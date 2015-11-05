@@ -1,0 +1,5 @@
+# Ignore vagrant data
+.vagrant
+
+# Ignore swap files
+*.swp

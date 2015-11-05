@@ -1,0 +1,8 @@
+---
+
+# Tests for jenkins role
+
+- hosts : all
+  remote_user : vagrant
+  roles :
+    - .
