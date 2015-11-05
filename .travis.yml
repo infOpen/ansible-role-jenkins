@@ -21,7 +21,7 @@ script:
   - ansible-playbook -i tests/inventory tests/test_travis.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test_travis.yml --skip-tags=custom_gpg --connection=local --sudo
+  - ansible-playbook -i tests/inventory tests/test_travis.yml --connection=local --sudo
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   # Set change=1 due to a bug in ansible service module always return changed
