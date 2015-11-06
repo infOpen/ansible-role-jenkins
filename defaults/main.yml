@@ -1,2 +1,7 @@
 ---
-# defaults file for jenkins
+
+# Defaults file for jenkins
+
+# Ubuntu repository vars
+jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
+

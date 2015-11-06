@@ -1,0 +1,18 @@
+---
+
+# Common tests between local Vagrant and Travis
+
+- name : Jenkins repository key should exists
+  become : True
+  apt_key :
+    url : "{{ jenkins_repository_key_url }}"
+  register : jenkins_apt_key_test
+  when :
+    - ansible_os_family == "Debian"
+
+- fail :
+    msg : "Key import task change if we import twice"
+  when :
+    - ansible_os_family == "Debian"
+    - jenkins_apt_key_test.changed
+

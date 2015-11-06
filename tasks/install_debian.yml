@@ -1,0 +1,10 @@
+---
+
+# Debian family specific installation tasks
+
+- name : Add Jenkins repository key
+  become : True
+  apt_key :
+    url   : "{{ jenkins_repository_key_url }}"
+    state : present
+

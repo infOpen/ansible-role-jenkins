@@ -6,3 +6,6 @@
   remote_user : root
   roles :
     - ansible-role-jenkins
+  post_tasks :
+    - include : ./common_tests.yml
+

@@ -6,3 +6,6 @@
   remote_user : vagrant
   roles :
     - .
+  post_tasks :
+    - include : ./common_tests.yml
+
