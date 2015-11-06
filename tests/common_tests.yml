@@ -17,3 +17,14 @@
     - ansible_os_family == "Debian"
     - jenkins_apt_key_test.changed
 
+- name : Check if Jenkins repository definition file exists
+  stat :
+    path : "{{ jenkins_repository_file_prefix }}/{{ jenkins_repository_file }}"
+  register : jenkins_apt_file_test
+
+- name : Fail if Jenkins repository file not exists
+  fail :
+    msg : "Jenkins repository file not exists"
+  when :
+    - jenkins_apt_file_test.stat.exists == False
+
