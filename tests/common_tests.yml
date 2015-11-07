@@ -28,3 +28,18 @@
   when :
     - jenkins_apt_file_test.stat.exists == False
 
+- name : Jenkins package should installed
+  become : True
+  apt :
+    name  : "{{ jenkins_package_name }}"
+    state : "{{ jenkins_package_state }}"
+  register : jenkins_package_test
+  when :
+    - ansible_os_family == "Debian"
+
+- name : Fail if Jenkins package not installed
+  fail :
+    msg : "Jenkins package not installed"
+  when :
+    - jenkins_package_test.changed
+

@@ -5,3 +5,5 @@ jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
 jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
 jenkins_repository_content     : "deb http://pkg.jenkins-ci.org/debian binary/"
 
+jenkins_package_name : "jenkins"
+
