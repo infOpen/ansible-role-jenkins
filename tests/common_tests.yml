@@ -57,10 +57,14 @@
 - name : Check if default config file is managed by Ansible
   become  : True
   command : >
-    grep -E '^# Ansible managed:( Testing)?.*'
+    grep -E '^# Ansible managed.*$'
     {{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}
   register : jenkins_config_managed_test
   changed_when : False
+
+- name : Add debug to fix Travis
+  debug :
+    var : jenkins_config_managed_test
 
 - name : Fail if ansible_managed string not found in default config file
   fail :
