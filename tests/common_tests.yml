@@ -63,10 +63,6 @@
   changed_when : False
   ignore_errors: True
 
-- name : Add debug to fix Travis
-  debug :
-    var : jenkins_config_managed_test
-
 - name : Fail if ansible_managed string not found in default config file
   fail :
     msg : "Jenkins config file not contains ansible_managed string"
