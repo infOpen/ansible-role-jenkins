@@ -3,3 +3,7 @@
 
 # Ignore swap files
 *.swp
+
+# Ignore roles dependencies used for vagrant tests
+roles
+
