@@ -43,3 +43,27 @@
   when :
     - jenkins_package_test.changed
 
+- name : Check if Jenkins default config file exists
+  stat :
+    path : "{{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}"
+  register : jenkins_config_file_test
+
+- name : Fail if Jenkins default config file not exists
+  fail :
+    msg : "Jenkins default config file not exists"
+  when :
+    - jenkins_config_file_test.stat.exists == False
+
+- name : Check if default config file is managed by Ansible
+  become  : True
+  command : >
+    grep '^# Ansible managed:.*'
+    {{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}
+  register : jenkins_config_managed_test
+  changed_when : False
+
+- name : Fail if ansible_managed string not found in default config file
+  fail :
+    msg : "Jenkins config file not contains ansible_managed string"
+  when : jenkins_config_managed_test.stdout == ""
+
