@@ -28,6 +28,18 @@ Role Variables
 
 Follow the possible variables with their default values
 
+# Defaults file for jenkins
+
+    # Ubuntu repository vars
+    jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
+    jenkins_package_state      : "latest"
+
+# Specific vars values for Debian family
+    jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
+    jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
+    jenkins_repository_content     : "deb http://pkg.jenkins-ci.org/debian binary/"
+    jenkins_package_name : "jenkins"
+
 Dependencies
 ------------
 
