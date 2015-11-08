@@ -16,16 +16,6 @@
   delay    : "{{ jenkins_waiting_available_delay }}"
   changed_when : False
 
-- name : Add debug for Travis
-  register : jenkins_travis_debug
-  shell : "curl http://localhost:8080/cli/"
-  ignore_errors : True
-
-- name : Display debug variable
-  debug :
-    var : jenkins_travis_debug
-  ignore_errors : True
-
 - name : Install Jenkins CLI
   become : True
   become_user : "{{ jenkins_config_user }}"
