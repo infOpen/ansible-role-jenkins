@@ -8,4 +8,6 @@
     - ansible-role-jenkins
   post_tasks :
     - include : ./common_tests.yml
+  vars :
+    jenkins_cli_waiting_available : 15
 

@@ -8,16 +8,19 @@
     name  : "{{ jenkins_service_name }}"
     state : started
 
-- name : Ensure Jenkins is available
-  wait_for :
-    port  : "{{ jenkins_config_http_port }}"
-    delay : "{{ jenkins_cli_waiting_available }}"
+- name : Wait untils Jenkins web API is available
+  command  : curl --head --silent {{ jenkins_base_url }}/
+  register : jenkins_check_available
+  until    : jenkins_check_available.stdout.find("200 OK") != -1
+  retries  : "{{ jenkins_waiting_available_retries }}"
+  delay    : "{{ jenkins_waiting_available_delay }}"
+  changed_when : False
 
 - name : Install Jenkins CLI
   become : True
   become_user : "{{ jenkins_config_user }}"
   get_url :
-    url   : "{{ jenkins_cli_download_address }}"
+    url   : "{{ jenkins_cli_download_url }}"
     dest  : "{{ jenkins_cli_destination }}"
     force : True
 
