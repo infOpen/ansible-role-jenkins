@@ -68,3 +68,14 @@
     msg : "Jenkins config file not contains ansible_managed string"
   when : jenkins_config_managed_test.stdout == ""
 
+- name : Jenkins CLI should exist
+  stat :
+    path : "{{ jenkins_cli_destination }}/jenkins-cli.jar"
+  register : jenkins_cli_file_test
+
+- name : Fail if Jenkins CLI file not found
+  fail :
+    msg : "Jenkins CLI file not exists"
+  when :
+    - jenkins_cli_file_test.stat.exists == False
+

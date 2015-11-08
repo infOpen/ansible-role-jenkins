@@ -40,3 +40,9 @@ jenkins_config_args :
   - "--httpPort={{ jenkins_config_http_port }}"
   - "--ajp13Port={{ jenkins_config_ajp_port }}"
 
+# Jenkins cli
+jenkins_cli_waiting_available : 5
+jenkins_cli_download_address : >
+  http://localhost:{{ jenkins_config_http_port }}/jnlpJars/jenkins-cli.jar
+jenkins_cli_destination : "{{ jenkins_config_home_location }}/"
+

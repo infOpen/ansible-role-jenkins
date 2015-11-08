@@ -1,0 +1,23 @@
+---
+
+# Tasks used to manange Jenkins CLI
+
+- name : Ensure jenkins running
+  become  : True
+  service :
+    name  : "{{ jenkins_service_name }}"
+    state : started
+
+- name : Ensure Jenkins is available
+  wait_for :
+    port  : "{{ jenkins_config_http_port }}"
+    delay : "{{ jenkins_cli_waiting_available }}"
+
+- name : Install Jenkins CLI
+  become : True
+  become_user : "{{ jenkins_config_user }}"
+  get_url :
+    url   : "{{ jenkins_cli_download_address }}"
+    dest  : "{{ jenkins_cli_destination }}"
+    force : True
+

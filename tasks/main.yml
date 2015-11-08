@@ -16,3 +16,8 @@
     - configure
     - jenkins
 
+- include: manage_cli.yml
+  tags:
+    - jenkins
+    - install
+
