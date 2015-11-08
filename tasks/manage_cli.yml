@@ -15,11 +15,13 @@
 
 - name : Add debug for Travis
   register : jenkins_travis_debug
-  shell : "curl http://localhost:8080/cli/ | grep jenkins-cli.jar"
+  shell : "curl http://localhost:8080/cli/"
+  ignore_errors : True
 
 - name : Display debug variable
   debug :
     var : jenkins_travis_debug
+  ignore_errors : True
 
 - name : Install Jenkins CLI
   become : True
