@@ -20,20 +20,23 @@ jenkins_config_max_open_files : 8192
 jenkins_config_umask          : "022"
 jenkins_config_http_port      : 8080
 jenkins_config_ajp_port       : -1
-jenkins_config_servlet_context_prefix : "/$NAME"
+jenkins_config_servlet_context_prefix : "/{{ jenkins_config_name }}"
 
 # Location and files configuration
 jenkins_config_java_location : "/usr/bin/java"
-jenkins_config_war_location  : "/usr/share/$NAME/$NAME.war"
-jenkins_config_home_location : "/var/lib/$NAME"
-jenkins_config_log_location  : "/var/log/$NAME/$NAME.log"
-jenkins_config_pid_file      : "/var/run/$NAME/$NAME.pid"
+jenkins_config_war_location  : >
+  /usr/share/{{ jenkins_config_name }}/{{ jenkins_config_name }}.war
+jenkins_config_home_location : "/var/lib/{{ jenkins_config_name }}"
+jenkins_config_log_location  : >
+  /var/log/{{ jenkins_config_name }}/{{ jenkins_config_name }}.log
+jenkins_config_pid_file      : >
+  /var/run/{{ jenkins_config_name }}/{{ jenkins_config_name }}.pid
 
 # Java and jenkins arguments
 jenkins_config_java_args :
   - "-Djava.awt.headless=true"
 jenkins_config_args :
-  - "--webroot=/var/cache/$NAME/war"
-  - "--httpPort=$HTTP_PORT"
-  - "--ajp13Port=$AJP_PORT"
+  - "--webroot=/var/cache/{{ jenkins_config_name }}/war"
+  - "--httpPort={{ jenkins_config_http_port }}"
+  - "--ajp13Port={{ jenkins_config_ajp_port }}"
 
