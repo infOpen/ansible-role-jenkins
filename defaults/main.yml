@@ -41,8 +41,9 @@ jenkins_config_args :
   - "--ajp13Port={{ jenkins_config_ajp_port }}"
 
 # Jenkins cli
-jenkins_cli_waiting_available : 5
-jenkins_cli_download_address : >
-  http://localhost:{{ jenkins_config_http_port }}/jnlpJars/jenkins-cli.jar
-jenkins_cli_destination : "{{ jenkins_config_home_location }}/"
+jenkins_base_url         : "http://localhost:{{ jenkins_config_http_port }}"
+jenkins_cli_download_url : "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
+jenkins_cli_destination  : "{{ jenkins_config_home_location }}/"
 
+jenkins_waiting_available_retries : 10
+jenkins_waiting_available_delay   : 5
