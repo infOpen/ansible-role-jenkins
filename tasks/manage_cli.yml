@@ -13,6 +13,15 @@
     port  : "{{ jenkins_config_http_port }}"
     delay : "{{ jenkins_cli_waiting_available }}"
 
+- name : Add debuf for Travis
+  register : jenkins_travis_debug
+  get_url :
+    url :  "{{ jenkins_cli_download_address }}"
+
+- name : Display debug variable
+  debug :
+    var : jenkins_travis_debug
+
 - name : Install Jenkins CLI
   become : True
   become_user : "{{ jenkins_config_user }}"
