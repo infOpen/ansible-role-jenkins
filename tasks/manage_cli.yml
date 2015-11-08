@@ -20,7 +20,7 @@
     dest : "/tmp/foo"
 
 - name: Get file content
-    shell: cat /tmp/foo
+  shell: cat /tmp/foo
   register: jenkins_travis_cli_debug
 
 - name : Display debug variable
