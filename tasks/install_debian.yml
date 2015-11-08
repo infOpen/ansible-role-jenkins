@@ -1,0 +1,23 @@
+---
+
+# Debian family specific installation tasks
+
+- name : Add Jenkins repository key
+  become : True
+  apt_key :
+    url   : "{{ jenkins_repository_key_url }}"
+    state : present
+
+- name : Create Jenkins repository file
+  become : True
+  apt_repository :
+    repo  : "{{ jenkins_repository_content }}"
+    state : present
+    update_cache : True
+
+- name : Install Jenkins package
+  become : True
+  apt :
+    name : "{{ jenkins_package_name }}"
+    state : "{{ jenkins_package_state }}"
+

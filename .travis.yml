@@ -16,6 +16,9 @@ install:
   # Add ansible.cfg to pick up roles path.
   - "cp ./tests/ansible.cfg ./"
 
+  # Install role dependencies
+  - ansible-galaxy install -r tests/requirements.yml
+
 script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i tests/inventory tests/test_travis.yml --syntax-check

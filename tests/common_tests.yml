@@ -1,0 +1,70 @@
+---
+
+# Common tests between local Vagrant and Travis
+
+- name : Jenkins repository key should exists
+  become : True
+  apt_key :
+    url : "{{ jenkins_repository_key_url }}"
+  register : jenkins_apt_key_test
+  when :
+    - ansible_os_family == "Debian"
+
+- name : Fail if Jenkins repository key reimport change
+  fail :
+    msg : "Key import task change if we import twice"
+  when :
+    - ansible_os_family == "Debian"
+    - jenkins_apt_key_test.changed
+
+- name : Check if Jenkins repository definition file exists
+  stat :
+    path : "{{ jenkins_repository_file_prefix }}/{{ jenkins_repository_file }}"
+  register : jenkins_apt_file_test
+
+- name : Fail if Jenkins repository file not exists
+  fail :
+    msg : "Jenkins repository file not exists"
+  when :
+    - jenkins_apt_file_test.stat.exists == False
+
+- name : Jenkins package should installed
+  become : True
+  apt :
+    name  : "{{ jenkins_package_name }}"
+    state : "{{ jenkins_package_state }}"
+  register : jenkins_package_test
+  when :
+    - ansible_os_family == "Debian"
+
+- name : Fail if Jenkins package not installed
+  fail :
+    msg : "Jenkins package not installed"
+  when :
+    - jenkins_package_test.changed
+
+- name : Check if Jenkins default config file exists
+  stat :
+    path : "{{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}"
+  register : jenkins_config_file_test
+
+- name : Fail if Jenkins default config file not exists
+  fail :
+    msg : "Jenkins default config file not exists"
+  when :
+    - jenkins_config_file_test.stat.exists == False
+
+- name : Check if default config file is managed by Ansible
+  become  : True
+  command : >
+    grep -P 'Ansible managed(: Testing)?'
+    {{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}
+  register : jenkins_config_managed_test
+  changed_when : False
+  ignore_errors: True
+
+- name : Fail if ansible_managed string not found in default config file
+  fail :
+    msg : "Jenkins config file not contains ansible_managed string"
+  when : jenkins_config_managed_test.stdout == ""
+

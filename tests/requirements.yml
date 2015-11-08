@@ -1,0 +1,5 @@
+---
+
+# Role requirements used to launch tests
+- src : achaussier.openjdk-jre
+- src : achaussier.openjdk-jdk

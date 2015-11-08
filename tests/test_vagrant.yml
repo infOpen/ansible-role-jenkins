@@ -4,5 +4,24 @@
 
 - hosts : all
   remote_user : vagrant
+  pre_tasks :
+
+    - name : Delete old role dependencies if exists
+      file :
+        dest  : "./roles"
+        state : absent
+        force : True
+      delegate_to  : 127.0.0.1
+      changed_when : False
+
+    - name : Get role dependencies
+      command : "ansible-galaxy install -r ./tests/requirements.yml -p ./roles"
+      delegate_to  : 127.0.0.1
+      changed_when : False
+
   roles :
     - .
+
+  post_tasks :
+    - include : ./common_tests.yml
+
