@@ -1,2 +1,13 @@
 ---
-# handlers file for jenkins
+
+# Handlers file for jenkins
+
+- name: restart jenkins
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  command: >
+    java
+    -jar {{ jenkins_cli }}
+    -s {{ jenkins_base_url }}
+    safe-restart
+

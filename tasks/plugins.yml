@@ -1,0 +1,32 @@
+---
+
+# Tasks about Jenkins plugins
+
+- name : Get installed plugins
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  register    : jenkins_list_plugins
+  shell : >
+    java
+    -jar {{ jenkins_cli }}
+    -s {{ jenkins_base_url }}
+    list-plugins
+    | awk '{ print $1 }'
+  changed_when : False
+
+- name : Install required plugins
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  register    : jenkins_install_plugins
+  shell : >
+    java
+    -jar {{ jenkins_cli }}
+    -s {{ jenkins_base_url }}
+    install-plugin {{ item }}
+  with_items :
+    - "{{
+        jenkins_plugins
+        | difference(jenkins_list_plugins.stdout_lines)
+      }}"
+  notify : restart jenkins
+

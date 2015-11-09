@@ -21,3 +21,8 @@
     - jenkins
     - install
 
+- include: plugins.yml
+  tags:
+    - jenkins
+    - install
+
