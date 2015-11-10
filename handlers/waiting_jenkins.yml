@@ -1,12 +1,5 @@
 ---
 
-# Contain task used to wait Jenkins fully (re)started
-
-- name : Restart jenkins
-  become  : True
-  service :
-    name  : "{{ jenkins_service_name }}"
-    state : restarted
 
 - name : Waiting jenkins started
   command  : curl --head --silent {{ jenkins_base_url }}/

@@ -1,0 +1,10 @@
+---
+
+# Contain task used to wait Jenkins fully (re)started
+
+- name : Restart jenkins
+  include : "{{ role_path }}/handlers/restart_jenkins.yml"
+
+- name : Waiting jenkins started
+  include : "{{ role_path }}/handlers/waiting_jenkins.yml"
+

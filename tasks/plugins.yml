@@ -17,7 +17,7 @@
 - name : Install required plugins
   become      : True
   become_user : "{{ jenkins_config_user }}"
-  register    : jenkins_install_plugins
+  register    : jenkins_task_install_plugins
   shell : >
     java
     -jar {{ jenkins_cli }}
@@ -30,6 +30,6 @@
       }}"
 
 - name : Waiting jenkins started
-  include : "{{ role_path }}/handlers/restart_and_waiting.yml"
-  when: jenkins_install_plugins.changed
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when: jenkins_task_install_plugins.changed
 
