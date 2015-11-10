@@ -1,0 +1,11 @@
+---
+
+
+- name : Waiting jenkins started
+  command  : curl --head --silent {{ jenkins_base_url }}/
+  register : jenkins_check_available
+  until    : jenkins_check_available.stdout.find("200 OK") != -1
+  retries  : "{{ jenkins_waiting_available_retries }}"
+  delay    : "{{ jenkins_waiting_available_delay }}"
+  changed_when : False
+
