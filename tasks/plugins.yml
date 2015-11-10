@@ -28,5 +28,8 @@
         jenkins_plugins
         | difference(jenkins_list_plugins.stdout_lines)
       }}"
-  notify : restart jenkins
+
+- name : Waiting jenkins started
+  include : "{{ role_path }}/handlers/restart_and_waiting.yml"
+  when: jenkins_install_plugins.changed
 
