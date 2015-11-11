@@ -8,7 +8,7 @@ Install jenkins package.
 Requirements
 ------------
 
-This role requires Ansible 1.5 or higher, and platform requirements are listed
+This role requires Ansible 1.9 or higher, and platform requirements are listed
 in the metadata file.
 
 Testing
