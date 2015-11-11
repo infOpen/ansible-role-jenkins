@@ -47,6 +47,7 @@ Follow the possible variables with their default values
     jenkins_config_run_standalone : True
     jenkins_config_max_open_files : 8192
     jenkins_config_umask          : "022"
+    jenkins_config_listen_address : 127.0.0.1
     jenkins_config_http_port      : 8080
     jenkins_config_ajp_port       : -1
     jenkins_config_servlet_context_prefix : "/{{ jenkins_config_name }}"
