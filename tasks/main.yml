@@ -11,8 +11,25 @@
     - jenkins
   when: ansible_os_family == "Debian"
 
+- name : Restart jenkins if new version installed
+  include : "{{ role_path }}/handlers/restart_jenkins.yml"
+  when : jenkins_task_package_install.changed
+
+- name : Waiting the application is available
+  include : "{{ role_path }}/handlers/waiting_jenkins.yml"
+
 - include: configure.yml
   tags:
     - configure
     - jenkins
+
+- include: manage_cli.yml
+  tags:
+    - jenkins
+    - install
+
+- include: plugins.yml
+  tags:
+    - jenkins
+    - install
 

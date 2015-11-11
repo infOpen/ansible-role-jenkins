@@ -16,8 +16,9 @@
     update_cache : True
 
 - name : Install Jenkins package
-  become : True
+  register : jenkins_task_package_install
+  become   : True
   apt :
-    name : "{{ jenkins_package_name }}"
+    name  : "{{ jenkins_package_name }}"
     state : "{{ jenkins_package_state }}"
 
