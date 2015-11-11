@@ -9,4 +9,5 @@ jenkins_default_cfg_prefix : "/etc/default"
 jenkins_default_cfg_file   : "jenkins"
 
 jenkins_package_name : "jenkins"
+jenkins_service_name : "jenkins"
 

@@ -8,4 +8,17 @@
     - ansible-role-jenkins
   post_tasks :
     - include : ./common_tests.yml
+  vars :
+    jenkins_plugins :
+      - ansible
+      - ansicolor
+      - build-pipeline-plugin
+      - debian-package-builder
+      - envinject
+      - git
+      - github
+      - graphiteIntegrator
+      - publish-over-ssh
+      - ssh
+      - redmine
 

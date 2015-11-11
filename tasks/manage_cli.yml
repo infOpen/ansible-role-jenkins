@@ -1,0 +1,36 @@
+---
+
+# Tasks used to manange Jenkins CLI
+
+- name : Install Jenkins CLI
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  get_url :
+    url   : "{{ jenkins_cli_download_url }}"
+    dest  : "{{ jenkins_cli }}"
+    force : True
+
+- name : Get Jenkins updates (for update center)
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  register    : jenkins_task_new_updates
+  get_url :
+    url     : "{{ jenkins_update_center_url_download }}"
+    dest    : "{{ jenkins_update_file }}"
+    mode    : 0440
+    timeout : 30
+
+- name : Update center
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  shell : >
+    cat {{ jenkins_update_file }}
+    | sed '1d;$d'
+    | curl -X POST -H 'Accept: application/json'
+    -d @- {{ jenkins_update_center_url_post }}
+  when: jenkins_task_new_updates.changed
+
+- name : Waiting jenkins restarted
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when: jenkins_task_new_updates.changed
+
