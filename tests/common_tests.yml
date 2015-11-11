@@ -136,3 +136,23 @@
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}"
 
+- name : Get plugins should be upgraded
+  become      : True
+  become_user : "{{ jenkins_config_user }}"
+  register    : jenkins_list_plugins_with_upgrade_test
+  shell : >
+    java
+    -jar {{ jenkins_cli }}
+    -s {{ jenkins_base_url }}
+    list-plugins
+    | grep ')$'
+    | awk '{ print $1 }'
+  changed_when : False
+
+- name : Check if some plugins should be upgraded
+  fail :
+    msg : >
+      Some needed plugins should be upgraded :
+      {{ jenkins_list_plugins_with_upgrade_test.stdout_lines }}
+  when : jenkins_list_plugins_with_upgrade_test.stdout_lines
+
