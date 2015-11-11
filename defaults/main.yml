@@ -4,6 +4,7 @@
 
 # Ubuntu repository vars
 jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
+jenkins_repository_content : "deb http://pkg.jenkins-ci.org/debian binary/"
 jenkins_package_state      : "latest"
 
 # Configuration file settings

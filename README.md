@@ -8,7 +8,7 @@ Install jenkins package.
 Requirements
 ------------
 
-This role requires Ansible 1.5 or higher, and platform requirements are listed
+This role requires Ansible 1.9 or higher, and platform requirements are listed
 in the metadata file.
 
 Testing
@@ -33,6 +33,7 @@ Follow the possible variables with their default values
     # Ubuntu repository vars
     jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
     jenkins_package_state      : "latest"
+    jenkins_repository_content : "deb http://pkg.jenkins-ci.org/debian binary/"
 
     # Configuration file settings
     jenkins_default_cfg_file_owner : root
@@ -91,7 +92,6 @@ Follow the possible variables with their default values
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
     jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
-    jenkins_repository_content     : "deb http://pkg.jenkins-ci.org/debian binary/"
 
     jenkins_default_cfg_prefix : "/etc/default"
     jenkins_default_cfg_file   : "jenkins"
@@ -121,5 +121,5 @@ Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro
-- a.chaussier [at] infopen.pro } }}"
+- a.chaussier [at] infopen.pro
 
