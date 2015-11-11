@@ -121,5 +121,5 @@ Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro
-- a.chaussier [at] infopen.pro } }}"
+- a.chaussier [at] infopen.pro
 
