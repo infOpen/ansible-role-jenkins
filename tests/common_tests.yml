@@ -79,6 +79,37 @@
   when :
     - jenkins_cli_file_test.stat.exists == False
 
+- name : Jenkins json file for update center
+  stat :
+    path : "{{ jenkins_update_file }}"
+  register : jenkins_update_json_file_test
+
+- name : Fail if Jenkins update json file not found
+  fail :
+    msg : "Jenkins update file not exists"
+  when :
+    - jenkins_update_json_file_test.stat.exists == False
+
+- name : Jenkins json file version for update center
+  become  : True
+  command : >
+    sed -n '0,/RE/s/.*war\/\(.*\)\/jenkins.war.*/\1/p'
+    {{ jenkins_update_file }}
+  register : jenkins_update_json_file_version_test
+  changed_when : False
+
+- name : Jenkins war version
+  command  : "java -jar {{ jenkins_config_war_location }} --version"
+  register : jenkins_war_version_test
+  changed_when : False
+
+- name : Fail if Jenkins update json file too old
+  fail :
+    msg : "Jenkins update file too old"
+  when : >
+    {{ jenkins_update_json_file_version_test.stdout
+    | version_compare(jenkins_war_version_test.stdout_lines[2], '<') }}
+
 - name : Get installed plugins
   become      : True
   become_user : "{{ jenkins_config_user }}"
