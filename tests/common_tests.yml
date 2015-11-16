@@ -46,27 +46,27 @@
 - name : Check if Jenkins default config file exists
   stat :
     path : "{{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}"
-  register : jenkins_config_file_test
+  register : jenkins_etc_file_test
 
 - name : Fail if Jenkins default config file not exists
   fail :
     msg : "Jenkins default config file not exists"
   when :
-    - jenkins_config_file_test.stat.exists == False
+    - jenkins_etc_file_test.stat.exists == False
 
 - name : Check if default config file is managed by Ansible
   become  : True
   command : >
     grep -P 'Ansible managed(: Testing)?'
     {{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}
-  register : jenkins_config_managed_test
+  register : jenkins_etc_managed_test
   changed_when : False
   ignore_errors: True
 
 - name : Fail if ansible_managed string not found in default config file
   fail :
     msg : "Jenkins config file not contains ansible_managed string"
-  when : jenkins_config_managed_test.stdout == ""
+  when : jenkins_etc_managed_test.stdout == ""
 
 - name : Jenkins CLI should exist
   stat :
@@ -99,7 +99,7 @@
   changed_when : False
 
 - name : Jenkins war version
-  command  : "java -jar {{ jenkins_config_war_location }} --version"
+  command  : "java -jar {{ jenkins_etc_war_location }} --version"
   register : jenkins_war_version_test
   changed_when : False
 
@@ -112,7 +112,7 @@
 
 - name : Get installed plugins
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_list_plugins_test
   shell : >
     java
@@ -138,7 +138,7 @@
 
 - name : Get plugins should be upgraded
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_list_plugins_with_upgrade_test
   shell : >
     java

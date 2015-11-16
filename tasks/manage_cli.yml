@@ -4,7 +4,7 @@
 
 - name : Install Jenkins CLI
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   get_url :
     url   : "{{ jenkins_cli_download_url }}"
     dest  : "{{ jenkins_cli }}"
@@ -12,7 +12,7 @@
 
 - name : Get Jenkins updates (for update center)
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_task_new_updates
   get_url :
     url     : "{{ jenkins_update_center_url_download }}"
@@ -22,7 +22,7 @@
 
 - name : Update center
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   shell : >
     cat {{ jenkins_update_file }}
     | sed '1d;$d'

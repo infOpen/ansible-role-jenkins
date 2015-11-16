@@ -4,7 +4,7 @@
 
 - name : Get installed plugins
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_list_plugins
   shell : >
     java
@@ -16,7 +16,7 @@
 
 - name : Install required plugins
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_task_install_plugins
   shell : >
     java
@@ -35,7 +35,7 @@
 
 - name : Get plugins should be upgraded
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_list_plugins_with_upgrade
   shell : >
     java
@@ -48,7 +48,7 @@
 
 - name : Install upgrade for plugins
   become      : True
-  become_user : "{{ jenkins_config_user }}"
+  become_user : "{{ jenkins_etc_user }}"
   register    : jenkins_task_upgrade_plugins
   shell : >
     java
