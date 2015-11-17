@@ -1,0 +1,22 @@
+---
+
+# Tasks about config
+
+- name : Get Jenkins war version
+  command  : "java -jar {{ jenkins_etc_war_location }} --version"
+  register : jenkins_main_cfg_version
+  changed_when : False
+
+- name : Generate main configuration file
+  become : True
+  become_user : "{{ jenkins_etc_name }}"
+  register : jenkins_main_configuration_generate
+  template :
+    src  : "{{ role_path }}/templates/configuration/config.xml.j2"
+    dest : "{{ jenkins_etc_home_location }}/config.xml"
+    mode : "0400"
+
+- name : Restart jenkins and waiting if new changes
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when : jenkins_main_configuration_generate.changed
+

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors/>
+  <version>{{ jenkins_main_cfg_version.stdout_lines[2] }}</version>
+  <numExecutors>{{ jenkins_main_cfg_num_executors }}</numExecutors>
+  <mode>{{ jenkins_main_cfg_mode }}</mode>
+  <useSecurity>{{ jenkins_main_cfg_use_security | lower }}</useSecurity>
+  <authorizationStrategy class="{{ jenkins_main_cfg_authorization_strategy | trim }}"/>
+  <securityRealm class="{{ jenkins_main_cfg_security_realm | trim }}"/>
+  <disableRememberMe>{{ jenkins_main_cfg_disable_remember_me | lower}}</disableRememberMe>
+  <projectNamingStrategy class="{{ jenkins_main_cfg_project_naming_strategy | trim }}"/>
+  <workspaceDir>{{ jenkins_main_cfg_workspace_dir }}</workspaceDir>
+  <buildsDir>{{ jenkins_main_cfg_builds_dir }}</buildsDir>
+  <jdks/>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds/>
+  <quietPeriod>{{ jenkins_main_cfg_quiet_period }}</quietPeriod>
+  <scmCheckoutRetryCount>{{ jenkins_main_cfg_scm_checkout_retry_count }}</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>All</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+  </views>
+  <primaryView>{{ jenkins_main_cfg_primary_view }}</primaryView>
+  <slaveAgentPort>{{ jenkins_main_cfg_slave_agent_port }}</slaveAgentPort>
+  <label>{{ jenkins_main_cfg_label }}</label>
+  <nodeProperties/>
+  <globalNodeProperties/>
+</hudson>

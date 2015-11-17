@@ -36,3 +36,9 @@
     - jenkins
     - install
 
+- name : Configure Jenkins application and its plugins
+  include : "{{ role_path }}/tasks/create_config_files.yml"
+  tags :
+    - jenkins
+    - configure
+
