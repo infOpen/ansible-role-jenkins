@@ -110,6 +110,18 @@
     {{ jenkins_update_json_file_version_test.stdout
     | version_compare(jenkins_war_version_test.stdout_lines[2], '<') }}
 
+- name : Jenkins homepage should return 200
+  register : jenkins_homepage_test
+  uri :
+    url : "{{ jenkins_base_url }}"
+    status_code : 200
+    return_content : True
+
+- name : Check homepage not contains error
+  fail :
+    msg : Jenkins not return expected homepage
+  when : "'Welcome to Jenkins!' not in jenkins_homepage_test.content"
+
 - name : Get installed plugins
   become      : True
   become_user : "{{ jenkins_etc_user }}"
