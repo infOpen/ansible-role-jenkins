@@ -126,11 +126,18 @@ Follow the possible variables with their default values
         template : "envinject-plugin-configuration.xml.j2"
         dest     : >
           {{ jenkins_etc_home_location }}/envinject-plugin-configuration.xml
+      - name     : github
+        template : "github-plugin-configuration.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}/github-plugin-configuration.xml
 
     # Plugin : envinject
     jenkins_plugin_cfg_envinject_global_password_entries : []
     jenkins_plugin_cfg_envinject_hide_injected_vars : False
     jenkins_plugin_cfg_envinject_enable_permissions : False
+
+    # Plugins : github
+    jenkins_plugin_cfg_github_configs : []
 
 # Specific vars values for Debian family
 
