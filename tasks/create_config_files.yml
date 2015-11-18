@@ -1,0 +1,44 @@
+---
+
+# Tasks about config
+
+- name : Get Jenkins war version
+  command  : "java -jar {{ jenkins_etc_war_location }} --version"
+  register : jenkins_main_cfg_version
+  changed_when : False
+
+- name : Get plugins informations
+  register : jenkins_list_plugins_updated
+  uri :
+    url : "{{ jenkins_base_url }}/{{ jenkins_api_plugins_list }}"
+    return_content : True
+
+- name : Generate main configuration file
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  register : jenkins_main_configuration_generate
+  template :
+    src  : "{{ role_path }}/templates/configuration/config.xml.j2"
+    dest : "{{ jenkins_etc_home_location }}/config.xml"
+    mode : "0400"
+
+- name : Generate plugin configuration files
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  register : jenkins_plugin_configuration_generate
+  template :
+    src  : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
+      ~ '/' ~ item.1.template }}"
+    dest : "{{ item.1.dest | trim }}"
+    mode : "0400"
+  with_nested :
+    - "{{ (jenkins_list_plugins_updated.content | from_json).plugins }}"
+    - jenkins_plugin_templates
+  when : item.0.shortName == item.1.name
+
+- name : Restart jenkins and waiting if new changes
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when : >
+    jenkins_main_configuration_generate.changed
+    or jenkins_plugin_configuration_generate.changed
+

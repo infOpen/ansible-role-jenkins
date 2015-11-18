@@ -41,46 +41,46 @@ Follow the possible variables with their default values
     jenkins_default_cfg_file_mode  : "0640"
 
     # Configuration file content variables
-    jenkins_config_name  : "jenkins"
-    jenkins_config_user  : "jenkins"
-    jenkins_config_group : "jenkins"
-    jenkins_config_run_standalone : True
-    jenkins_config_max_open_files : 8192
-    jenkins_config_umask          : "022"
-    jenkins_config_listen_address : 127.0.0.1
-    jenkins_config_http_port      : 8080
-    jenkins_config_ajp_port       : -1
-    jenkins_config_servlet_context_prefix : "/{{ jenkins_config_name }}"
+    jenkins_etc_name  : "jenkins"
+    jenkins_etc_user  : "jenkins"
+    jenkins_etc_group : "jenkins"
+    jenkins_etc_run_standalone : True
+    jenkins_etc_max_open_files : 8192
+    jenkins_etc_umask          : "022"
+    jenkins_etc_listen_address : 127.0.0.1
+    jenkins_etc_http_port      : 8080
+    jenkins_etc_ajp_port       : -1
+    jenkins_etc_servlet_context_prefix : "/{{ jenkins_etc_name }}"
 
     # Location and files configuration
-    jenkins_config_java_location : "/usr/bin/java"
-    jenkins_config_war_location  : >
-      /usr/share/{{ jenkins_config_name }}/{{ jenkins_config_name }}.war
-    jenkins_config_home_location : "/var/lib/{{ jenkins_config_name }}"
-    jenkins_config_log_location  : >
-      /var/log/{{ jenkins_config_name }}/{{ jenkins_config_name }}.log
-    jenkins_config_pid_file      : >
-      /var/run/{{ jenkins_config_name }}/{{ jenkins_config_name }}.pid
+    jenkins_etc_java_location : "/usr/bin/java"
+    jenkins_etc_war_location  : >
+      /usr/share/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.war
+    jenkins_etc_home_location : "/var/lib/{{ jenkins_etc_name }}"
+    jenkins_etc_log_location  : >
+      /var/log/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.log
+    jenkins_etc_pid_file      : >
+      /var/run/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.pid
 
     # Java and jenkins arguments
-    jenkins_config_java_args :
+    jenkins_etc_java_args :
       - "-Djava.awt.headless=true"
-    jenkins_config_args :
-      - "--webroot=/var/cache/{{ jenkins_config_name }}/war"
-      - "--httpPort={{ jenkins_config_http_port }}"
-      - "--ajp13Port={{ jenkins_config_ajp_port }}"
+    jenkins_etc_args :
+      - "--webroot=/var/cache/{{ jenkins_etc_name }}/war"
+      - "--httpPort={{ jenkins_etc_http_port }}"
+      - "--ajp13Port={{ jenkins_etc_ajp_port }}"
 
     # Jenkins cli
-    jenkins_base_url         : "http://localhost:{{ jenkins_config_http_port }}"
+    jenkins_base_url         : "http://localhost:{{ jenkins_etc_http_port }}"
     jenkins_cli_download_url : "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
-    jenkins_cli : "{{ jenkins_config_home_location }}/jenkins-cli.jar"
+    jenkins_cli : "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
 
     # Jenkins update center variables
     jenkins_update_center_url_download : >
       https://updates.jenkins-ci.org/update-center.json
     jenkins_update_center_url_post : >
       {{ jenkins_base_url }}/updateCenter/byId/default/postBack
-    jenkins_update_file : "{{ jenkins_config_home_location }}/updates_jenkins.json"
+    jenkins_update_file : "{{ jenkins_etc_home_location }}/updates_jenkins.json"
 
     # Jenkins waiting availability test
     jenkins_waiting_available_retries : 10
@@ -88,6 +88,49 @@ Follow the possible variables with their default values
 
     # Plugins
     jenkins_plugins : []
+
+    # API URLs
+    #---------
+    jenkins_api_plugins_list : >
+      pluginManager/api/json?depth=1&tree=plugins[shortName,version]
+
+    # CONFIGURATION
+    #--------------
+
+    # Main configuration
+    jenkins_main_cfg_version : ''
+    jenkins_main_cfg_num_executors : 2
+    jenkins_main_cfg_mode : 'NORMAL'
+    jenkins_main_cfg_use_security : True
+    jenkins_main_cfg_authorization_strategy : >
+      hudson.security.AuthorizationStrategy$Unsecured
+    jenkins_main_cfg_security_realm : 'hudson.security.SecurityRealm$None'
+    jenkins_main_cfg_disable_remember_me : False
+    jenkins_main_cfg_project_naming_strategy : >
+      jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy
+    jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
+    jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
+    jenkins_main_cfg_quiet_period : 5
+    jenkins_main_cfg_scm_checkout_retry_count : 0
+    jenkins_main_cfg_views : []
+    jenkins_main_cfg_primary_view : All
+    jenkins_main_cfg_slave_agent_port : 0
+    jenkins_main_cfg_label : ''
+
+    # Plugins templates
+    jenkins_plugin_templates :
+      - name     : envinject
+        template : "envInject.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/envInject.xml"
+      - name     : envinject
+        template : "envinject-plugin-configuration.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}/envinject-plugin-configuration.xml
+
+    # Plugin : envinject
+    jenkins_plugin_cfg_envinject_global_password_entries : []
+    jenkins_plugin_cfg_envinject_hide_injected_vars : False
+    jenkins_plugin_cfg_envinject_enable_permissions : False
 
 # Specific vars values for Debian family
 
