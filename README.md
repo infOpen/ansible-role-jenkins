@@ -130,6 +130,10 @@ Follow the possible variables with their default values
         template : "github-plugin-configuration.xml.j2"
         dest     : >
           {{ jenkins_etc_home_location }}/github-plugin-configuration.xml
+      - name     : git
+        template : "hudson.plugins.git.GitSCM.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}/hudson.plugins.git.GitSCM.xml
 
     # Plugin : envinject
     jenkins_plugin_cfg_envinject_global_password_entries : []
@@ -138,6 +142,12 @@ Follow the possible variables with their default values
 
     # Plugins : github
     jenkins_plugin_cfg_github_configs : []
+
+    # Plugins : git
+    jenkins_plugin_cfg_git_generation   : 1
+    jenkins_plugin_cfg_git_global_name  : foobar
+    jenkins_plugin_cfg_git_global_email : "foo@foo.bar"
+    jenkins_plugin_cfg_git_create_account_based_on_email : False
 
 # Specific vars values for Debian family
 
