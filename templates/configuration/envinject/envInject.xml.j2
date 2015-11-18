@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.envinject.EnvInjectNodeProperty_-EnvInjectNodePropertyDescriptor plugin="{{ item.0.shortName }}@{{ item.0.version  }}">
+{% if jenkins_plugin_cfg_envinject_global_password_entries %}
+  <envInjectGlobalPasswordEntries/>
+{% for passwordentry in jenkins_plugin_cfg_envinject_global_password_entries %}
+{% endfor %}
+  </envInjectGlobalPasswordEntries>
+{% else %}
+  <envInjectGlobalPasswordEntries/>
+{% endif %}
+</org.jenkinsci.plugins.envinject.EnvInjectNodeProperty_-EnvInjectNodePropertyDescriptor>

@@ -89,6 +89,49 @@ Follow the possible variables with their default values
     # Plugins
     jenkins_plugins : []
 
+    # API URLs
+    #---------
+    jenkins_api_plugins_list : >
+      pluginManager/api/json?depth=1&tree=plugins[shortName,version]
+
+    # CONFIGURATION
+    #--------------
+
+    # Main configuration
+    jenkins_main_cfg_version : ''
+    jenkins_main_cfg_num_executors : 2
+    jenkins_main_cfg_mode : 'NORMAL'
+    jenkins_main_cfg_use_security : True
+    jenkins_main_cfg_authorization_strategy : >
+      hudson.security.AuthorizationStrategy$Unsecured
+    jenkins_main_cfg_security_realm : 'hudson.security.SecurityRealm$None'
+    jenkins_main_cfg_disable_remember_me : False
+    jenkins_main_cfg_project_naming_strategy : >
+      jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy
+    jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
+    jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
+    jenkins_main_cfg_quiet_period : 5
+    jenkins_main_cfg_scm_checkout_retry_count : 0
+    jenkins_main_cfg_views : []
+    jenkins_main_cfg_primary_view : All
+    jenkins_main_cfg_slave_agent_port : 0
+    jenkins_main_cfg_label : ''
+
+    # Plugins templates
+    jenkins_plugin_templates :
+      - name     : envinject
+        template : "envInject.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/envInject.xml"
+      - name     : envinject
+        template : "envinject-plugin-configuration.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}/envinject-plugin-configuration.xml
+
+    # Plugin : envinject
+    jenkins_plugin_cfg_envinject_global_password_entries : []
+    jenkins_plugin_cfg_envinject_hide_injected_vars : False
+    jenkins_plugin_cfg_envinject_enable_permissions : False
+
 # Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"

@@ -63,9 +63,15 @@ jenkins_waiting_available_delay   : 5
 jenkins_plugins : []
 
 
+# API URLs
+#---------
+jenkins_api_plugins_list : >
+  pluginManager/api/json?depth=1&tree=plugins[shortName,version]
+
 # CONFIGURATION
 #--------------
 
+# Main configuration
 jenkins_main_cfg_version : ''
 jenkins_main_cfg_num_executors : 2
 jenkins_main_cfg_mode : 'NORMAL'
@@ -84,4 +90,19 @@ jenkins_main_cfg_views : []
 jenkins_main_cfg_primary_view : All
 jenkins_main_cfg_slave_agent_port : 0
 jenkins_main_cfg_label : ''
+
+# Plugins templates
+jenkins_plugin_templates :
+  - name     : envinject
+    template : "envInject.xml.j2"
+    dest     : "{{ jenkins_etc_home_location }}/envInject.xml"
+  - name     : envinject
+    template : "envinject-plugin-configuration.xml.j2"
+    dest     : >
+      {{ jenkins_etc_home_location }}/envinject-plugin-configuration.xml
+
+# Plugin : envinject
+jenkins_plugin_cfg_envinject_global_password_entries : []
+jenkins_plugin_cfg_envinject_hide_injected_vars : False
+jenkins_plugin_cfg_envinject_enable_permissions : False
 
