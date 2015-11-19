@@ -180,6 +180,11 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.ansible.AnsibleInstallation.xml
+      - name     : ansicolor
+        template : "hudson.plugins.ansicolor.AnsiColorBuildWrapper.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /hudson.plugins.ansicolor.AnsiColorBuildWrapper.xml
       - name     : ant
         template : "hudson.tasks.Ant.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Ant.xml"
@@ -255,6 +260,89 @@ Follow the possible variables with their default values
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
+
+    # Plugins : ansicolor
+    jenkins_plugin_cfg_ansicolor_maps :
+      - name : xterm
+        normal :
+          - [ "BLACK",   "#000000" ]
+          - [ "RED",     "#CD0000" ]
+          - [ "GREEN",   "#00CD00" ]
+          - [ "YELLOW",  "#CDCD00" ]
+          - [ "BLUE",    "#1E90FF" ]
+          - [ "MAGENTA", "#CD00CD" ]
+          - [ "CYAN",    "#00CDCD" ]
+          - [ "WHITE",   "#E5E5E5" ]
+        bright :
+          - [ "BLACK",   "#4C4C4C" ]
+          - [ "RED",     "#FF0000" ]
+          - [ "GREEN",   "#00FF00" ]
+          - [ "YELLOW",  "#FFFF00" ]
+          - [ "BLUE",    "#4682B4" ]
+          - [ "MAGENTA", "#FF00FF" ]
+          - [ "CYAN",    "#00FFFF" ]
+          - [ "WHITE",   "#FFFFFF" ]
+      - name : vga
+        normal :
+          - [ "BLACK",   "#000000" ]
+          - [ "RED",     "#AA0000" ]
+          - [ "GREEN",   "#00AA00" ]
+          - [ "YELLOW",  "#AA5500" ]
+          - [ "BLUE",    "#0000AA" ]
+          - [ "MAGENTA", "#AA00AA" ]
+          - [ "CYAN",    "#00AAAA" ]
+          - [ "WHITE",   "#AAAAAA" ]
+        bright :
+          - [ "BLACK",   "#555555" ]
+          - [ "RED",     "#FF5555" ]
+          - [ "GREEN",   "#55FF55" ]
+          - [ "YELLOW",  "#FFFF55" ]
+          - [ "BLUE",    "#5555FF" ]
+          - [ "MAGENTA", "#FF55FF" ]
+          - [ "CYAN",    "#55FFFF" ]
+          - [ "WHITE",   "#FFFFFF" ]
+        default_foreground : 7
+        default_background : 0
+      - name : css
+        normal :
+          - [ "BLACK",   "black"   ]
+          - [ "RED",     "red"     ]
+          - [ "GREEN",   "green"   ]
+          - [ "YELLOW",  "yellow"  ]
+          - [ "BLUE",    "blue"    ]
+          - [ "MAGENTA", "magenta" ]
+          - [ "CYAN",    "cyan"    ]
+          - [ "WHITE",   "white"   ]
+        bright :
+          - [ "BLACK",   "black"   ]
+          - [ "RED",     "red"     ]
+          - [ "GREEN",   "green"   ]
+          - [ "YELLOW",  "yellow"  ]
+          - [ "BLUE",    "blue"    ]
+          - [ "MAGENTA", "magenta" ]
+          - [ "CYAN",    "cyan"    ]
+          - [ "WHITE",   "white"   ]
+      - name : gnome-terminal
+        normal :
+          - [ "BLACK",   "#2E3436" ]
+          - [ "RED",     "#CC0000" ]
+          - [ "GREEN",   "#4E9A06" ]
+          - [ "YELLOW",  "#C4A000" ]
+          - [ "BLUE",    "#3465A4" ]
+          - [ "MAGENTA", "#75507B" ]
+          - [ "CYAN",    "#06989A" ]
+          - [ "WHITE",   "#D3D7CF" ]
+        bright :
+          - [ "BLACK",   "#2E3436" ]
+          - [ "RED",     "#CC0000" ]
+          - [ "GREEN",   "#4E9A06" ]
+          - [ "YELLOW",  "#C4A000" ]
+          - [ "BLUE",    "#3465A4" ]
+          - [ "MAGENTA", "#75507B" ]
+          - [ "CYAN",    "#06989A" ]
+          - [ "WHITE",   "#D3D7CF" ]
+        default_foreground : 7
+        default_background : 0
 
     # Plugins : ant
     jenkins_plugin_cfg_ant_installations : []
