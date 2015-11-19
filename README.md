@@ -185,6 +185,10 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml
+      - name     : maven-plugin
+        template : "hudson.maven.MavenModuleSet.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}/hudson.maven.MavenModuleSet.xml
       - name     : publish-over-ssh
         template : >
           jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml.j2
@@ -234,6 +238,22 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_graphite_integrator_servers : []
     jenkins_plugin_cfg_graphite_integrator_metrics_map : []
     jenkins_plugin_cfg_graphite_integrator_base_queue_name : ""
+
+    # Plugins : maven-plugin
+    jenkins_plugin_cfg_maven_plugin_local_repository  : {}
+    jenkins_plugin_cfg_maven_plugin_validation_levels :
+      - level_string : DEFAULT
+        level_int    : -1
+      - level_string : LEVEL_MINIMAL
+        level_int    : 0
+      - level_string : LEVEL_MAVEN_2_0
+        level_int    : 20
+      - level_string : LEVEL_MAVEN_3_0
+        level_int    : 30
+      - level_string : LEVEL_MAVEN_3_1
+        level_int    : 31
+      - level_string : LEVEL_STRICT
+        level_int    : 30
 
     # Plugins : publish-over-ssh
     jenkins_plugin_cfg_publish_over_ssh_defaults : []
