@@ -168,11 +168,11 @@
       {{ jenkins_list_plugins_with_upgrade_test.stdout_lines }}
   when : jenkins_list_plugins_with_upgrade_test.stdout_lines
 
-- name : Check if configuration files exists for managed tasks
+- name : Check if configuration files exists for managed misc configurations
   file :
     dest : "{{ item.dest | trim }}"
     state : file
-  with_items : jenkins_task_templates
+  with_items : jenkins_misc_templates
 
 - name : Check if configuration files exists for managed plugins
   file :

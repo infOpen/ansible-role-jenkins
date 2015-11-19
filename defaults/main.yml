@@ -94,19 +94,19 @@ jenkins_main_cfg_primary_view : All
 jenkins_main_cfg_slave_agent_port : 0
 jenkins_main_cfg_label : ''
 
-# Tasks configuration
-jenkins_tasks :
+# Misc configuration
+jenkins_misc_cfg :
   - maven
   - shell
 
-# Tasks : maven
-jenkins_tasks_cfg_maven_installations : []
+# Misc : maven
+jenkins_misc_cfg_maven_installations : []
 
-# Tasks : shell
-jenkins_tasks_cfg_shells : []
+# Misc : shell
+jenkins_misc_cfg_shells : []
 
-# Tasks templates
-jenkins_task_templates :
+# Misc templates
+jenkins_misc_templates :
   - name     : maven
     template : "hudson.tasks.Maven.xml.j2"
     dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Maven.xml"
