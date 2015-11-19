@@ -158,6 +158,11 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location }}
           /org.jenkinsci.plugins.gitclient.JGitTool.xml }}
+      - name     : redmine
+        template : "hudson.plugins.redmine.RedmineProjectProperty.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /hudson.plugins.redmine.RedmineProjectProperty.xml
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
@@ -178,6 +183,9 @@ Follow the possible variables with their default values
 
     # Plugins : git-client
     jenkins_plugin_cfg_git_client_installations : []
+
+    # Plugins : redmine
+    jenkins_plugin_cfg_redmine_websites : []
 
 # Specific vars values for Debian family
 
