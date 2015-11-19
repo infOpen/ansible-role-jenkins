@@ -122,9 +122,13 @@ Follow the possible variables with their default values
 
     # Misc configuration
     jenkins_misc_cfg :
+      - artifact-manager
       - maven
       - scm-trigger
       - shell
+
+    # Misc : artifact manager
+    jenkins_misc_cfg_artifact_manager_factories : []
 
     # Misc : maven
     jenkins_misc_cfg_maven_installations : []
@@ -138,6 +142,11 @@ Follow the possible variables with their default values
 
     # Misc templates
     jenkins_misc_templates :
+      - name     : artifact-manager
+        template : "jenkins.model.ArtifactManagerConfiguration.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /jenkins.model.ArtifactManagerConfiguration.xml
       - name     : maven
         template : "hudson.tasks.Maven.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Maven.xml"
