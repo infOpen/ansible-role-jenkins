@@ -24,6 +24,22 @@
     group : "{{ jenkins_configuration_files_group }}"
     mode  : "{{ jenkins_configuration_files_mode }}"
 
+- name : Generate task configuration files
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  register : jenkins_task_configuration_generate
+  template :
+    src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
+      ~ '/' ~ item.1.template }}"
+    dest  : "{{ item.1.dest | trim }}"
+    owner : "{{ jenkins_configuration_files_owner }}"
+    group : "{{ jenkins_configuration_files_group }}"
+    mode  : "{{ jenkins_configuration_files_mode }}"
+  with_nested :
+    - jenkins_tasks
+    - jenkins_task_templates
+  when : item.0 == item.1.name
+
 - name : Generate plugin configuration files
   become : True
   become_user : "{{ jenkins_etc_user }}"
@@ -45,4 +61,5 @@
   when : >
     jenkins_main_configuration_generate.changed
     or jenkins_plugin_configuration_generate.changed
+    or jenkins_task_configuration_generate.changed
 

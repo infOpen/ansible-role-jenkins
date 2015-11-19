@@ -120,6 +120,17 @@ Follow the possible variables with their default values
     jenkins_main_cfg_slave_agent_port : 0
     jenkins_main_cfg_label : ''
 
+    # Tasks configuration
+    jenkins_tasks :
+      - shell
+    jenkins_tasks_cfg_shells : []
+
+    # Tasks templates
+    jenkins_task_templates :
+      - name     : shell
+        template : "hudson.tasks.Shell.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Shell.xml"
+
     # Plugins templates
     jenkins_plugin_templates :
       - name     : ansible
