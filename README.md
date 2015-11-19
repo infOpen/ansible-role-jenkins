@@ -188,6 +188,9 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml
+      - name     : mailer
+        template : "hudson.tasks.Mailer.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Mailer.xml"
       - name     : maven-plugin
         template : "hudson.maven.MavenModuleSet.xml.j2"
         dest     : >
@@ -249,6 +252,10 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_graphite_integrator_servers : []
     jenkins_plugin_cfg_graphite_integrator_metrics_map : []
     jenkins_plugin_cfg_graphite_integrator_base_queue_name : ""
+
+    # Plugins : mailer
+    jenkins_plugin_cfg_mailer_use_ssl : False
+    jenkins_plugin_cfg_mailer_charset : UTF-8
 
     # Plugins : maven-plugin
     jenkins_plugin_cfg_maven_plugin_local_repository  : {}
