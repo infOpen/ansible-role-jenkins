@@ -147,6 +147,9 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.ansible.AnsibleInstallation.xml
+      - name     : ant
+        template : "hudson.tasks.Ant.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Ant.xml"
       - name     : debian-package-builder
         template : >
           ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml.j2
@@ -213,6 +216,9 @@ Follow the possible variables with their default values
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
+
+    # Plugins : ant
+    jenkins_plugin_cfg_ant_installations : []
 
     # Plugins : debian-package-builder
     jenkins_plugin_cfg_debian_package_builder_public_key    : ""
