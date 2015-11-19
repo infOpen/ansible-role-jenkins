@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jvnet.hudson.plugins.SSHBuildWrapper_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+{% if jenkins_plugin_cfg_ssh_sites %}
+  <sites>
+{% for jenkins_ssh_site in jenkins_plugin_cfg_ssh_sites %}
+{% endfor %}
+  </sites>
+{% else %}
+  <sites/>
+{% endif %}
+</org.jvnet.hudson.plugins.SSHBuildWrapper_-DescriptorImpl>

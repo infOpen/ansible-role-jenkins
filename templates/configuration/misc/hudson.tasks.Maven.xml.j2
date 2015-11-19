@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.tasks.Maven_-DescriptorImpl>
+{% if jenkins_misc_cfg_maven_installations %}
+  <installations>
+{% for jenkins_misc_maven_installation in jenkins_misc_cfg_maven_installations %}
+{% endfor %}
+  </installations>
+{% else %}
+  <installations/>
+{% endif %}
+</hudson.tasks.Maven_-DescriptorImpl>

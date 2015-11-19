@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.plugins.ansicolor.AnsiColorBuildWrapper_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+{% if jenkins_plugin_cfg_ansicolor_maps %}
+  <colorMaps>
+{% for jenkins_color_map in jenkins_plugin_cfg_ansicolor_maps %}
+    <hudson.plugins.ansicolor.AnsiColorMap>
+      <name>{{ jenkins_color_map.name }}</name>
+{% if jenkins_color_map.normal %}
+      <normalMap class="enum-map" enum-type="hudson.plugins.ansicolor.AnsiColorMap$Color">
+{% for color in jenkins_color_map.normal %}
+        <entry>
+          <hudson.plugins.ansicolor.AnsiColorMap_-Color>{{ color[0] }}</hudson.plugins.ansicolor.AnsiColorMap_-Color>
+          <string>{{ color[1] }}</string>
+        </entry>
+{% endfor %}
+      </normalMap>
+{% endif %}
+{% if jenkins_color_map.bright %}
+      <brightMap class="enum-map" enum-type="hudson.plugins.ansicolor.AnsiColorMap$Color">
+{% for color in jenkins_color_map.bright %}
+        <entry>
+          <hudson.plugins.ansicolor.AnsiColorMap_-Color>{{ color[0] }}</hudson.plugins.ansicolor.AnsiColorMap_-Color>
+          <string>{{ color[1] }}</string>
+        </entry>
+{% endfor %}
+      </brightMap>
+{% endif %}
+{% if jenkins_color_map.default_foreground is defined %}
+      <defaultForeground>{{ jenkins_color_map.default_foreground }}</defaultForeground>
+{% endif %}
+{% if jenkins_color_map.default_background is defined %}
+      <defaultBackground>{{ jenkins_color_map.default_background }}</defaultBackground>
+{% endif %}
+    </hudson.plugins.ansicolor.AnsiColorMap>
+{% endfor %}
+  </colorMaps>
+{% else %}
+  <colorMaps/>
+{% endif %}
+</hudson.plugins.ansicolor.AnsiColorBuildWrapper_-DescriptorImpl>
