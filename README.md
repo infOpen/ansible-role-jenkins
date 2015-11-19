@@ -119,6 +119,11 @@ Follow the possible variables with their default values
 
     # Plugins templates
     jenkins_plugin_templates :
+      - name     : ansible
+        template : "org.jenkinsci.plugins.ansible.AnsibleInstallation.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /org.jenkinsci.plugins.ansible.AnsibleInstallation.xml
       - name     : envinject
         template : "envInject.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/envInject.xml"
@@ -139,6 +144,9 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location }}
           /org.jenkinsci.plugins.gitclient.JGitTool.xml }}
+
+    # Plugins : ansible
+    jenkins_plugin_cfg_ansible_installations : []
 
     # Plugin : envinject
     jenkins_plugin_cfg_envinject_global_password_entries : []
