@@ -143,6 +143,11 @@ jenkins_plugin_templates :
     dest     : >
       {{ jenkins_etc_home_location -}}
       /hudson.plugins.redmine.RedmineProjectProperty.xml
+  - name     : ssh
+    template : "org.jvnet.hudson.plugins.SSHBuildWrapper.xml.j2"
+    dest     : >
+      {{ jenkins_etc_home_location -}}
+      /org.jvnet.hudson.plugins.SSHBuildWrapper.xml
 
 # Plugins : ansible
 jenkins_plugin_cfg_ansible_installations : []
@@ -171,4 +176,7 @@ jenkins_plugin_cfg_graphite_integrator_base_queue_name : ""
 
 # Plugins : redmine
 jenkins_plugin_cfg_redmine_websites : []
+
+# Plugins : ssh
+jenkins_plugin_cfg_ssh_sites : []
 

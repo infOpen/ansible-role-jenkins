@@ -169,6 +169,11 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /hudson.plugins.redmine.RedmineProjectProperty.xml
+      - name     : ssh
+        template : "org.jvnet.hudson.plugins.SSHBuildWrapper.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /org.jvnet.hudson.plugins.SSHBuildWrapper.xml
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
@@ -197,6 +202,9 @@ Follow the possible variables with their default values
 
     # Plugins : redmine
     jenkins_plugin_cfg_redmine_websites : []
+
+    # Plugins : ssh
+    jenkins_plugin_cfg_ssh_sites : []
 
 # Specific vars values for Debian family
 
