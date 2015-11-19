@@ -123,10 +123,15 @@ Follow the possible variables with their default values
     # Misc configuration
     jenkins_misc_cfg :
       - maven
+      - scm-trigger
       - shell
 
     # Misc : maven
     jenkins_misc_cfg_maven_installations : []
+
+    # Misc : scm-trigger
+    jenkins_misc_cfg_scm_trigger_synchronous_polling : False
+    jenkins_misc_cfg_scm_trigger_maximum_threads : 0
 
     # Misc : shell
     jenkins_misc_cfg_shells : []
