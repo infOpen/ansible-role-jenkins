@@ -30,7 +30,7 @@
   register : jenkins_task_configuration_generate
   template :
     src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
-      ~ '/' ~ item.1.template }}"
+      ~ '/' ~ item.1.template | trim }}"
     dest  : "{{ item.1.dest | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
     group : "{{ jenkins_configuration_files_group }}"
@@ -46,7 +46,7 @@
   register : jenkins_plugin_configuration_generate
   template :
     src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
-      ~ '/' ~ item.1.template }}"
+      ~ '/' ~ item.1.template | trim }}"
     dest  : "{{ item.1.dest | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
     group : "{{ jenkins_configuration_files_group }}"
