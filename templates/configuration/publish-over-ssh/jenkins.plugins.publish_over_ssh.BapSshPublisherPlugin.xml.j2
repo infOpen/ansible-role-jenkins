@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin_-Descriptor plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+{% if jenkins_plugin_cfg_publish_over_ssh_host_configurations %}
+  <hostConfigurations>
+{% for jenkins_host_configuration in jenkins_plugin_cfg_publish_over_ssh_host_configurations %}
+{% endfor %}
+  </hostConfigurations>
+{% else %}
+  <hostConfigurations/>
+{% endif %}
+  <commonConfig>
+    <secretPassphrase>{{ jenkins_plugin_cfg_publish_over_ssh_common_passphrase }}</secretPassphrase>
+    <key>{{ jenkins_plugin_cfg_publish_over_ssh_common_key }}</key>
+    <keyPath>{{ jenkins_plugin_cfg_publish_over_ssh_common_key_path }}</keyPath>
+    <disableAllExec>{{ jenkins_plugin_cfg_publish_over_ssh_common_disable_all_exec | lower }}</disableAllExec>
+  </commonConfig>
+{% if jenkins_plugin_cfg_publish_over_ssh_defaults %}
+  <defaults class="jenkins.plugins.publish_over_ssh.options.SshPluginDefaults">
+{% for jenkins_publish_default in jenkins_plugin_cfg_publish_over_ssh_defaults %}
+{% endfor %}
+  </defaults>
+{% else %}
+  <defaults class="jenkins.plugins.publish_over_ssh.options.SshPluginDefaults"/>
+{% endif %}
+</jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin_-Descriptor>

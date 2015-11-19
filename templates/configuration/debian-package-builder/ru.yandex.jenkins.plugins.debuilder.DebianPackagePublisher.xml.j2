@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+{% if jenkins_plugin_cfg_debian_package_builder_repos %}
+  <repos>
+{% for jenkins_dpb_repo in jenkins_plugin_cfg_debian_package_builder_repos %}
+{% endfor %}
+  </repos>
+{% else %}
+  <repos/>
+{% endif %}
+</ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher_-DescriptorImpl>
