@@ -164,6 +164,12 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml
+      - name     : publish-over-ssh
+        template : >
+          jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml.j2
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml
       - name     : redmine
         template : "hudson.plugins.redmine.RedmineProjectProperty.xml.j2"
         dest     : >
@@ -199,6 +205,14 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_graphite_integrator_servers : []
     jenkins_plugin_cfg_graphite_integrator_metrics_map : []
     jenkins_plugin_cfg_graphite_integrator_base_queue_name : ""
+
+    # Plugins : publish-over-ssh
+    jenkins_plugin_cfg_publish_over_ssh_defaults : []
+    jenkins_plugin_cfg_publish_over_ssh_host_configurations : []
+    jenkins_plugin_cfg_publish_over_ssh_common_passphrase : ""
+    jenkins_plugin_cfg_publish_over_ssh_common_key : ""
+    jenkins_plugin_cfg_publish_over_ssh_common_key_path : ""
+    jenkins_plugin_cfg_publish_over_ssh_common_disable_all_exec : False
 
     # Plugins : redmine
     jenkins_plugin_cfg_redmine_websites : []
