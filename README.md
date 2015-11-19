@@ -96,6 +96,9 @@ Follow the possible variables with their default values
 
     # CONFIGURATION
     #--------------
+    jenkins_configuration_files_owner : "{{ jenkins_etc_user }}"
+    jenkins_configuration_files_group : "{{ jenkins_etc_group }}"
+    jenkins_configuration_files_mode  : "0644"
 
     # Main configuration
     jenkins_main_cfg_version : ''

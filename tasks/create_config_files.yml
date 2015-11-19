@@ -18,19 +18,23 @@
   become_user : "{{ jenkins_etc_user }}"
   register : jenkins_main_configuration_generate
   template :
-    src  : "{{ role_path }}/templates/configuration/config.xml.j2"
-    dest : "{{ jenkins_etc_home_location }}/config.xml"
-    mode : "0400"
+    src   : "{{ role_path }}/templates/configuration/config.xml.j2"
+    dest  : "{{ jenkins_etc_home_location }}/config.xml"
+    owner : "{{ jenkins_configuration_files_owner }}"
+    group : "{{ jenkins_configuration_files_group }}"
+    mode  : "{{ jenkins_configuration_files_mode }}"
 
 - name : Generate plugin configuration files
   become : True
   become_user : "{{ jenkins_etc_user }}"
   register : jenkins_plugin_configuration_generate
   template :
-    src  : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
+    src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
       ~ '/' ~ item.1.template }}"
-    dest : "{{ item.1.dest | trim }}"
-    mode : "0400"
+    dest  : "{{ item.1.dest | trim }}"
+    owner : "{{ jenkins_configuration_files_owner }}"
+    group : "{{ jenkins_configuration_files_group }}"
+    mode  : "{{ jenkins_configuration_files_mode }}"
   with_nested :
     - "{{ (jenkins_list_plugins_updated.content | from_json).plugins }}"
     - jenkins_plugin_templates
