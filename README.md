@@ -212,7 +212,8 @@ Follow the possible variables with their default values
 Dependencies
 ------------
 
-None
+- achaussier.openjdk-jre
+- achaussier.openjdk-jdk
 
 Example Playbook
 ----------------
