@@ -183,6 +183,9 @@ Follow the possible variables with their default values
       - name     : ant
         template : "hudson.tasks.Ant.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Ant.xml"
+      - name     : cvs
+        template : "hudson.scm.CVSSCM.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/hudson.scm.CVSSCM.xml"
       - name     : debian-package-builder
         template : >
           ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml.j2
@@ -255,6 +258,15 @@ Follow the possible variables with their default values
 
     # Plugins : ant
     jenkins_plugin_cfg_ant_installations : []
+
+    # Plugins : cvs
+    jenkins_plugin_cfg_cvs_generation : 1
+    jenkins_plugin_cfg_cvs_compression_level : 3
+    jenkins_plugin_cfg_cvs_private_key_location : ""
+    jenkins_plugin_cfg_cvs_private_key_password : ""
+    jenkins_plugin_cfg_cvs_known_hosts_location : ""
+    jenkins_plugin_cfg_cvs_auth_tokens : []
+    jenkins_plugin_cfg_cvs_changelog_encoding : UTF-8
 
     # Plugins : debian-package-builder
     jenkins_plugin_cfg_debian_package_builder_public_key    : ""

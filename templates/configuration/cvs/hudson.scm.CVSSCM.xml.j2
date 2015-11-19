@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.scm.CVSSCM_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+  <generation>{{ jenkins_plugin_cfg_cvs_generation }}</generation>
+  <compressionLevel>{{ jenkins_plugin_cfg_cvs_compression_level }}</compressionLevel>
+  <privateKeyLocation>{{ jenkins_plugin_cfg_cvs_private_key_location }}</privateKeyLocation>
+  <privateKeyPassword>{{ jenkins_plugin_cfg_cvs_private_key_password }}</privateKeyPassword>
+  <knownHostsLocation>{{ jenkins_plugin_cfg_cvs_known_hosts_location }}</knownHostsLocation>
+{% if jenkins_plugin_cfg_cvs_auth_tokens %}
+  <authTokens>
+{% for jenkins_cvs_auth_token in jenkins_plugin_cfg_cvs_auth_tokens %}
+{% endfor %}
+  </authTokens>
+{% else %}
+  <authTokens/>
+{% endif %}
+  <changelogEncoding>{{ jenkins_plugin_cfg_cvs_changelog_encoding }}</changelogEncoding>
+</hudson.scm.CVSSCM_-DescriptorImpl>
