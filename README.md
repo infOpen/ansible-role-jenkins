@@ -122,11 +122,20 @@ Follow the possible variables with their default values
 
     # Tasks configuration
     jenkins_tasks :
+      - maven
       - shell
+
+    # Tasks : maven
+    jenkins_tasks_cfg_maven_installations : []
+
+    # Tasks : shell
     jenkins_tasks_cfg_shells : []
 
     # Tasks templates
     jenkins_task_templates :
+      - name     : maven
+        template : "hudson.tasks.Maven.xml.j2"
+        dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Maven.xml"
       - name     : shell
         template : "hudson.tasks.Shell.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/hudson.tasks.Shell.xml"
