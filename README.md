@@ -205,6 +205,11 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jvnet.hudson.plugins.SSHBuildWrapper.xml
+      - name     : subversion
+        template : "hudson.scm.SubversionSCM.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /hudson.scm.SubversionSCM.xml
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
@@ -268,6 +273,13 @@ Follow the possible variables with their default values
 
     # Plugins : ssh
     jenkins_plugin_cfg_ssh_sites : []
+
+    # Plugins : subversion
+    jenkins_plugin_cfg_subversion_generation : 1
+    jenkins_plugin_cfg_subversion_legacy_per_job_credentials : False
+    jenkins_plugin_cfg_subversion_workspace_format : 8
+    jenkins_plugin_cfg_subversion_validate_remote_up_to_var : False
+    jenkins_plugin_cfg_subversion_store_auth_to_disk : False
 
 # Specific vars values for Debian family
 
