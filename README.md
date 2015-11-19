@@ -123,6 +123,7 @@ Follow the possible variables with their default values
     # Misc configuration
     jenkins_misc_cfg :
       - artifact-manager
+      - global-maven
       - jenkins-location
       - maven
       - scm-trigger
@@ -130,6 +131,10 @@ Follow the possible variables with their default values
 
     # Misc : artifact manager
     jenkins_misc_cfg_artifact_manager_factories : []
+
+    # Misc : global maven
+    jenkins_misc_cfg_jenkins_global_maven_settings_provider : {}
+    jenkins_misc_cfg_jenkins_global_maven_global_settings_provider : {}
 
     # Misc : jenkins location
     jenkins_misc_cfg_jenkins_location_admin_address : ""
@@ -152,6 +157,10 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /jenkins.model.ArtifactManagerConfiguration.xml
+      - name     : global-maven
+        template : "jenkins.mvn.GlobalMavenConfig.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location -}}/jenkins.mvn.GlobalMavenConfig.xml
       - name     : jenkins-location
         template : "jenkins.model.JenkinsLocationConfiguration.xml.j2"
         dest     : >
