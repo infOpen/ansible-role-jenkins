@@ -134,6 +134,11 @@ Follow the possible variables with their default values
         template : "hudson.plugins.git.GitSCM.xml.j2"
         dest     : >
           {{ jenkins_etc_home_location }}/hudson.plugins.git.GitSCM.xml
+      - name     : git-client
+        template : "org.jenkinsci.plugins.gitclient.JGitTool.xml.j2"
+        dest     : >
+          {{ jenkins_etc_home_location }}
+          /org.jenkinsci.plugins.gitclient.JGitTool.xml }}
 
     # Plugin : envinject
     jenkins_plugin_cfg_envinject_global_password_entries : []
@@ -148,6 +153,9 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_git_global_name  : foobar
     jenkins_plugin_cfg_git_global_email : "foo@foo.bar"
     jenkins_plugin_cfg_git_create_account_based_on_email : False
+
+    # Plugins : git-client
+    jenkins_plugin_cfg_git_client_installations : []
 
 # Specific vars values for Debian family
 
