@@ -138,6 +138,18 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location -}}
           /org.jenkinsci.plugins.ansible.AnsibleInstallation.xml
+      - name     : debian-package-builder
+        template : >
+          ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml.j2
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml
+      - name     : debian-package-builder
+        template : >
+          ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher.xml.j2
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher.xml
       - name     : envinject
         template : "envInject.xml.j2"
         dest     : "{{ jenkins_etc_home_location }}/envInject.xml"
@@ -183,6 +195,14 @@ Follow the possible variables with their default values
 
     # Plugins : ansible
     jenkins_plugin_cfg_ansible_installations : []
+
+    # Plugins : debian-package-builder
+    jenkins_plugin_cfg_debian_package_builder_public_key    : ""
+    jenkins_plugin_cfg_debian_package_builder_private_key   : ""
+    jenkins_plugin_cfg_debian_package_builder_account_name  : "Jenkins"
+    jenkins_plugin_cfg_debian_package_builder_account_email : ""
+    jenkins_plugin_cfg_debian_package_builder_passphrase    : ""
+    jenkins_plugin_cfg_debian_package_builder_repos : []
 
     # Plugin : envinject
     jenkins_plugin_cfg_envinject_global_password_entries : []
