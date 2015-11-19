@@ -29,7 +29,7 @@
   become_user : "{{ jenkins_etc_user }}"
   register : jenkins_misc_configuration_generate
   template :
-    src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
+    src   : "{{ role_path ~ '/templates/configuration/misc'
       ~ '/' ~ item.1.template | trim }}"
     dest  : "{{ item.1.dest | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
