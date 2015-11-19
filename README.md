@@ -158,6 +158,12 @@ Follow the possible variables with their default values
         dest     : >
           {{ jenkins_etc_home_location }}
           /org.jenkinsci.plugins.gitclient.JGitTool.xml }}
+      - name     : graphiteIntegrator
+        template : >
+          org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml.j2
+        dest     : >
+          {{ jenkins_etc_home_location -}}
+          /org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml
       - name     : redmine
         template : "hudson.plugins.redmine.RedmineProjectProperty.xml.j2"
         dest     : >
@@ -183,6 +189,11 @@ Follow the possible variables with their default values
 
     # Plugins : git-client
     jenkins_plugin_cfg_git_client_installations : []
+
+    # Plugins : graphiteIntegrator
+    jenkins_plugin_cfg_graphite_integrator_servers : []
+    jenkins_plugin_cfg_graphite_integrator_metrics_map : []
+    jenkins_plugin_cfg_graphite_integrator_base_queue_name : ""
 
     # Plugins : redmine
     jenkins_plugin_cfg_redmine_websites : []
