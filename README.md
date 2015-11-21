@@ -35,6 +35,9 @@ Follow the possible variables with their default values
     jenkins_package_state      : "latest"
     jenkins_repository_content : "deb http://pkg.jenkins-ci.org/debian binary/"
 
+    jenkins_system_dependencies : []
+    jenkins_system_dependencies_state : "present"
+
     # Configuration file settings
     jenkins_default_cfg_file_owner : root
     jenkins_default_cfg_file_group : root
@@ -437,6 +440,9 @@ Follow the possible variables with their default values
 
     jenkins_package_name : "jenkins"
     jenkins_service_name : "jenkins"
+
+    jenkins_system_dependencies :
+      - python-httplib2
 
 Dependencies
 ------------

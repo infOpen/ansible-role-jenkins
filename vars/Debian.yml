@@ -10,3 +10,6 @@ jenkins_default_cfg_file   : "jenkins"
 jenkins_package_name : "jenkins"
 jenkins_service_name : "jenkins"
 
+jenkins_system_dependencies :
+  - python-httplib2
+
