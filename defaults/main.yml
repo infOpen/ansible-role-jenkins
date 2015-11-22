@@ -68,6 +68,9 @@ jenkins_plugins : []
 # Jenkins clouds
 jenkins_main_cfg_clouds : []
 
+# Jenkins credentials
+jenkins_credentials : []
+
 # API URLs
 #---------
 jenkins_api_plugins_list : >
