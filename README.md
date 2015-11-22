@@ -88,6 +88,12 @@ Follow the possible variables with their default values
     # Plugins
     jenkins_plugins : []
 
+    # Jenkins clouds
+    jenkins_main_cfg_clouds : []
+
+    # Jenkins credentials
+    jenkins_credentials : []
+
     # API URLs
     #---------
     jenkins_api_plugins_list : >
@@ -472,6 +478,38 @@ Follow the possible variables with their default values
               cpu_shares: 0
             retention_strategy:
               idle_minutes: 10
+
+### How configure credentials
+
+This is an example of YAML structure to create credentials for Jenkins.
+WARNING : This will clear old previous credentials !
+
+This example create two accounts, one with SSH auth and one with password auth.
+
+    jenkins_credentials:
+      domainCredentials:
+        - domain:
+            name: "my-credential-domain"
+            description: "My beautiful credential domain"
+          credentials:
+            - scope: "GLOBAL"
+              id: "my-id"
+              username: "foo"
+              description: "foobar"
+              privateKeySource:
+                value: 1
+                privateKeyFile: "/my/key.ssh"
+                stapler-class: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey$FileOnMasterPrivateKeySource"
+              passphrase: "coucou"
+              stapler-class: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey"
+              kind: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey"
+            - scope: "GLOBAL"
+              id: "my-id-2"
+              username: "bar"
+              description: "foobar"
+              password: "big-password!"
+              stapler-class: "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
+              kind: "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
 
 ### Specific vars values for Debian family
 
