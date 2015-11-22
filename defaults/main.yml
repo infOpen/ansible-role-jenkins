@@ -65,6 +65,8 @@ jenkins_waiting_available_delay   : 5
 # Plugins
 jenkins_plugins : []
 
+# Jenkins clouds
+jenkins_main_cfg_clouds : []
 
 # API URLs
 #---------

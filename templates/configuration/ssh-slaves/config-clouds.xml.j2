@@ -1,0 +1,14 @@
+
+{% set jenkins_ssh_slave_plugin = (
+    (jenkins_list_plugins_updated.content | from_json).plugins
+    | selectattr('shortName', 'equalto', 'ssh-slaves') | first)
+%}
+            <sshConnector plugin="ssh-slaves@{{ jenkins_ssh_slave_plugin.version }}">
+              <port>{{ jenkins_ssh_slave.port }}</port>
+              <credentialsId>{{ jenkins_ssh_slave.credentials_id }}</credentialsId>
+              <jvmOptions>{{ jenkins_ssh_slave.jvm_options | join(' ') }}</jvmOptions>
+              <javaPath>{{ jenkins_ssh_slave.java_path }}</javaPath>
+              <maxNumRetries>{{ jenkins_ssh_slave.max_num_retries }}</maxNumRetries>
+              <retryWaitTime>{{ jenkins_ssh_slave.retry_wait_time }}</retryWaitTime>
+            </sshConnector>
+

@@ -426,6 +426,53 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_subversion_validate_remote_up_to_var : False
     jenkins_plugin_cfg_subversion_store_auth_to_disk : False
 
+### How configure a Docker cloud
+    jenkins_main_cfg_clouds:
+      - type: 'docker-plugin'
+        name: 'my-docker-cloud'
+        url: 'http://127.0.0.1:8081'
+        connect_timeout: 0
+        read_timeout: 0
+        credentials_id: ''
+        container_cap: 100
+        templates:
+          - config_version: 2
+            label_string: ''
+            remote_fs_mapping: '/tmp'
+            remote_fs: '/home/jenkins'
+            instance_cap: 1
+            mode: 'NORMAL'
+            num_executor: 1
+            remove_volumes: False
+            pull_strategy: 'PULL_LATEST'
+            launcher:
+              class: 'ssh'
+              port: 22
+              credentials_id: ''
+              jvm_options: []
+              java_path: ''
+              max_num_retries: 0
+              retry_wait_time: 0
+            template_base:
+              image: 'evarga/jenkins-slave'
+              docker_command: ''
+              lxc_conf_string: ''
+              hostname: ''
+              dns_hosts: []
+              volumes: []
+              volumes_from2: []
+              environment: []
+              bind_ports: []
+              bind_all_ports: False
+              privileged: False
+              tty: False
+              extra_hosts: []
+              mac_address: ''
+              memory_limit: 0
+              cpu_shares: 0
+            retention_strategy:
+              idle_minutes: 10
+
 ### Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
