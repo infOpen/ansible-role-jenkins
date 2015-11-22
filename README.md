@@ -88,6 +88,9 @@ Follow the possible variables with their default values
     # Plugins
     jenkins_plugins : []
 
+    # Jenkins clouds
+    jenkins_main_cfg_clouds : []
+
     # API URLs
     #---------
     jenkins_api_plugins_list : >
