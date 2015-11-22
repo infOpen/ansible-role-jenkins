@@ -1,18 +1,15 @@
-jenkins
-=======
+# jenkins
 
 [![Build Status](https://travis-ci.org/infOpen/ansible-role-jenkins.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-jenkins)
 
 Install jenkins package.
 
-Requirements
-------------
+## Requirements
 
 This role requires Ansible 1.9 or higher, and platform requirements are listed
 in the metadata file.
 
-Testing
--------
+## Testing
 
 This role has two test methods :
 
@@ -23,12 +20,11 @@ This role has two test methods :
 
 Vagrant should be used to check the role before push changes to Github.
 
-Role Variables
---------------
+## Role Variables
 
 Follow the possible variables with their default values
 
-# Defaults file for jenkins
+### Defaults file for jenkins
 
     # Ubuntu repository vars
     jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
@@ -430,7 +426,7 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_subversion_validate_remote_up_to_var : False
     jenkins_plugin_cfg_subversion_store_auth_to_disk : False
 
-# Specific vars values for Debian family
+### Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
     jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
@@ -444,26 +440,22 @@ Follow the possible variables with their default values
     jenkins_system_dependencies :
       - python-httplib2
 
-Dependencies
-------------
+## Dependencies
 
 - achaussier.openjdk-jre
 - achaussier.openjdk-jdk
 
-Example Playbook
-----------------
+## Example Playbook
 
     - hosts: servers
       roles:
          - { role: achaussier.jenkins }
 
-License
--------
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro
