@@ -1,0 +1,104 @@
+
+{% set jenkins_docker_plugin = (
+    (jenkins_list_plugins_updated.content | from_json).plugins
+    | selectattr('shortName', 'equalto', 'docker-plugin') | first)
+%}
+    <com.nirima.jenkins.plugins.docker.DockerCloud plugin="docker-plugin@{{ jenkins_docker_plugin.version }}">
+      <name>{{ jenkins_cloud.name }}</name>
+      <templates>
+        {% for jenkins_docker_template in jenkins_cloud.templates -%}
+        <com.nirima.jenkins.plugins.docker.DockerTemplate>
+          <configVersion>{{ jenkins_docker_template.config_version }}</configVersion>
+          <labelString>{{ jenkins_docker_template.label_string }}</labelString>
+          {% if jenkins_docker_template.launcher.class == 'ssh' -%}
+          {%- set jenkins_ssh_slave = jenkins_docker_template.launcher -%}
+          <launcher class="com.nirima.jenkins.plugins.docker.launcher.DockerComputerSSHLauncher">
+          {%- include 'templates/configuration/ssh-slaves/config-clouds.xml.j2' %}
+          </launcher>
+          {% endif -%}
+          <remoteFsMapping>{{ jenkins_docker_template.remote_fs_mapping }}</remoteFsMapping>
+          <remoteFs>{{ jenkins_docker_template.remote_fs }}</remoteFs>
+          <instanceCap>{{ jenkins_docker_template.instance_cap }}</instanceCap>
+          <mode>{{ jenkins_docker_template.mode }}</mode>
+          <retentionStrategy class="com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy">
+            <idleMinutes>{{ jenkins_docker_template.retention_strategy.idle_minutes }}</idleMinutes>
+            <idleMinutes defined-in="com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy">{{ jenkins_docker_template.retention_strategy.idle_minutes }}</idleMinutes>
+          </retentionStrategy>
+          <numExecutors>{{ jenkins_docker_template.num_executor }}</numExecutors>
+          <dockerTemplateBase>
+            <image>{{ jenkins_docker_template.template_base.image }}</image>
+            <dockerCommand>{{ jenkins_docker_template.template_base.docker_command }}</dockerCommand>
+            <lxcConfString>{{ jenkins_docker_template.template_base.lxc_conf_string }}</lxcConfString>
+            <hostname>{{ jenkins_docker_template.template_base.hostname }}</hostname>
+            {% if jenkins_docker_template.template_base.dns_hosts -%}
+            <dnsHosts>
+            {%- for dns_host in jenkins_docker_template.template_base.dns_hosts -%}
+              <string>{{ dns_host }}</string>
+            {%- endfor -%}
+            </dnsHosts>
+            {%- else -%}
+            <dnsHosts/>
+            {% endif -%}
+            {% if jenkins_docker_template.template_base.volumes -%}
+            <volumes>
+            {% for volume in jenkins_docker_template.template_base.volumes -%}
+              <string>{{ volume }}</string>
+            {%- endfor -%}
+            </volumes>
+            {%- else -%}
+            <volumes/>
+            {% endif -%}
+            {% if jenkins_docker_template.template_base.volumes_from2 -%}
+            <volumesFrom2>
+            {% for volume in jenkins_docker_template.template_base.volumes_from2 -%}
+              <string>{{ volume }}</string>
+            {%- endfor -%}
+            </volumesFrom2>
+            {%- else -%}
+            <volumesFrom2/>
+            {% endif -%}
+            {% if jenkins_docker_template.template_base.environment -%}
+            <environment>
+            {% for environment in jenkins_docker_template.template_base.environment -%}
+              <string>{{ environment }}</string>
+            {%- endfor -%}
+            </environment>
+            {%- else -%}
+            <environment/>
+            {% endif -%}
+            <bindPorts>{{ jenkins_docker_template.template_base.bind_ports | join(',') }}</bindPorts>
+            <bindAllPorts>{{ jenkins_docker_template.template_base.bind_all_ports | lower }}</bindAllPorts>
+            {% if (jenkins_docker_template.template_base.memory_limit | int) > 0 -%}
+            <memoryLimit>{{ jenkins_docker_template.template_base.memory_limit }}</memoryLimit>
+            {%- endif -%}
+            {% if (jenkins_docker_template.template_base.cpu_shares | int) > 0 -%}
+            <cpuShares>{{ jenkins_docker_template.template_base.cpu_shares }}</cpuShares>
+            {%- endif -%}
+            <privileged>{{ jenkins_docker_template.template_base.privileged | lower }}</privileged>
+            <tty>{{ jenkins_docker_template.template_base.tty | lower }}</tty>
+            <macAddress>{{ jenkins_docker_template.template_base.mac_address }}</macAddress>
+            <extraHosts class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
+              {% if jenkins_docker_template.template_base.extra_hosts -%}
+              <c class="list">
+              {% for extra_host in jenkins_docker_template.template_base.extra_hosts -%}
+                <string>{{ extra_host }}</string>
+              {% endfor %}
+              </c>
+              {%- else -%}
+              <c class="list"/>
+              {% endif -%}
+              <list reference="../c"/>
+            </extraHosts>
+          </dockerTemplateBase>
+          <removeVolumes>{{ jenkins_docker_template.remove_volumes | lower }}</removeVolumes>
+          <pullStrategy>{{ jenkins_docker_template.pull_strategy }}</pullStrategy>
+        </com.nirima.jenkins.plugins.docker.DockerTemplate>
+      </templates>
+      {% endfor -%}
+      <serverUrl>{{ jenkins_cloud.url }}</serverUrl>
+      <connectTimeout>{{ jenkins_cloud.connect_timeout }}</connectTimeout>
+      <readTimeout>{{ jenkins_cloud.read_timeout }}</readTimeout>
+      <credentialsId>{{ jenkins_cloud.credentials_id }}</credentialsId>
+      <containerCap>{{ jenkins_cloud.container_cap }}</containerCap>
+    </com.nirima.jenkins.plugins.docker.DockerCloud>
+
