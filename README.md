@@ -1,18 +1,15 @@
-jenkins
-=======
+# jenkins
 
 [![Build Status](https://travis-ci.org/infOpen/ansible-role-jenkins.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-jenkins)
 
 Install jenkins package.
 
-Requirements
-------------
+## Requirements
 
 This role requires Ansible 1.9 or higher, and platform requirements are listed
 in the metadata file.
 
-Testing
--------
+## Testing
 
 This role has two test methods :
 
@@ -23,17 +20,19 @@ This role has two test methods :
 
 Vagrant should be used to check the role before push changes to Github.
 
-Role Variables
---------------
+## Role Variables
 
 Follow the possible variables with their default values
 
-# Defaults file for jenkins
+### Defaults file for jenkins
 
     # Ubuntu repository vars
     jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
     jenkins_package_state      : "latest"
     jenkins_repository_content : "deb http://pkg.jenkins-ci.org/debian binary/"
+
+    jenkins_system_dependencies : []
+    jenkins_system_dependencies_state : "present"
 
     # Configuration file settings
     jenkins_default_cfg_file_owner : root
@@ -427,7 +426,54 @@ Follow the possible variables with their default values
     jenkins_plugin_cfg_subversion_validate_remote_up_to_var : False
     jenkins_plugin_cfg_subversion_store_auth_to_disk : False
 
-# Specific vars values for Debian family
+### How configure a Docker cloud
+    jenkins_main_cfg_clouds:
+      - type: 'docker-plugin'
+        name: 'my-docker-cloud'
+        url: 'http://127.0.0.1:8081'
+        connect_timeout: 0
+        read_timeout: 0
+        credentials_id: ''
+        container_cap: 100
+        templates:
+          - config_version: 2
+            label_string: ''
+            remote_fs_mapping: '/tmp'
+            remote_fs: '/home/jenkins'
+            instance_cap: 1
+            mode: 'NORMAL'
+            num_executor: 1
+            remove_volumes: False
+            pull_strategy: 'PULL_LATEST'
+            launcher:
+              class: 'ssh'
+              port: 22
+              credentials_id: ''
+              jvm_options: []
+              java_path: ''
+              max_num_retries: 0
+              retry_wait_time: 0
+            template_base:
+              image: 'evarga/jenkins-slave'
+              docker_command: ''
+              lxc_conf_string: ''
+              hostname: ''
+              dns_hosts: []
+              volumes: []
+              volumes_from2: []
+              environment: []
+              bind_ports: []
+              bind_all_ports: False
+              privileged: False
+              tty: False
+              extra_hosts: []
+              mac_address: ''
+              memory_limit: 0
+              cpu_shares: 0
+            retention_strategy:
+              idle_minutes: 10
+
+### Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
     jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
@@ -438,26 +484,25 @@ Follow the possible variables with their default values
     jenkins_package_name : "jenkins"
     jenkins_service_name : "jenkins"
 
-Dependencies
-------------
+    jenkins_system_dependencies :
+      - python-httplib2
+
+## Dependencies
 
 - achaussier.openjdk-jre
 - achaussier.openjdk-jdk
 
-Example Playbook
-----------------
+## Example Playbook
 
     - hosts: servers
       roles:
          - { role: achaussier.jenkins }
 
-License
--------
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro

@@ -14,7 +14,17 @@
   <jdks/>
   <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
   <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  {% if jenkins_main_cfg_clouds -%}
+  <clouds>
+  {%- for jenkins_cloud in jenkins_main_cfg_clouds -%}
+    {%- if jenkins_cloud.type == 'docker-plugin' -%}
+      {% include 'templates/configuration/docker-plugin/config-clouds.xml.j2' %}
+    {%- endif -%}
+  {% endfor %}
+  </clouds>
+  {%- else -%}
   <clouds/>
+  {% endif -%}
   <quietPeriod>{{ jenkins_main_cfg_quiet_period }}</quietPeriod>
   <scmCheckoutRetryCount>{{ jenkins_main_cfg_scm_checkout_retry_count }}</scmCheckoutRetryCount>
   <views>
