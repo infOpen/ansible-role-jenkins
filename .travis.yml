@@ -10,8 +10,14 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  # Install Ansible.
-  - pip install ansible
+  # Install Ansible devel prerequisites.
+  - pip install paramiko PyYAML Jinja2 httplib2 six
+
+  # Install Ansible devel.
+  - git clone git://github.com/ansible/ansible.git --recursive
+    && cd ./ansible
+    && sudo make install
+    && cd ..
 
   # Add ansible.cfg to pick up roles path.
   - "cp ./tests/ansible.cfg ./"
