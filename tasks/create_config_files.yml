@@ -30,15 +30,13 @@
   register : jenkins_misc_configuration_generate
   template :
     src   : "{{ role_path ~ '/templates/configuration/misc'
-      ~ '/' ~ item.1.template | trim }}"
-    dest  : "{{ item.1.dest | trim }}"
+      ~ '/' ~ item.template | trim }}"
+    dest  : "{{ item.dest | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
     group : "{{ jenkins_configuration_files_group }}"
     mode  : "{{ jenkins_configuration_files_mode }}"
-  with_nested :
-    - jenkins_misc_cfg
-    - jenkins_misc_templates
-  when : item.0 == item.1.name
+  with_items : jenkins_misc_templates
+  when : item.name in jenkins_misc_cfg
 
 - name : Generate plugin configuration files
   become : True
