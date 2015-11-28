@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<org.jenkinsci.plugins.gitclient.JGitTool_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<org.jenkinsci.plugins.gitclient.JGitTool_-DescriptorImpl plugin="git-client@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_git_client_installations %}
   <installations class="hudson.plugins.git.GitTool-array">
 {% for git_client_install in jenkins_plugin_cfg_git_client_installations %}

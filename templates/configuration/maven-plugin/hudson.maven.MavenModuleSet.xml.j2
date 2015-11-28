@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.maven.MavenModuleSet_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<hudson.maven.MavenModuleSet_-DescriptorImpl plugin="maven-plugin@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_maven_plugin_validation_levels %}
   <mavenValidationLevels class="linked-hash-map">
 {% for jenkins_maven_validation_level in jenkins_plugin_cfg_maven_plugin_validation_levels %}

@@ -1,9 +1,9 @@
 
-{% set jenkins_docker_plugin = (
+{% set jenkins_plugin = (
     (jenkins_list_plugins_updated.content | from_json).plugins
     | selectattr('shortName', 'equalto', 'docker-plugin') | first)
 %}
-    <com.nirima.jenkins.plugins.docker.DockerCloud plugin="docker-plugin@{{ jenkins_docker_plugin.version }}">
+    <com.nirima.jenkins.plugins.docker.DockerCloud plugin="docker-plugin@{{ jenkins_plugin.version }}">
       <name>{{ jenkins_cloud.name }}</name>
       <templates>
         {% for jenkins_docker_template in jenkins_cloud.templates -%}

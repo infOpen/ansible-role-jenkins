@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.ansicolor.AnsiColorBuildWrapper_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<hudson.plugins.ansicolor.AnsiColorBuildWrapper_-DescriptorImpl plugin="ansicolor@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_ansicolor_maps %}
   <colorMaps>
 {% for jenkins_color_map in jenkins_plugin_cfg_ansicolor_maps %}
