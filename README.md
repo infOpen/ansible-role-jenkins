@@ -13,7 +13,7 @@ in the metadata file.
 
 This role has two test methods :
 
-- localy with Vagrant :
+- localy with Vagrant (need vagrant-triggers plugin installed) :
     vagrant up
 
 - automaticaly by Travis
