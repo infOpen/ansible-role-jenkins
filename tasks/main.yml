@@ -11,6 +11,12 @@
     - jenkins
   when: ansible_os_family == "Debian"
 
+- name : Ensure Jenkins is started
+  become  : True
+  service :
+    name  : "{{ jenkins_service_name }}"
+    state : started
+
 - name : Restart jenkins if new version installed
   include : "{{ role_path }}/handlers/restart_jenkins.yml"
   when : jenkins_task_package_install.changed
