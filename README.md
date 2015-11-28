@@ -6,14 +6,14 @@ Install jenkins package.
 
 ## Requirements
 
-This role requires Ansible 1.9 or higher, and platform requirements are listed
+This role requires Ansible 2.0 or higher, and platform requirements are listed
 in the metadata file.
 
 ## Testing
 
 This role has two test methods :
 
-- localy with Vagrant :
+- localy with Vagrant (need vagrant-triggers plugin installed) :
     vagrant up
 
 - automaticaly by Travis

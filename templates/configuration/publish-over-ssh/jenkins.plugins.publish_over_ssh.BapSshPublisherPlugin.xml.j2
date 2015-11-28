@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin_-Descriptor plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin_-Descriptor plugin="publish-over-ssh@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_publish_over_ssh_host_configurations %}
   <hostConfigurations>
 {% for jenkins_host_configuration in jenkins_plugin_cfg_publish_over_ssh_host_configurations %}

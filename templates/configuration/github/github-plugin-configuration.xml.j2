@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<github-plugin-configuration plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<github-plugin-configuration plugin="github@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_github_configs %}
   <configs>
 {% for github_config in jenkins_plugin_cfg_github_configs %}

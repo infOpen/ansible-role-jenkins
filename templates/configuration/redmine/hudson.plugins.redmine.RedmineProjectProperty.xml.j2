@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.redmine.RedmineProjectProperty_-DescriptorImpl plugin="{{ item.0.shortName }}@{{ item.0.version }}">
+<hudson.plugins.redmine.RedmineProjectProperty_-DescriptorImpl plugin="redmine@{{ jenkins_plugin.version }}">
 {% if jenkins_plugin_cfg_redmine_websites %}
   <redmineWebsites>
 {% for jenkins_redmine_website in jenkins_plugin_cfg_redmine_websites %}

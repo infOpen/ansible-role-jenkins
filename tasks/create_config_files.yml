@@ -30,31 +30,37 @@
   register : jenkins_misc_configuration_generate
   template :
     src   : "{{ role_path ~ '/templates/configuration/misc'
-      ~ '/' ~ item.1.template | trim }}"
-    dest  : "{{ item.1.dest | trim }}"
+      ~ '/' ~ item.template | trim }}"
+    dest  : "{{ item.dest | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
     group : "{{ jenkins_configuration_files_group }}"
     mode  : "{{ jenkins_configuration_files_mode }}"
-  with_nested :
-    - jenkins_misc_cfg
-    - jenkins_misc_templates
-  when : item.0 == item.1.name
+  with_items : jenkins_misc_templates
+  when : item.name in jenkins_misc_cfg
 
 - name : Generate plugin configuration files
   become : True
   become_user : "{{ jenkins_etc_user }}"
   register : jenkins_plugin_configuration_generate
   template :
-    src   : "{{ role_path ~ '/templates/configuration/' ~ item.1.name
-      ~ '/' ~ item.1.template | trim }}"
-    dest  : "{{ item.1.dest | trim }}"
+    src   : "{{ role_path ~ '/templates/configuration/' ~ item.name
+      ~ '/' ~ item.template | trim }}"
+    dest  : "{{ jenkins_etc_home_location ~ '/' ~ item.template
+      | regex_replace('.j2$', '') | trim }}"
     owner : "{{ jenkins_configuration_files_owner }}"
     group : "{{ jenkins_configuration_files_group }}"
     mode  : "{{ jenkins_configuration_files_mode }}"
-  with_nested :
-    - "{{ (jenkins_list_plugins_updated.content | from_json).plugins }}"
-    - jenkins_plugin_templates
-  when : item.0.shortName == item.1.name
+  with_items : jenkins_plugin_templates
+  vars:
+    jenkins_plugin: >
+      {{
+        ((jenkins_list_plugins_updated.content | from_json).plugins
+        | selectattr('shortName', 'equalto', item.name) | first)
+      }}
+  when : >
+    "item.name in (
+    (jenkins_list_plugins_updated.content | from_json).plugins
+    | map(attribute='shortName'))"
 
 - name : Restart jenkins and waiting if new changes
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
