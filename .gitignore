@@ -5,5 +5,9 @@
 *.swp
 
 # Ignore roles dependencies used for vagrant tests
-roles
+tests/roles
+
+# python
+*.pyc
+.cache
 
