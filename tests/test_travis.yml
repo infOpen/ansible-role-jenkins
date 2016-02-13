@@ -2,14 +2,14 @@
 
 # Tests for jenkins role
 
-- hosts : localhost
-  remote_user : root
-  roles :
-    - ansible-role-jenkins
-  post_tasks :
-    - include : ./common_tests.yml
-  vars :
-    jenkins_plugins :
+- hosts: localhost
+  remote_user: root
+  roles:
+    - "{{ role_name }}"
+  post_tasks:
+    - include: ./common_tests.yml
+  vars:
+    jenkins_plugins:
       - ansible
       - ansicolor
       - build-pipeline-plugin
@@ -21,4 +21,5 @@
       - publish-over-ssh
       - ssh
       - redmine
+    role_name: "{{ lookup('env','TRAVIS_REPO_SLUG') }}"
 
