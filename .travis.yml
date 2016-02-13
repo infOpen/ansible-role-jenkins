@@ -44,7 +44,6 @@ install:
   - ansible-galaxy install -r tests/requirements.yml
 
 script:
-  script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i tests/inventory tests/test_travis.yml --syntax-check
 
