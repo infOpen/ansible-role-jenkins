@@ -2,62 +2,27 @@
 
 # Tasks about Jenkins plugins
 
-- name : Get installed plugins
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_list_plugins
-  shell : >
-    java
-    -jar {{ jenkins_cli }}
-    -s {{ jenkins_base_url }}
-    list-plugins
-    | awk '{ print $1 }'
-  changed_when : False
+- name: Get plugins status
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  get_jenkins_plugins:
+    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+  register: jenkins_plugins_status
+  changed_when: False
 
-- name : Install required plugins
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_task_install_plugins
-  shell : >
-    java
-    -jar {{ jenkins_cli }}
-    -s {{ jenkins_base_url }}
-    install-plugin {{ item }}
-  with_items :
-    - "{{
-        jenkins_plugins
-        | difference(jenkins_list_plugins.stdout_lines)
-      }}"
+- name: Manage plugin installation
+  include: "{{ role_path }}/tasks/manage_plugin_installation.yml"
+  with_items: "{{ jenkins_plugins }}"
 
-- name : Waiting jenkins restarted
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when: jenkins_task_install_plugins.changed
+- name: Get plugins should be upgraded
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  get_jenkins_plugins:
+    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+  register: jenkins_list_plugins_for_upgrade
+  changed_when: False
 
-- name : Get plugins should be upgraded
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_list_plugins_with_upgrade
-  shell : >
-    java
-    -jar {{ jenkins_cli }}
-    -s {{ jenkins_base_url }}
-    list-plugins
-    | grep ')$'
-    | awk '{ print $1 }'
-  changed_when : False
-
-- name : Install upgrade for plugins
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_task_upgrade_plugins
-  shell : >
-    java
-    -jar {{ jenkins_cli }}
-    -s {{ jenkins_base_url }}
-    install-plugin {{ item }}
-  with_items : jenkins_list_plugins_with_upgrade.stdout_lines
-
-- name : Waiting jenkins restarted
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when: jenkins_task_upgrade_plugins.changed
+- name: Manage plugin upgrade
+  include: "{{ role_path }}/tasks/manage_plugin_upgrade.yml"
+  with_items : "{{ jenkins_list_plugins_for_upgrade.has_update }}"
 

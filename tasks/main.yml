@@ -24,17 +24,23 @@
 - name : Waiting the application is available
   include : "{{ role_path }}/handlers/waiting_jenkins.yml"
 
-- name : Configure jenkins launching settings
-  include: configure.yml
-  tags:
-    - configure
-    - jenkins
-
 - name : Install and configure Jenkins CLI
   include: manage_cli.yml
   tags:
     - jenkins
     - install
+
+- name : Install groovy scripts
+  include: manage_groovy_scripts.yml
+  tags:
+    - jenkins
+    - install
+
+- name : Configure jenkins launching settings
+  include: configure.yml
+  tags:
+    - configure
+    - jenkins
 
 - name : Manage plugins installations and upgrades
   include: plugins.yml
