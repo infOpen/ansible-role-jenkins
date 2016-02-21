@@ -43,7 +43,6 @@ describe 'jenkins Ansible role' do
             '/var/lib/jenkins/hudson.tasks.Mailer.xml',
             '/var/lib/jenkins/hudson.maven.MavenModuleSet.xml',
             '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml',
-            '/var/lib/jenkins/hudson.plugins.redmine.RedmineProjectProperty.xml',
             '/var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml',
             '/var/lib/jenkins/hudson.scm.SubversionSCM.xml'
         ]

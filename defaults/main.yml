@@ -224,11 +224,6 @@ jenkins_plugin_templates :
     dest     : >
       {{ jenkins_etc_home_location -}}
       /jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml
-  - name     : redmine
-    template : "hudson.plugins.redmine.RedmineProjectProperty.xml.j2"
-    dest     : >
-      {{ jenkins_etc_home_location -}}
-      /hudson.plugins.redmine.RedmineProjectProperty.xml
   - name     : ssh
     template : "org.jvnet.hudson.plugins.SSHBuildWrapper.xml.j2"
     dest     : >
