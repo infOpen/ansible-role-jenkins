@@ -48,11 +48,7 @@ def install_plugin(plugin_state, plugin) {
 
 /* SCRIPT */
 
-def changes = [
-    installed: null,
-    need_restart: null,
-    restart_scheduled: null
-]
+def installed = false
 
 try {
     def jenkins_instance = Jenkins.getInstance()
@@ -63,14 +59,12 @@ try {
     check_args(plugin_name)
     def jenkins_plugin = get_plugin(jenkins_uc, plugin_name)
 
-    changes['installed'] = install_plugin(plugin_state, jenkins_plugin)
-    changes['need_restart'] = jenkins_uc.isRestartRequiredForCompletion()
-    changes['restart_scheduled'] = jenkins_uc.isRestartScheduled()
+    installed = install_plugin(plugin_state, jenkins_plugin)
     jenkins_instance.save()
 }
 catch (e) {
     throw new RuntimeException(e.getMessage())
 }
 
-println JsonOutput.toJson(changes)
+println JsonOutput.toJson(installed)
 

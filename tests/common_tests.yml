@@ -66,12 +66,12 @@
     msg : >
       Some needed plugins not installed :
       {{
-        jenkins_plugins
+        (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}
   when :
     - "{{
-        jenkins_plugins
+        (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}"
 

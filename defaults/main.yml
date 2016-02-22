@@ -64,6 +64,7 @@ jenkins_waiting_available_delay   : 5
 
 # Plugins
 jenkins_plugins : []
+jenkins_plugins_state: 'latest'
 
 # Jenkins clouds
 jenkins_main_cfg_clouds : []

@@ -12,24 +12,14 @@
     jenkins_etc_listen_address: '0.0.0.0'
     jenkins_plugins:
       - name: ansible
-        state: latest
       - name: ansicolor
-        state: latest
       - name: build-pipeline-plugin
-        state: latest
       - name: debian-package-builder
-        state: latest
       - name: envinject
-        state: latest
       - name: git
-        state: latest
       - name: github
-        state: latest
       - name: graphiteIntegrator
-        state: latest
       - name: publish-over-ssh
-        state: latest
       - name: ssh
-        state: latest
     role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
 

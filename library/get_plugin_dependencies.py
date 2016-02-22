@@ -21,11 +21,6 @@ def main():
                 type='str',
                 required=False,
                 default='/var/lib/jenkins/groovy_scripts'),
-            state=dict(
-                type='str',
-                required=False,
-                default='present',
-                choices=['present', 'latest']),
             url=dict(
                 type='str',
                 required=False,
@@ -37,9 +32,9 @@ def main():
                                basename(__file__))
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' groovy %s %s %s" %
+        "java -jar %s -s '%s' groovy %s %s" %
         (module.params['cli_path'], module.params['url'], script,
-         module.params['name'], module.params['state']))
+         module.params['name']))
 
     if (rc != 0):
         module.fail_json(msg=stderr)
