@@ -2,7 +2,7 @@
 
 # Tasks about Jenkins main configuration management
 
-- name: Manage number of executors
+- name: Manage main configuration with new settings
   become : True
   become_user : "{{ jenkins_etc_user }}"
   manage_jenkins_main_configuration:
