@@ -52,5 +52,7 @@ catch(Exception e) {
     throw new RuntimeException(e.getMessage())
 }
 
-println JsonOutput.toJson(changed=changed, output=data.toString())
+def result = [ 'changed': changed, 'output': data ]
+
+println JsonOutput.toJson(result.toString())
 
