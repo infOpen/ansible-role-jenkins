@@ -2,6 +2,9 @@
 
 # Tasks about config
 
+- name: Include groovy configuration
+  include: "{{ role_path }}/tasks/manage_main_config.yml"
+
 - name : Get Jenkins war version
   command  : "java -jar {{ jenkins_etc_war_location }} --version"
   register : jenkins_main_cfg_version
