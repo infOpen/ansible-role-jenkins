@@ -56,6 +56,32 @@ def Boolean set_disable_remember_me(Jenkins jenkins_instance,
 
 
 /**
+    Set the Jenkins label
+
+    @param Jenkins Jenkins singleton
+    @param Boolean New Jenkins label
+    @return Boolean True if changed, else false
+*/
+def Boolean set_label(Jenkins jenkins_instance, String label) {
+
+    // Get current value, used to check if changed
+    def String cur_value = jenkins_instance.getLabelString()
+    if (cur_value == label) {
+        return false
+    }
+
+    try {
+        jenkins_instance.setLabelString(label)
+    }
+    catch(Exception e) {
+        throw new Exception( 'An error occurs during label change')
+    }
+
+    return true
+}
+
+
+/**
     Set the Jenkins number of executors
 
     @param Jenkins Jenkins singleton
@@ -234,6 +260,7 @@ try {
 
     // Manage configuration with user data
     set_disable_remember_me(jenkins_instance, data['disable_remember_me'])
+    set_label(jenkins_instance, data['label'])
     set_number_of_executors(jenkins_instance, data['number_of_executors'])
     set_mode(jenkins_instance, data['mode'])
     set_project_naming_strategy(jenkins_instance,

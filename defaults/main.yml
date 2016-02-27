@@ -85,6 +85,7 @@ jenkins_configuration_files_mode  : "0644"
 
 # Main configuration
 jenkins_config_disable_remember_me : False
+jenkins_config_label : ''
 jenkins_config_mode : 'NORMAL'
 jenkins_config_num_executors : 2
 jenkins_config_project_naming_strategy :
@@ -104,7 +105,6 @@ jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
 jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
 jenkins_main_cfg_views : []
 jenkins_main_cfg_primary_view : All
-jenkins_main_cfg_label : ''
 
 # Misc configuration
 jenkins_misc_cfg :
