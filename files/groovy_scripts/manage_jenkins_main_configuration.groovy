@@ -118,6 +118,32 @@ def Boolean set_project_naming_strategy(Jenkins jenkins_instance,
 }
 
 
+/**
+    Set the Jenkins quiet period
+
+    @param Jenkins Jenkins singleton
+    @param Integer New quiet period
+    @return Boolean True if changed, else false
+*/
+def Boolean set_quiet_period(Jenkins jenkins_instance, Integer quiet_period) {
+
+    // Get current value, used to check if changed
+    def Integer cur_value = jenkins_instance.getQuietPeriod()
+    if (cur_value == quiet_period) {
+        return false
+    }
+
+    try {
+        jenkins_instance.setQuietPeriod(quiet_period)
+    }
+    catch(Exception e) {
+        throw new Exception('An error occurs during quiet period change')
+    }
+
+    return true
+}
+
+
 /* SCRIPT */
 def Boolean changed = false
 def Map data = [:]
@@ -131,6 +157,7 @@ try {
     set_mode(jenkins_instance, data['mode'])
     set_project_naming_strategy(jenkins_instance,
                                 data['project_naming_strategy'])
+    set_quiet_period(jenkins_instance, data['quiet_period'])
 }
 catch(Exception e) {
     throw new RuntimeException(e.getMessage())

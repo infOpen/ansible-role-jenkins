@@ -90,6 +90,7 @@ jenkins_config_project_naming_strategy :
   pattern: '\w+'
   description: 'Alphanumeric pattern'
   force: True
+jenkins_config_quiet_period : 5
 
 jenkins_main_cfg_version : ''
 jenkins_main_cfg_use_security : True
@@ -99,7 +100,6 @@ jenkins_main_cfg_security_realm : 'hudson.security.SecurityRealm$None'
 jenkins_main_cfg_disable_remember_me : False
 jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
 jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
-jenkins_main_cfg_quiet_period : 5
 jenkins_main_cfg_scm_checkout_retry_count : 0
 jenkins_main_cfg_views : []
 jenkins_main_cfg_primary_view : All

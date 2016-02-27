@@ -12,5 +12,6 @@
       pattern: "{{ jenkins_config_project_naming_strategy.pattern }}"
       description: "{{ jenkins_config_project_naming_strategy.description }}"
       force: "{{ jenkins_config_project_naming_strategy.force }}"
+    quiet_period: "{{ jenkins_config_quiet_period }}"
   register: jenkins_change_main_configuration
 

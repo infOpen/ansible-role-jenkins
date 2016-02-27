@@ -16,6 +16,9 @@ module_args = dict(
     project_naming_strategy=dict(
         type='dict',
         required=True),
+    quiet_period=dict(
+        type='int',
+        required=True),
 
     cli_path=dict(
         type='str',
