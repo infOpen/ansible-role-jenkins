@@ -84,18 +84,19 @@ jenkins_configuration_files_group : "{{ jenkins_etc_group }}"
 jenkins_configuration_files_mode  : "0644"
 
 # Main configuration
+jenkins_config_mode : 'NORMAL'
+jenkins_config_num_executors : 2
+jenkins_config_project_naming_strategy :
+  pattern: '\w+'
+  description: 'Alphanumeric pattern'
+  force: True
+
 jenkins_main_cfg_version : ''
-jenkins_main_cfg_num_executors : 2
-jenkins_main_cfg_mode : 'NORMAL'
 jenkins_main_cfg_use_security : True
 jenkins_main_cfg_authorization_strategy : >
   hudson.security.AuthorizationStrategy$Unsecured
 jenkins_main_cfg_security_realm : 'hudson.security.SecurityRealm$None'
 jenkins_main_cfg_disable_remember_me : False
-jenkins_config_project_naming_strategy :
-  pattern: '\w+'
-  description: 'Alphanumeric pattern'
-  force: True
 jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
 jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
 jenkins_main_cfg_quiet_period : 5

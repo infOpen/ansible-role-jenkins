@@ -6,8 +6,8 @@
   become : True
   become_user : "{{ jenkins_etc_user }}"
   manage_jenkins_main_configuration:
-    mode: "{{ jenkins_main_cfg_mode }}"
-    number_of_executors: "{{ jenkins_main_cfg_num_executors }}"
+    mode: "{{ jenkins_config_mode }}"
+    number_of_executors: "{{ jenkins_config_num_executors }}"
     project_naming_strategy:
       pattern: "{{ jenkins_config_project_naming_strategy.pattern }}"
       description: "{{ jenkins_config_project_naming_strategy.description }}"
