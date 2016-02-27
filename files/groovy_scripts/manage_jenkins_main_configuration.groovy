@@ -145,8 +145,6 @@ def Boolean set_quiet_period(Jenkins jenkins_instance, Integer quiet_period) {
 
 
 /* SCRIPT */
-def Boolean changed = false
-def Map data = [:]
 
 try {
     def Jenkins jenkins_instance = Jenkins.getInstance()
@@ -163,7 +161,12 @@ catch(Exception e) {
     throw new RuntimeException(e.getMessage())
 }
 
-def Map result = [ 'changed': changed, 'output': data ]
+// Build json result
+result = new JsonBuilder()
+result {
+    changed false
+    output data
+}
 
-println JsonOutput.toJson(result.toString())
+println result
 
