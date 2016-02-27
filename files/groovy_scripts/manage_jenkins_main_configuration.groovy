@@ -145,6 +145,34 @@ def Boolean set_quiet_period(Jenkins jenkins_instance, Integer quiet_period) {
 
 
 /**
+    Set the Jenkins SCM checkout retry count
+
+    @param Jenkins Jenkins singleton
+    @param Integer SCM checkout retry count
+    @return Boolean True if changed, else false
+*/
+def Boolean set_scm_checkout_retry_count(Jenkins jenkins_instance,
+                                         Integer new_count) {
+
+    // Get current value, used to check if changed
+    def Integer cur_value = jenkins_instance.getScmCheckoutRetryCount()
+    if (cur_value == new_count) {
+        return false
+    }
+
+    try {
+        jenkins_instance.setScmCheckoutRetryCount(new_count)
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'An error occurs during scm checkout retry count change')
+    }
+
+    return true
+}
+
+
+/**
     Set the Jenkins slave agent port
 
     @param Jenkins Jenkins singleton
@@ -182,6 +210,8 @@ try {
     set_project_naming_strategy(jenkins_instance,
                                 data['project_naming_strategy'])
     set_quiet_period(jenkins_instance, data['quiet_period'])
+    set_scm_checkout_retry_count(jenkins_instance,
+                                 data['scm_checkout_retry_count'])
     set_slave_agent_port(jenkins_instance, data['slave_agent_port'])
 
     // Save new configuration to disk
