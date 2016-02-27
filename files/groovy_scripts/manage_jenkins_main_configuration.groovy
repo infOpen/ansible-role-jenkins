@@ -156,6 +156,9 @@ try {
     set_project_naming_strategy(jenkins_instance,
                                 data['project_naming_strategy'])
     set_quiet_period(jenkins_instance, data['quiet_period'])
+
+    // Save new configuration to disk
+    jenkins_instance.save()
 }
 catch(Exception e) {
     throw new RuntimeException(e.getMessage())
