@@ -1,6 +1,9 @@
 #!/usr/bin/env groovy
 
 import jenkins.model.*
+import jenkins.model.ProjectNamingStrategy
+import jenkins.model.ProjectNamingStrategy.PatternProjectNamingStrategy \
+    as PatternProjectNaming
 import hudson.model.*
 import groovy.json.*
 
@@ -78,6 +81,43 @@ def Boolean set_mode(Jenkins jenkins_instance, String mode) {
 }
 
 
+/**
+    Set the new Jenkins project naming strategy
+
+    @param Jenkins Jenkins singleton
+    @param String New project naming strategy regex
+    @return Boolean True if changed, else false
+*/
+def Boolean set_project_naming_strategy(Jenkins jenkins_instance,
+                                        Map strategy) {
+
+    try {
+        def PatternProjectNaming new_value = new PatternProjectNaming(
+                                                        strategy.pattern,
+                                                        strategy.description,
+                                                        strategy.force)
+        // Get current value, used to check if changed
+        def ProjectNamingStrategy cur_value = jenkins_instance
+                                               .getProjectNamingStrategy()
+
+        if (cur_value == new_value
+          && cur_value.getNamePattern() == new_value.getNamePattern()
+          && cur_value.getDescription() == new_value.getDescription()
+          && cur_value.isForceExistingJobs() == new_value.isForceExistingJobs()
+        ) {
+            return false
+        }
+        jenkins_instance.setProjectNamingStrategy(new_value)
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'An error occurs during project naming strategy change')
+    }
+
+    return true
+}
+
+
 /* SCRIPT */
 def Boolean changed = false
 def Map data = [:]
@@ -89,6 +129,8 @@ try {
     // Manage configuration with user data
     set_number_of_executors(jenkins_instance, data['number_of_executors'])
     set_mode(jenkins_instance, data['mode'])
+    set_project_naming_strategy(jenkins_instance,
+                                data['project_naming_strategy'])
 }
 catch(Exception e) {
     throw new RuntimeException(e.getMessage())

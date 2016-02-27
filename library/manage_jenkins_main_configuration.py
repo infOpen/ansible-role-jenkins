@@ -13,6 +13,9 @@ module_args = dict(
     number_of_executors=dict(
         type='int',
         required=True),
+    project_naming_strategy=dict(
+        type='dict',
+        required=True),
 
     cli_path=dict(
         type='str',

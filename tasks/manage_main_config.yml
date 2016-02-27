@@ -8,5 +8,9 @@
   manage_jenkins_main_configuration:
     mode: "{{ jenkins_main_cfg_mode }}"
     number_of_executors: "{{ jenkins_main_cfg_num_executors }}"
+    project_naming_strategy:
+      pattern: "{{ jenkins_config_project_naming_strategy.pattern }}"
+      description: "{{ jenkins_config_project_naming_strategy.description }}"
+      force: "{{ jenkins_config_project_naming_strategy.force }}"
   register: jenkins_change_main_configuration
 
