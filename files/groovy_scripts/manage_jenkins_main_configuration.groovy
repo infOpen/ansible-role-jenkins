@@ -18,7 +18,8 @@ def parse_data(String arg) {
 }
 
 
-def set_number_of_executors(jenkins_instance, executors_number) {
+def set_number_of_executors(Jenkins jenkins_instance,
+                            Integer executors_number) {
 
     // Get current value, used to check if changed
     def cur_value = jenkins_instance.getNumExecutors()
@@ -37,6 +38,26 @@ def set_number_of_executors(jenkins_instance, executors_number) {
 }
 
 
+def set_mode(Jenkins jenkins_instance, String mode) {
+
+    // Get current value, used to check if changed
+    def cur_value = jenkins_instance.getMode()
+    if (cur_value.getName() == mode) {
+        return false
+    }
+
+    try {
+        new_mode = Node.Mode.valueOf(mode)
+        jenkins_instance.setMode(new_mode)
+    }
+    catch(Exception e) {
+        throw new Exception('An error occurs during mode change')
+    }
+
+    return true
+}
+
+
 /* SCRIPT */
 def changed = false
 def data = [:]
@@ -47,6 +68,7 @@ try {
 
     // Manage configuration with user data
     set_number_of_executors(jenkins_instance, data['number_of_executors'])
+    set_mode(jenkins_instance, data['mode'])
 }
 catch(Exception e) {
     throw new RuntimeException(e.getMessage())

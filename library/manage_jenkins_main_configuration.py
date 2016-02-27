@@ -7,6 +7,9 @@ from os.path import basename
 
 
 module_args = dict(
+    mode=dict(
+        type='str',
+        required=True),
     number_of_executors=dict(
         type='int',
         required=True),
