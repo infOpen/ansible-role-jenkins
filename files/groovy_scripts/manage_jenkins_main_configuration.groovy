@@ -28,6 +28,34 @@ def Object parse_data(String arg) {
 
 
 /**
+    Set the Jenkins disable remember me option
+
+    @param Jenkins Jenkins singleton
+    @param Boolean New value for disable remember me option
+    @return Boolean True if changed, else false
+*/
+def Boolean set_disable_remember_me(Jenkins jenkins_instance,
+                                    Boolean new_value) {
+
+    // Get current value, used to check if changed
+    def Boolean cur_value = jenkins_instance.isDisableRememberMe()
+    if (cur_value == new_value) {
+        return false
+    }
+
+    try {
+        jenkins_instance.setDisableRememberMe(new_value)
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'An error occurs during disable remember me change')
+    }
+
+    return true
+}
+
+
+/**
     Set the Jenkins number of executors
 
     @param Jenkins Jenkins singleton
@@ -205,6 +233,7 @@ try {
     data = parse_data(args[0])
 
     // Manage configuration with user data
+    set_disable_remember_me(jenkins_instance, data['disable_remember_me'])
     set_number_of_executors(jenkins_instance, data['number_of_executors'])
     set_mode(jenkins_instance, data['mode'])
     set_project_naming_strategy(jenkins_instance,

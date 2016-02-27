@@ -6,6 +6,7 @@
   become : True
   become_user : "{{ jenkins_etc_user }}"
   manage_jenkins_main_configuration:
+    disable_remember_me: "{{ jenkins_config_disable_remember_me }}"
     mode: "{{ jenkins_config_mode }}"
     number_of_executors: "{{ jenkins_config_num_executors }}"
     project_naming_strategy:

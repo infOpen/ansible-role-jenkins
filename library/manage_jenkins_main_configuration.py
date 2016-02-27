@@ -7,6 +7,9 @@ from os.path import basename
 
 
 module_args = dict(
+    disable_remember_me=dict(
+        type='bool',
+        required=True),
     mode=dict(
         type='str',
         required=True),
