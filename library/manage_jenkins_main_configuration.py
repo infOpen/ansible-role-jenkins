@@ -19,6 +19,9 @@ module_args = dict(
     quiet_period=dict(
         type='int',
         required=True),
+    slave_agent_port=dict(
+        type='int',
+        required=True),
 
     cli_path=dict(
         type='str',

@@ -91,6 +91,7 @@ jenkins_config_project_naming_strategy :
   description: 'Alphanumeric pattern'
   force: True
 jenkins_config_quiet_period : 5
+jenkins_config_slave_agent_port : 0
 
 jenkins_main_cfg_version : ''
 jenkins_main_cfg_use_security : True
@@ -103,7 +104,6 @@ jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
 jenkins_main_cfg_scm_checkout_retry_count : 0
 jenkins_main_cfg_views : []
 jenkins_main_cfg_primary_view : All
-jenkins_main_cfg_slave_agent_port : 0
 jenkins_main_cfg_label : ''
 
 # Misc configuration

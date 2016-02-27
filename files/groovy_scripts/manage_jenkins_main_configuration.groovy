@@ -144,6 +144,32 @@ def Boolean set_quiet_period(Jenkins jenkins_instance, Integer quiet_period) {
 }
 
 
+/**
+    Set the Jenkins slave agent port
+
+    @param Jenkins Jenkins singleton
+    @param Integer New slave agent port
+    @return Boolean True if changed, else false
+*/
+def Boolean set_slave_agent_port(Jenkins jenkins_instance, Integer port) {
+
+    // Get current value, used to check if changed
+    def Integer cur_value = jenkins_instance.getSlaveAgentPort()
+    if (cur_value == port) {
+        return false
+    }
+
+    try {
+        jenkins_instance.setSlaveAgentPort(port)
+    }
+    catch(Exception e) {
+        throw new Exception('An error occurs during slave agent port change')
+    }
+
+    return true
+}
+
+
 /* SCRIPT */
 
 try {
@@ -156,6 +182,7 @@ try {
     set_project_naming_strategy(jenkins_instance,
                                 data['project_naming_strategy'])
     set_quiet_period(jenkins_instance, data['quiet_period'])
+    set_slave_agent_port(jenkins_instance, data['slave_agent_port'])
 
     // Save new configuration to disk
     jenkins_instance.save()
