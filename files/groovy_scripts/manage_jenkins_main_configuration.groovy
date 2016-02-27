@@ -1,14 +1,20 @@
 #!/usr/bin/env groovy
 
 import jenkins.model.*
+import hudson.model.*
 import groovy.json.*
 
 
-/* FUNCTIONS */
-def parse_data(String arg) {
+/**
+    Convert Json string to Groovy Object
+
+    @param String arg Json string to parse
+    @return Object Groovy object used to get data
+*/
+def Object parse_data(String arg) {
 
     try {
-        def jsonSlurper = new JsonSlurper()
+        def JsonSlurper jsonSlurper = new JsonSlurper()
         return jsonSlurper.parseText(arg)
     }
     catch(e) {
@@ -18,11 +24,18 @@ def parse_data(String arg) {
 }
 
 
-def set_number_of_executors(Jenkins jenkins_instance,
-                            Integer executors_number) {
+/**
+    Set the Jenkins number of executors
+
+    @param Jenkins Jenkins singleton
+    @param Integer New number of executors
+    @return Boolean True if changed, else false
+*/
+def Boolean set_number_of_executors(Jenkins jenkins_instance,
+                                    Integer executors_number) {
 
     // Get current value, used to check if changed
-    def cur_value = jenkins_instance.getNumExecutors()
+    def Integer cur_value = jenkins_instance.getNumExecutors()
     if (cur_value == executors_number) {
         return false
     }
@@ -38,16 +51,23 @@ def set_number_of_executors(Jenkins jenkins_instance,
 }
 
 
-def set_mode(Jenkins jenkins_instance, String mode) {
+/**
+    Set the new Jenkins mode
+
+    @param Jenkins Jenkins singleton
+    @param String New mode
+    @return Boolean True if changed, else false
+*/
+def Boolean set_mode(Jenkins jenkins_instance, String mode) {
 
     // Get current value, used to check if changed
-    def cur_value = jenkins_instance.getMode()
+    def Node.Mode cur_value = jenkins_instance.getMode()
     if (cur_value.getName() == mode) {
         return false
     }
 
     try {
-        new_mode = Node.Mode.valueOf(mode)
+        def Node.Mode new_mode = Node.Mode.valueOf(mode)
         jenkins_instance.setMode(new_mode)
     }
     catch(Exception e) {
@@ -59,11 +79,11 @@ def set_mode(Jenkins jenkins_instance, String mode) {
 
 
 /* SCRIPT */
-def changed = false
-def data = [:]
+def Boolean changed = false
+def Map data = [:]
 
 try {
-    def jenkins_instance = Jenkins.getInstance()
+    def Jenkins jenkins_instance = Jenkins.getInstance()
     data = parse_data(args[0])
 
     // Manage configuration with user data
@@ -74,7 +94,7 @@ catch(Exception e) {
     throw new RuntimeException(e.getMessage())
 }
 
-def result = [ 'changed': changed, 'output': data ]
+def Map result = [ 'changed': changed, 'output': data ]
 
 println JsonOutput.toJson(result.toString())
 
