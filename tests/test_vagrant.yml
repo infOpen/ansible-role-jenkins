@@ -10,16 +10,16 @@
     - include: ./common_tests.yml
   vars:
     jenkins_etc_listen_address: '0.0.0.0'
-    jenkins_plugins:
-      - name: ansible
-      - name: ansicolor
-      - name: build-pipeline-plugin
-      - name: debian-package-builder
-      - name: envinject
-      - name: git
-      - name: github
-      - name: graphiteIntegrator
-      - name: publish-over-ssh
-      - name: ssh
+    jenkins_plugins: []
+      #- name: ansible
+      #- name: ansicolor
+      #- name: build-pipeline-plugin
+      #- name: debian-package-builder
+      #- name: envinject
+      #- name: git
+      #- name: github
+      #- name: graphiteIntegrator
+      #- name: publish-over-ssh
+      #- name: ssh
     role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
 

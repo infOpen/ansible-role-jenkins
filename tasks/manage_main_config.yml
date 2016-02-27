@@ -15,3 +15,6 @@
     quiet_period: "{{ jenkins_config_quiet_period }}"
   register: jenkins_change_main_configuration
 
+- debug:
+    var: jenkins_change_main_configuration
+
