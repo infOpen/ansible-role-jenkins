@@ -96,23 +96,40 @@ jenkins_config_quiet_period : 5
 jenkins_config_scm_checkout_retry_count : 0
 jenkins_config_slave_agent_port : 0
 
-# Jenkins user configuration, used to create deployment user
+# Jenkins users configuration
+jenkins_manage_users_and_security: True
 jenkins_deployment_user:
   username: 'ansible'
   full_name: 'Ansible deployment user'
+  email: 'ansible@foo.bar'
+  password: 'ansible'
   ssh:
     private: ''
     public: ''
 
-jenkins_main_cfg_version : ''
-jenkins_main_cfg_use_security : True
-jenkins_main_cfg_authorization_strategy : >
-  hudson.security.AuthorizationStrategy$Unsecured
-jenkins_main_cfg_security_realm : 'hudson.security.SecurityRealm$None'
-jenkins_main_cfg_workspace_dir : '${ITEM_ROOTDIR}/workspace'
-jenkins_main_cfg_builds_dir : '${ITEM_ROOTDIR}/builds'
-jenkins_main_cfg_views : []
-jenkins_main_cfg_primary_view : All
+jenkins_users:
+  - username: 'admin'
+    full_name: 'Jenkins administrator user'
+    email: 'ansible@foo.bar'
+    password: 'admin'
+    roles:
+      - 'jenkins-administer'
+    public_keys: []
+  - username: 'user'
+    full_name: 'Jenkins read only user'
+    email: 'ansible@foo.bar'
+    password: 'user'
+    roles:
+      - 'jenkins-read'
+    public_keys: []
+
+# Jenkins realm management
+jenkins_security_realm:
+  class: 'HudsonPrivateSecurityRealm'
+
+# Jenkins authorization strategy management
+jenkins_authorization_strategy:
+  class: 'GlobalMatrixAuthorizationStrategy'
 
 # Misc configuration
 jenkins_misc_cfg :

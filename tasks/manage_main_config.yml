@@ -19,6 +19,33 @@
     slave_agent_port: "{{ jenkins_config_slave_agent_port }}"
   register: jenkins_change_main_configuration
 
-- debug:
-    var: jenkins_change_main_configuration
+- name: Manage deployment user configuration
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_deployment_user
+  with_items:
+    - username: "{{ jenkins_deployment_user.username }}"
+      full_name: "{{ jenkins_deployment_user.full_name }}"
+      email: "{{ jenkins_deployment_user.email }}"
+      password: "{{ jenkins_deployment_user.password }}"
+      roles:
+        - 'jenkins-administer'
+      public_keys:
+        - "{{ jenkins_user_ssh_public_key.stdout }}"
+  when: jenkins_manage_users_and_security
+
+- name: Manage users and security
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_users_or_security
+  with_items: "{{ jenkins_users }}"
+  when: jenkins_manage_users_and_security
 
