@@ -154,8 +154,7 @@ def Boolean set_project_naming_strategy(Jenkins jenkins_instance,
         def ProjectNamingStrategy cur_value = jenkins_instance
                                                .getProjectNamingStrategy()
 
-        if (cur_value == new_value
-          && cur_value.getNamePattern() == new_value.getNamePattern()
+        if (cur_value.getNamePattern() == new_value.getNamePattern()
           && cur_value.getDescription() == new_value.getDescription()
           && cur_value.isForceExistingJobs() == new_value.isForceExistingJobs()
         ) {
@@ -253,22 +252,36 @@ def Boolean set_slave_agent_port(Jenkins jenkins_instance, Integer port) {
 
 
 /* SCRIPT */
-
+def List<Boolean> has_changed = []
 try {
     def Jenkins jenkins_instance = Jenkins.getInstance()
     data = parse_data(args[0])
 
     // Manage configuration with user data
-    set_disable_remember_me(jenkins_instance, data['disable_remember_me'])
-    set_label(jenkins_instance, data['label'])
-    set_number_of_executors(jenkins_instance, data['number_of_executors'])
-    set_mode(jenkins_instance, data['mode'])
-    set_project_naming_strategy(jenkins_instance,
-                                data['project_naming_strategy'])
-    set_quiet_period(jenkins_instance, data['quiet_period'])
-    set_scm_checkout_retry_count(jenkins_instance,
-                                 data['scm_checkout_retry_count'])
-    set_slave_agent_port(jenkins_instance, data['slave_agent_port'])
+    has_changed.push(set_disable_remember_me(
+                        jenkins_instance,
+                        data['disable_remember_me']))
+    has_changed.push(set_label(
+                        jenkins_instance,
+                        data['label']))
+    has_changed.push(set_number_of_executors(
+                        jenkins_instance,
+                        data['number_of_executors']))
+    has_changed.push(set_mode(
+                        jenkins_instance,
+                        data['mode']))
+    has_changed.push(set_project_naming_strategy(
+                        jenkins_instance,
+                        data['project_naming_strategy']))
+    has_changed.push(set_quiet_period(
+                        jenkins_instance,
+                        data['quiet_period']))
+    has_changed.push(set_scm_checkout_retry_count(
+                        jenkins_instance,
+                        data['scm_checkout_retry_count']))
+    has_changed.push(set_slave_agent_port(
+                        jenkins_instance,
+                        data['slave_agent_port']))
 
     // Save new configuration to disk
     jenkins_instance.save()
@@ -280,8 +293,8 @@ catch(Exception e) {
 // Build json result
 result = new JsonBuilder()
 result {
-    changed false
-    output data
+    changed has_changed.any()
+    output has_changed
 }
 
 println result
