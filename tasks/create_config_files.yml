@@ -16,17 +16,6 @@
     url : "{{ jenkins_base_url }}/{{ jenkins_api_plugins_list }}"
     return_content : True
 
-- name : Generate main configuration file
-  become : True
-  become_user : "{{ jenkins_etc_user }}"
-  register : jenkins_main_configuration_generate
-  template :
-    src   : "{{ role_path }}/templates/configuration/config.xml.j2"
-    dest  : "{{ jenkins_etc_home_location }}/config.xml"
-    owner : "{{ jenkins_configuration_files_owner }}"
-    group : "{{ jenkins_configuration_files_group }}"
-    mode  : "{{ jenkins_configuration_files_mode }}"
-
 - name : Generate misc configuration files
   become : True
   become_user : "{{ jenkins_etc_user }}"
