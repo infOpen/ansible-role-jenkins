@@ -225,21 +225,32 @@ def manage_user_account(HudsonPrivateSecurityRealm realm, HashMap user) {
     Manage authorization for user accounts
 
     @param GlobalMatrixAuthorizationStrategy Glocal security strategy
-    @param List User list to be managed
+    @param User User to be managed
     @return Boolean True if users created
 */
 def manage_authorization(GlobalMatrixAuthorizationStrategy strategy,
                          Map user) {
+    def Boolean changed = false
+
     for (role in user.roles) {
+        def Permission permission
+
         switch (role) {
             case "jenkins-administer":
-                strategy.add(Jenkins.ADMINISTER, user.username)
+                permission = Jenkins.ADMINISTER
                 break
             case "jenkins-read":
-                strategy.add(Jenkins.READ, user.username)
+                permission = Jenkins.READ
                 break
         }
+
+        if (! strategy.hasPermission(user.username, permission)) {
+            changed = true
+        }
+        strategy.add(permission, user.username)
     }
+
+    return changed
 }
 
 
@@ -309,7 +320,7 @@ try {
                         jenkins_instance, data['authorization_strategy'])
 
     // Manage authorization
-    manage_authorization(strategy, data['user'])
+    auth_changed = manage_authorization(strategy, data['user'])
     jenkins_instance.setAuthorizationStrategy(strategy)
 
     // Save new configuration to disk
