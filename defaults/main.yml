@@ -96,6 +96,14 @@ jenkins_config_quiet_period : 5
 jenkins_config_scm_checkout_retry_count : 0
 jenkins_config_slave_agent_port : 0
 
+# Jenkins user configuration, used to create deployment user
+jenkins_deployment_user:
+  username: 'ansible'
+  full_name: 'Ansible deployment user'
+  ssh:
+    private: ''
+    public: ''
+
 jenkins_main_cfg_version : ''
 jenkins_main_cfg_use_security : True
 jenkins_main_cfg_authorization_strategy : >
