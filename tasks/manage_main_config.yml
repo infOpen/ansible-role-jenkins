@@ -19,6 +19,19 @@
     slave_agent_port: "{{ jenkins_config_slave_agent_port }}"
   register: jenkins_change_main_configuration
 
+- name: Manage administrator email address
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_location_settings:
+    email: "{{ jenkins_location_administrator_email }}"
+    full_name: "{{ jenkins_location_administrator_full_name }}"
+    jenkins_url: "{{ jenkins_location_url }}"
+  register: jenkins_change_administrator_email_address
+  when:
+    - jenkins_location_administrator_email != ''
+    - jenkins_location_administrator_full_name != ''
+    - jenkins_location_url != ''
+
 - name: Manage deployment user configuration
   become: True
   become_user : "{{ jenkins_etc_user }}"

@@ -131,6 +131,11 @@ jenkins_security_realm:
 jenkins_authorization_strategy:
   class: 'GlobalMatrixAuthorizationStrategy'
 
+# Jenkins location settings
+jenkins_location_administrator_email: 'root@localhost'
+jenkins_location_administrator_full_name: 'Jenkins administrator'
+jenkins_location_url: 'http://jenkins.foo.bar'
+
 # Misc configuration
 jenkins_misc_cfg :
   - artifact-manager
