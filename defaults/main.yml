@@ -163,10 +163,6 @@ jenkins_misc_cfg_artifact_manager_factories : []
 jenkins_misc_cfg_jenkins_global_maven_settings_provider : {}
 jenkins_misc_cfg_jenkins_global_maven_global_settings_provider : {}
 
-# Misc : jenkins location
-jenkins_misc_cfg_jenkins_location_admin_address : ""
-jenkins_misc_cfg_jenkins_location_url : "{{ jenkins_base_url }}/"
-
 # Misc : maven
 jenkins_misc_cfg_maven_installations : []
 
