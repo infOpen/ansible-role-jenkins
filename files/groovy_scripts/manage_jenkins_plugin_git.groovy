@@ -104,7 +104,7 @@ try {
     // Get arguments data
     new_full_name = args[0]
     new_email = args[1]
-    new_account_create = args[2]
+    new_account_create = args[2].toBoolean()
 
     // Manage configuration with user data
     has_changed.push(set_git_plugin_global_email(desc, new_email))
