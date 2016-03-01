@@ -1,0 +1,14 @@
+---
+
+# Tasks about Jenkins plugins configuration management
+
+- name: Manage git plugin configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_git:
+    create_accounts: "{{ jenkins_plugin_git_create_account_based_on_email }}"
+    email: "{{ jenkins_plugin_git_global_email }}"
+    full_name: "{{ jenkins_plugin_git_global_full_name }}"
+  register: jenkins_change_plugin_git
+
+

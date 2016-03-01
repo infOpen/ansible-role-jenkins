@@ -136,6 +136,17 @@ jenkins_location_administrator_email: 'root@localhost'
 jenkins_location_administrator_full_name: 'Jenkins administrator'
 jenkins_location_url: 'http://jenkins.foo.bar'
 
+
+# Plugins configuration
+#======================
+
+# Plugins : git
+jenkins_plugin_git_global_full_name  : "Jenkins GitUser"
+jenkins_plugin_git_global_email : "git@foo.bar"
+jenkins_plugin_git_create_account_based_on_email : False
+
+
+
 # Misc configuration
 jenkins_misc_cfg :
   - artifact-manager
@@ -382,12 +393,6 @@ jenkins_plugin_cfg_envinject_enable_permissions : False
 
 # Plugins : github
 jenkins_plugin_cfg_github_configs : []
-
-# Plugins : git
-jenkins_plugin_cfg_git_generation   : 1
-jenkins_plugin_cfg_git_global_name  : foobar
-jenkins_plugin_cfg_git_global_email : "foo@foo.bar"
-jenkins_plugin_cfg_git_create_account_based_on_email : False
 
 # Plugins : git-client
 jenkins_plugin_cfg_git_client_installations : []
