@@ -18,7 +18,7 @@ import groovy.json.*
 def Boolean set_git_plugin_global_email(Descriptor desc, String new_value) {
 
     // Get current value, used to check if changed
-    def Boolean cur_value = desc.getGlobalConfigEmail()
+    def String cur_value = desc.getGlobalConfigEmail()
     if (cur_value == new_value) {
         return false
     }
@@ -45,7 +45,7 @@ def Boolean set_git_plugin_global_email(Descriptor desc, String new_value) {
 def Boolean set_git_plugin_global_name(Descriptor desc, String new_value) {
 
     // Get current value, used to check if changed
-    def Boolean cur_value = desc.getGlobalConfigName()
+    def String cur_value = desc.getGlobalConfigName()
     if (cur_value == new_value) {
         return false
     }
@@ -123,6 +123,7 @@ result = new JsonBuilder()
 result {
     changed has_changed.any()
     output {
+        changed has_changed
         email new_email
         full_name new_full_name
         account_create new_account_create
