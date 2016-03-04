@@ -47,7 +47,8 @@ def main():
         module.fail_json(msg=stderr)
 
     json_stdout = json.loads(stdout)
-    module.exit_json(changed=bool(json_stdout), output=json_stdout)
+    module.exit_json(changed=bool(json_stdout['changed']),
+                     output=json_stdout['output'])
 
 
 if __name__ == '__main__':

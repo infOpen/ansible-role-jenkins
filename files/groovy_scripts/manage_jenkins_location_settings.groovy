@@ -19,7 +19,7 @@ def Boolean set_administrator_email(JenkinsLocationConfiguration location,
                                     String new_value) {
 
     // Get current value, used to check if changed
-    def Boolean cur_value = location.getAdminAddress()
+    def String cur_value = location.getAdminAddress()
     if (cur_value == new_value) {
         return false
     }
@@ -46,7 +46,7 @@ def Boolean set_administrator_email(JenkinsLocationConfiguration location,
 def Boolean set_url(JenkinsLocationConfiguration location, String new_value) {
 
     // Get current value, used to check if changed
-    def Boolean cur_value = location.getUrl()
+    def String cur_value = location.getUrl()
     if (cur_value == new_value) {
         return false
     }
@@ -96,6 +96,7 @@ result = new JsonBuilder()
 result {
     changed has_changed.any()
     output {
+        changed has_changed
         address new_address
         url new_url
     }

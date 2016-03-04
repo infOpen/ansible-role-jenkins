@@ -134,7 +134,7 @@ jenkins_authorization_strategy:
 # Jenkins location settings
 jenkins_location_administrator_email: 'root@localhost'
 jenkins_location_administrator_full_name: 'Jenkins administrator'
-jenkins_location_url: 'http://jenkins.foo.bar'
+jenkins_location_url: 'http://jenkins.foo.bar/'
 
 
 # Plugins configuration
