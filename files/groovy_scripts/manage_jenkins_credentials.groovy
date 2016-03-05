@@ -293,15 +293,15 @@ def BaseStandardCredentials create_credentials(HashMap credentials_desc) {
 
         switch (credentials_type) {
 
-            case "BasicSSHUserPrivateKey":
+            case "ssh_with_passphrase":
                 return create_ssh_credentials_with_passphrase(credentials_desc)
                 break
 
-            case "UsernamePasswordCredentialsImpl":
+            case "password":
                 return create_password_credentials(credentials_desc)
                 break
 
-            case "StringCredentialsImpl":
+            case "text":
                 return create_text_credentials(credentials_desc)
                 break
 

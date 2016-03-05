@@ -140,7 +140,7 @@ jenkins_credentials_domains_to_empty:
   - 'global'
 
 jenkins_credentials:
-  - credentials_type: 'BasicSSHUserPrivateKey'
+  - credentials_type: 'ssh_with_passphrase'
     credentials_domain: 'global'
     scope: 'global'
     id: 'ssh-jenkins-master-user'
@@ -150,7 +150,7 @@ jenkins_credentials:
     private_key_passphrase: 'bar'
     description: 'Jenkins user on local server'
     state: 'present'
-  - credentials_type: 'UsernamePasswordCredentialsImpl'
+  - credentials_type: 'password'
     credentials_domain: 'global'
     scope: 'global'
     id: 'simple-jenkins-user'
@@ -158,7 +158,7 @@ jenkins_credentials:
     password: 'jenkins'
     description: 'Jenkins testing password credentials'
     state: 'present'
-  - credentials_type: 'StringCredentialsImpl'
+  - credentials_type: 'text'
     credentials_domain: 'global'
     scope: 'global'
     id: 'simple-text-credentials'

@@ -12,7 +12,8 @@ def main():
         argument_spec=dict(
             credentials_type=dict(
                 type='str',
-                required=True),
+                required=True,
+                choice=['ssh_with_passphrase', 'password', 'text']),
             credentials_domain=dict(
                 type='str',
                 required=False,
