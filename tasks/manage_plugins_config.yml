@@ -25,6 +25,13 @@
     use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
   register: jenkins_change_plugin_mailer
 
+- name: Remove github plugin servers configuration
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  remove_jenkins_github_servers:
+    do_task: True
+  when: jenkins_plugins_github_remove_servers
+
 - name: Manage github plugin configuration with new settings
   become : True
   become_user : "{{ jenkins_etc_user }}"
