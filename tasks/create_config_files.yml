@@ -2,6 +2,9 @@
 
 # Tasks about config
 
+- name: Manage jenkins credentials
+  include: "{{ role_path }}/tasks/manage_credentials.yml"
+
 - name: Include groovy main configuration
   include: "{{ role_path }}/tasks/manage_main_config.yml"
 

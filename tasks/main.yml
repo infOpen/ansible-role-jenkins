@@ -85,10 +85,3 @@
     - jenkins
     - configure
 
-- name : Create credentials
-  include : "{{ role_path }}/tasks/manage_credentials.yml"
-  when : jenkins_credentials
-  tags :
-    - jenkins
-    - configure
-

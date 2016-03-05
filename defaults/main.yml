@@ -69,9 +69,6 @@ jenkins_plugins_state: 'latest'
 # Jenkins clouds
 jenkins_main_cfg_clouds : []
 
-# Jenkins credentials
-jenkins_credentials : []
-
 # API URLs
 #---------
 jenkins_api_plugins_list : >
@@ -135,6 +132,24 @@ jenkins_authorization_strategy:
 jenkins_location_administrator_email: 'root@localhost'
 jenkins_location_administrator_full_name: 'Jenkins administrator'
 jenkins_location_url: 'http://jenkins.foo.bar/'
+
+
+# Credentials configuration
+#==========================
+jenkins_credentials_domains_to_empty:
+  - 'global'
+
+jenkins_credentials:
+  - credentials_type: 'BasicSSHUserPrivateKey'
+    credentials_domain: 'global'
+    scope: 'global'
+    id: 'ssh-jenkins-master-user'
+    username: 'jenkins'
+    private_key_source_type: 'user'
+    private_key_source_data: 'foo'
+    private_key_passphrase: 'bar'
+    description: 'Jenkins user on local server'
+    state: 'present'
 
 
 # Plugins configuration
