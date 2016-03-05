@@ -150,6 +150,14 @@ jenkins_credentials:
     private_key_passphrase: 'bar'
     description: 'Jenkins user on local server'
     state: 'present'
+  - credentials_type: 'UsernamePasswordCredentialsImpl'
+    credentials_domain: 'global'
+    scope: 'global'
+    id: 'simple-jenkins-user'
+    username: 'jenkins'
+    password: 'jenkins'
+    description: 'Jenkins testing simple credentials'
+    state: 'present'
 
 
 # Plugins configuration

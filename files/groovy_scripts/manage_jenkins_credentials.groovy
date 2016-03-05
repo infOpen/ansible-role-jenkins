@@ -6,6 +6,7 @@ import com.cloudbees.plugins.credentials.common.*
 import com.cloudbees.plugins.credentials.domains.*
 import com.cloudbees.plugins.credentials.CredentialsStore
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials
+import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
 import hudson.plugins.sshslaves.*
 import groovy.json.*
@@ -192,6 +193,35 @@ def BasicSSHUserPrivateKey create_ssh_credentials_with_passphrase(
 
 
 /**
+    Create username with password credentials
+
+    @param HashMap Credentials description
+    @return UsernamePasswordCredentialsImpl Credentials object
+*/
+def UsernamePasswordCredentialsImpl create_password_credentials(
+                                            HashMap credentials_desc) {
+
+    try {
+        def UsernamePasswordCredentialsImpl crendentials
+
+        credentials = new UsernamePasswordCredentialsImpl(
+                            get_credentials_scope(credentials_desc['scope']),
+                            credentials_desc['id'],
+                            credentials_desc['description'],
+                            credentials_desc['username'],
+                            credentials_desc['password'])
+
+        return credentials
+    }
+    catch(Exception e) {
+        throw new Exception(
+            "Password credentials create error, "
+            + "error message : ${e.getMessage()}")
+    }
+}
+
+
+/**
     Get credentials by its id
 
     @param CredentialsStore Credentials store
@@ -237,6 +267,10 @@ def BaseStandardCredentials create_credentials(HashMap credentials_desc) {
 
             case "BasicSSHUserPrivateKey":
                 return create_ssh_credentials_with_passphrase(credentials_desc)
+                break
+
+            case "UsernamePasswordCredentialsImpl":
+                return create_password_credentials(credentials_desc)
                 break
 
             default:
