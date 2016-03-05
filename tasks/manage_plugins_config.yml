@@ -37,7 +37,7 @@
   become_user : "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_github:
     manage_hooks: "{{ item.manage_hooks }}"
-    credential_id: "{{ item.credential_id }}"
+    credentials_id: "{{ item.credentials_id }}"
     custom_url: "{{ item.custom_url }}"
     client_cache_size: "{{ item.client_cache_size }}"
   register: jenkins_change_plugin_github

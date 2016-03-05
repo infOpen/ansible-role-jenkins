@@ -14,7 +14,7 @@ def main():
                 type='bool',
                 required=False,
                 default=False),
-            credential_id=dict(
+            credentials_id=dict(
                 type='str',
                 required=True),
             custom_url=dict(

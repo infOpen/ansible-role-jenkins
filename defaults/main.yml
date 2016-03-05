@@ -189,7 +189,7 @@ jenkins_plugin_mailer_use_ssl: False
 jenkins_plugins_github_remove_servers: True
 jenkins_plugins_github_servers:
   - manage_hooks: False
-    credential_id: 'simple-text-credentials'
+    credentials_id: 'simple-text-credentials'
     custom_url: ''
     client_cache_size: 20
 
