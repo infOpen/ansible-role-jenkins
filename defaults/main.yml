@@ -185,6 +185,13 @@ jenkins_plugin_mailer_smtp_port: 25
 jenkins_plugin_mailer_smtp_user: ''
 jenkins_plugin_mailer_use_ssl: False
 
+# Plugins : github
+jenkins_plugins_github_servers:
+  - manage_hooks: False
+    credential_id: 'simple-text-credentials'
+    custom_url: ''
+    client_cache_size: 20
+
 
 
 # Misc configuration

@@ -25,3 +25,14 @@
     use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
   register: jenkins_change_plugin_mailer
 
+- name: Manage github plugin configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_github:
+    manage_hooks: "{{ item.manage_hooks }}"
+    credential_id: "{{ item.credential_id }}"
+    custom_url: "{{ item.custom_url }}"
+    client_cache_size: "{{ item.client_cache_size }}"
+  register: jenkins_change_plugin_github
+  with_items: "{{ jenkins_plugins_github_servers }}"
+
