@@ -193,6 +193,22 @@ jenkins_plugins_github_servers:
     custom_url: ''
     client_cache_size: 20
 
+# Plugins: debian package builder
+jenkins_plugins_debian_package_builder:
+  gpg:
+    name: 'Foo Bar'
+    email: 'foo@bar.fr'
+    public_key: 'foo_public_key'
+    private_key: 'foo_private_key'
+    passphrase: 'foo_passphrase'
+  repo:
+    - name: ''
+      method: ''
+      fqdn: ''
+      incoming: ''
+      login: ''
+      key_path: ''
+      options: []
 
 
 # Misc configuration

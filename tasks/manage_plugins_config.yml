@@ -43,3 +43,14 @@
   register: jenkins_change_plugin_github
   with_items: "{{ jenkins_plugins_github_servers }}"
 
+- name: Manage debian package builder plugin gpg configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_debian_package_builder_gpg:
+    name: "{{ jenkins_plugins_debian_package_builder.gpg.name }}"
+    email: "{{ jenkins_plugins_debian_package_builder.gpg.email }}"
+    public_key: "{{ jenkins_plugins_debian_package_builder.gpg.public_key }}"
+    private_key: "{{ jenkins_plugins_debian_package_builder.gpg.private_key }}"
+    passphrase: "{{ jenkins_plugins_debian_package_builder.gpg.passphrase }}"
+  register: jenkins_change_plugin_debian_package_builder_gpg
+
