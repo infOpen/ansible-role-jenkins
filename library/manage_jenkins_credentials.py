@@ -25,7 +25,7 @@ def main():
                 required=True),
             username=dict(
                 type='str',
-                required=True),
+                required=False),
             password=dict(
                 type='str',
                 required=False),
@@ -47,6 +47,9 @@ def main():
                 required=False,
                 default='present',
                 choices=['present', 'absent']),
+            text=dict(
+                type='str',
+                required=False),
             cli_path=dict(
                 type='str',
                 required=False,

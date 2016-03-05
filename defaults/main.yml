@@ -156,7 +156,14 @@ jenkins_credentials:
     id: 'simple-jenkins-user'
     username: 'jenkins'
     password: 'jenkins'
-    description: 'Jenkins testing simple credentials'
+    description: 'Jenkins testing password credentials'
+    state: 'present'
+  - credentials_type: 'StringCredentialsImpl'
+    credentials_domain: 'global'
+    scope: 'global'
+    id: 'simple-text-credentials'
+    text: 'loving_jenkins'
+    description: 'Jenkins testing text credentials'
     state: 'present'
 
 

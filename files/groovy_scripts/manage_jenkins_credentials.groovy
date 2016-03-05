@@ -9,7 +9,9 @@ import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials
 import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
 import hudson.plugins.sshslaves.*
+import hudson.util.Secret
 import groovy.json.*
+import org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl
 
 
 /**
@@ -222,6 +224,32 @@ def UsernamePasswordCredentialsImpl create_password_credentials(
 
 
 /**
+    Create text credentials
+
+    @param HashMap Credentials description
+    @return StringCredentialsImpl Credentials object
+*/
+def StringCredentialsImpl create_text_credentials(HashMap credentials_desc) {
+
+    try {
+        def StringCredentialsImpl crendentials
+
+        credentials = new StringCredentialsImpl(
+                            get_credentials_scope(credentials_desc['scope']),
+                            credentials_desc['id'],
+                            credentials_desc['description'],
+                            Secret.fromString(credentials_desc['text']))
+
+        return credentials
+    }
+    catch(Exception e) {
+        throw new Exception(
+            "Text credentials create error, error message : ${e.getMessage()}")
+    }
+}
+
+
+/**
     Get credentials by its id
 
     @param CredentialsStore Credentials store
@@ -271,6 +299,10 @@ def BaseStandardCredentials create_credentials(HashMap credentials_desc) {
 
             case "UsernamePasswordCredentialsImpl":
                 return create_password_credentials(credentials_desc)
+                break
+
+            case "StringCredentialsImpl":
+                return create_text_credentials(credentials_desc)
                 break
 
             default:
