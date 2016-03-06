@@ -62,10 +62,6 @@ jenkins_update_file : "{{ jenkins_etc_home_location }}/updates_jenkins.json"
 jenkins_waiting_available_retries : 10
 jenkins_waiting_available_delay   : 5
 
-# Plugins
-jenkins_plugins : []
-jenkins_plugins_state: 'latest'
-
 # Jenkins clouds
 jenkins_main_cfg_clouds : []
 
@@ -169,6 +165,10 @@ jenkins_credentials:
 
 # Plugins configuration
 #======================
+
+# Plugins management
+jenkins_plugins : []
+jenkins_plugins_state: 'latest'
 
 # Plugins : git
 jenkins_plugin_git_global_full_name  : "Jenkins GitUser"

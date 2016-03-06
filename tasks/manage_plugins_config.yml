@@ -10,6 +10,7 @@
     email: "{{ jenkins_plugin_git_global_email }}"
     full_name: "{{ jenkins_plugin_git_global_full_name }}"
   register: jenkins_change_plugin_git
+  when: "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
 
 - name: Manage mailer plugin configuration with new settings
   become : True
@@ -24,6 +25,7 @@
     smtp_user: "{{ jenkins_plugin_mailer_smtp_user }}"
     use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
   register: jenkins_change_plugin_mailer
+  when: "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
 
 - name: Remove github plugin servers configuration
   become: True
@@ -31,7 +33,9 @@
   remove_jenkins_github_servers:
     do_task: True
   register: jenkins_change_plugin_github_remove_servers
-  when: jenkins_plugins_github_remove_servers
+  when:
+    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
+    - jenkins_plugins_github_remove_servers
 
 - name: Manage github plugin configuration with new settings
   become : True
@@ -43,6 +47,7 @@
     client_cache_size: "{{ item.client_cache_size }}"
   register: jenkins_change_plugin_github
   with_items: "{{ jenkins_plugins_github_servers }}"
+  when: "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
 
 - name: Manage debian package builder plugin gpg configuration
   become : True
@@ -54,6 +59,8 @@
     private_key: "{{ jenkins_plugins_debian_package_builder.gpg.private_key }}"
     passphrase: "{{ jenkins_plugins_debian_package_builder.gpg.passphrase }}"
   register: jenkins_change_plugin_debian_package_builder_gpg
+  when: "{{ 'debian-package-builder' in
+                (jenkins_plugins | map(attribute='name')) }}"
 
 - name: Remove debian package builder plugin repositories configuration
   become: True
@@ -61,7 +68,10 @@
   remove_jenkins_debian_package_builder_repo:
     do_task: True
   register: jenkins_change_plugin_debian_package_builder_remove_repo
-  when: jenkins_plugins_debian_package_builder_remove_repositories
+  when:
+    - jenkins_plugins_debian_package_builder_remove_repositories
+    - "{{ 'debian-package-builder' in
+              (jenkins_plugins | map(attribute='name')) }}"
 
 - name: Manage debian package builder plugin repositories configuration
   become : True
@@ -77,6 +87,8 @@
     state: "{{ item.state }}"
   register: jenkins_change_plugin_debian_package_builder_repo
   with_items: "{{ jenkins_plugins_debian_package_builder.repo }}"
+  when: "{{ 'debian-package-builder' in
+                (jenkins_plugins | map(attribute='name')) }}"
 
 - name : Waiting jenkins restarted
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
