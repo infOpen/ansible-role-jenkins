@@ -54,3 +54,18 @@
     passphrase: "{{ jenkins_plugins_debian_package_builder.gpg.passphrase }}"
   register: jenkins_change_plugin_debian_package_builder_gpg
 
+- name: Manage debian package builder plugin repositories configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_debian_package_builder_repo:
+    name: "{{ item.name }}"
+    method: "{{ item.method }}"
+    fqdn: "{{ item.fqdn }}"
+    incoming: "{{ item.incoming }}"
+    login: "{{ item.login }}"
+    key_path: "{{ item.key_path }}"
+    options: "{{ item.options }}"
+    state: "{{ item.state }}"
+  register: jenkins_change_plugin_debian_package_builder_repo
+  with_items: "{{ jenkins_plugins_debian_package_builder.repo }}"
+
