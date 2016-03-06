@@ -2,26 +2,14 @@
 
 # Tests for jenkins role
 
-- hosts : all
-  remote_user : vagrant
-
-  roles :
-    - .
-
-  post_tasks :
-    - include : ./common_tests.yml
-
-  vars :
-    jenkins_plugins :
-      - ansible
-      - ansicolor
-      - build-pipeline-plugin
-      - debian-package-builder
-      - envinject
-      - git
-      - github
-      - graphiteIntegrator
-      - publish-over-ssh
-      - ssh
-      - redmine
+- hosts: all
+  remote_user: vagrant
+  pre_tasks:
+    - include_vars: "./{{ ansible_os_family | lower }}.yml"
+  roles:
+    - "{{ role_name }}"
+  post_tasks:
+    - include: ./common_tests.yml
+  vars:
+    role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
 

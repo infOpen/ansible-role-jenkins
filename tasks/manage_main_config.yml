@@ -1,0 +1,64 @@
+---
+
+# Tasks about Jenkins main configuration management
+
+- name: Manage main configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_main_configuration:
+    disable_remember_me: "{{ jenkins_config_disable_remember_me }}"
+    label: "{{ jenkins_config_label }}"
+    mode: "{{ jenkins_config_mode }}"
+    number_of_executors: "{{ jenkins_config_num_executors }}"
+    project_naming_strategy:
+      pattern: "{{ jenkins_config_project_naming_strategy.pattern }}"
+      description: "{{ jenkins_config_project_naming_strategy.description }}"
+      force: "{{ jenkins_config_project_naming_strategy.force }}"
+    quiet_period: "{{ jenkins_config_quiet_period }}"
+    scm_checkout_retry_count: "{{ jenkins_config_scm_checkout_retry_count }}"
+    slave_agent_port: "{{ jenkins_config_slave_agent_port }}"
+  register: jenkins_change_main_configuration
+
+- name: Manage administrator email address
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_location_settings:
+    email: "{{ jenkins_location_administrator_email }}"
+    full_name: "{{ jenkins_location_administrator_full_name }}"
+    jenkins_url: "{{ jenkins_location_url }}"
+  register: jenkins_change_administrator_email_address
+  when:
+    - jenkins_location_administrator_email != ''
+    - jenkins_location_administrator_full_name != ''
+    - jenkins_location_url != ''
+
+- name: Manage deployment user configuration
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_deployment_user
+  with_items:
+    - username: "{{ jenkins_deployment_user.username }}"
+      full_name: "{{ jenkins_deployment_user.full_name }}"
+      email: "{{ jenkins_deployment_user.email }}"
+      password: "{{ jenkins_deployment_user.password }}"
+      roles:
+        - 'jenkins-administer'
+      public_keys:
+        - "{{ jenkins_user_ssh_public_key.stdout }}"
+  when: jenkins_manage_users_and_security
+
+- name: Manage users and security
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_users_or_security
+  with_items: "{{ jenkins_users }}"
+  when: jenkins_manage_users_and_security
+

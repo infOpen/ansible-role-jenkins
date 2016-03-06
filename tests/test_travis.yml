@@ -2,23 +2,25 @@
 
 # Tests for jenkins role
 
-- hosts : localhost
-  remote_user : root
-  roles :
-    - ansible-role-jenkins
-  post_tasks :
-    - include : ./common_tests.yml
-  vars :
-    jenkins_plugins :
-      - ansible
-      - ansicolor
-      - build-pipeline-plugin
-      - debian-package-builder
-      - envinject
-      - git
-      - github
-      - graphiteIntegrator
-      - publish-over-ssh
-      - ssh
-      - redmine
+- hosts: localhost
+  remote_user: root
+  pre_tasks:
+    - include_vars: "./{{ ansible_os_family | lower }}.yml"
+  roles:
+    - "{{ role_name }}"
+  post_tasks:
+    - include: ./common_tests.yml
+  vars:
+    jenkins_plugins:
+      - name: ansible
+      - name: ansicolor
+      - name: build-pipeline-plugin
+      - name: debian-package-builder
+      - name: envinject
+      - name: git
+      - name: github
+      - name: graphiteIntegrator
+      - name: publish-over-ssh
+      - name: ssh
+    role_name: "{{ lookup('env','TRAVIS_REPO_SLUG') }}"
 

@@ -1,0 +1,104 @@
+---
+
+# Tasks about Jenkins plugins configuration management
+
+- name: Manage git plugin configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_git:
+    create_accounts: "{{ jenkins_plugin_git_create_account_based_on_email }}"
+    email: "{{ jenkins_plugin_git_global_email }}"
+    full_name: "{{ jenkins_plugin_git_global_full_name }}"
+  register: jenkins_change_plugin_git
+  when: "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Manage mailer plugin configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_mailer:
+    charset: "{{ jenkins_plugin_mailer_charset }}"
+    default_suffix: "{{ jenkins_plugin_mailer_default_suffix }}"
+    reply_to: "{{ jenkins_plugin_mailer_reply_to }}"
+    smtp_host: "{{ jenkins_plugin_mailer_smtp_host }}"
+    smtp_password: "{{ jenkins_plugin_mailer_smtp_password }}"
+    smtp_port: "{{ jenkins_plugin_mailer_smtp_port }}"
+    smtp_user: "{{ jenkins_plugin_mailer_smtp_user }}"
+    use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
+  register: jenkins_change_plugin_mailer
+  when: "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Remove github plugin servers configuration
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  remove_jenkins_github_servers:
+    do_task: True
+  register: jenkins_change_plugin_github_remove_servers
+  when:
+    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
+    - jenkins_plugins_github_remove_servers
+
+- name: Manage github plugin configuration with new settings
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_github:
+    manage_hooks: "{{ item.manage_hooks }}"
+    credentials_id: "{{ item.credentials_id }}"
+    custom_url: "{{ item.custom_url }}"
+    client_cache_size: "{{ item.client_cache_size }}"
+  register: jenkins_change_plugin_github
+  with_items: "{{ jenkins_plugins_github_servers }}"
+  when: "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Manage debian package builder plugin gpg configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_debian_package_builder_gpg:
+    name: "{{ jenkins_plugins_debian_package_builder.gpg.name }}"
+    email: "{{ jenkins_plugins_debian_package_builder.gpg.email }}"
+    public_key: "{{ jenkins_plugins_debian_package_builder.gpg.public_key }}"
+    private_key: "{{ jenkins_plugins_debian_package_builder.gpg.private_key }}"
+    passphrase: "{{ jenkins_plugins_debian_package_builder.gpg.passphrase }}"
+  register: jenkins_change_plugin_debian_package_builder_gpg
+  when: "{{ 'debian-package-builder' in
+                (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Remove debian package builder plugin repositories configuration
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  remove_jenkins_debian_package_builder_repo:
+    do_task: True
+  register: jenkins_change_plugin_debian_package_builder_remove_repo
+  when:
+    - jenkins_plugins_debian_package_builder_remove_repositories
+    - "{{ 'debian-package-builder' in
+              (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Manage debian package builder plugin repositories configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_debian_package_builder_repo:
+    name: "{{ item.name }}"
+    method: "{{ item.method }}"
+    fqdn: "{{ item.fqdn }}"
+    incoming: "{{ item.incoming }}"
+    login: "{{ item.login }}"
+    key_path: "{{ item.key_path }}"
+    options: "{{ item.options }}"
+    state: "{{ item.state }}"
+  register: jenkins_change_plugin_debian_package_builder_repo
+  with_items: "{{ jenkins_plugins_debian_package_builder.repo }}"
+  when: "{{ 'debian-package-builder' in
+                (jenkins_plugins | map(attribute='name')) }}"
+
+- name : Waiting jenkins restarted
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when: "{{
+            jenkins_change_plugin_git.changed
+              or jenkins_change_plugin_mailer
+              or jenkins_change_plugin_github_remove_servers
+              or jenkins_change_plugin_github
+              or jenkins_change_plugin_debian_package_builder_gpg
+              or jenkins_change_plugin_debian_package_builder_remove_repo
+              or jenkins_change_plugin_debian_package_builder_repo
+        }}"
+
