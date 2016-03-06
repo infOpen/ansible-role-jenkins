@@ -4,22 +4,12 @@
 
 - hosts: all
   remote_user: vagrant
+  pre_tasks:
+    - include_vars: "./{{ ansible_os_family | lower }}.yml"
   roles:
     - "{{ role_name }}"
   post_tasks:
     - include: ./common_tests.yml
   vars:
-    jenkins_etc_listen_address: '0.0.0.0'
-    jenkins_plugins: []
-      #- name: ansible
-      #- name: ansicolor
-      #- name: build-pipeline-plugin
-      #- name: debian-package-builder
-      #- name: envinject
-      #- name: git
-      #- name: github
-      #- name: graphiteIntegrator
-      #- name: publish-over-ssh
-      #- name: ssh
     role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
 
