@@ -30,6 +30,7 @@
   become_user: "{{ jenkins_etc_user }}"
   remove_jenkins_github_servers:
     do_task: True
+  register: jenkins_change_plugin_github_remove_servers
   when: jenkins_plugins_github_remove_servers
 
 - name: Manage github plugin configuration with new settings
@@ -59,6 +60,7 @@
   become_user: "{{ jenkins_etc_user }}"
   remove_jenkins_debian_package_builder_repo:
     do_task: True
+  register: jenkins_change_plugin_debian_package_builder_remove_repo
   when: jenkins_plugins_debian_package_builder_remove_repositories
 
 - name: Manage debian package builder plugin repositories configuration
@@ -75,4 +77,16 @@
     state: "{{ item.state }}"
   register: jenkins_change_plugin_debian_package_builder_repo
   with_items: "{{ jenkins_plugins_debian_package_builder.repo }}"
+
+- name : Waiting jenkins restarted
+  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when: "{{
+            jenkins_change_plugin_git.changed
+              or jenkins_change_plugin_mailer
+              or jenkins_change_plugin_github_remove_servers
+              or jenkins_change_plugin_github
+              or jenkins_change_plugin_debian_package_builder_gpg
+              or jenkins_change_plugin_debian_package_builder_remove_repo
+              or jenkins_change_plugin_debian_package_builder_repo
+        }}"
 
