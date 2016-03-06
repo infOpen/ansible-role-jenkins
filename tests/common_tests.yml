@@ -17,37 +17,17 @@
     - ansible_os_family == "Debian"
     - jenkins_apt_key_test.changed
 
-- name : Jenkins json file version for update center
-  become  : True
-  command : >
-    sed -n '0,/RE/s/.*war\/\(.*\)\/jenkins.war.*/\1/p'
-    {{ jenkins_update_file }}
-  register : jenkins_update_json_file_version_test
-  changed_when : False
-
-- name : Jenkins war version
-  command  : "java -jar {{ jenkins_etc_war_location }} --version"
-  register : jenkins_war_version_test
-  changed_when : False
-
-- name : Fail if Jenkins update json file too old
-  fail :
-    msg : "Jenkins update file too old"
-  when : >
-    {{ jenkins_update_json_file_version_test.stdout
-    | version_compare(jenkins_war_version_test.stdout_lines[2], '<') }}
-
-- name : Jenkins homepage should return 200
+- name : Jenkins homepage should return 403
   register : jenkins_homepage_test
   uri :
     url : "{{ jenkins_base_url }}"
-    status_code : 200
+    status_code : 403
     return_content : True
 
 - name : Check homepage not contains error
   fail :
     msg : Jenkins not return expected homepage
-  when : "'Welcome to Jenkins!' not in jenkins_homepage_test.content"
+  when : "'Authentication required' not in jenkins_homepage_test.content"
 
 - name : Get installed plugins
   become      : True
@@ -66,12 +46,12 @@
     msg : >
       Some needed plugins not installed :
       {{
-        jenkins_plugins
+        (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}
   when :
     - "{{
-        jenkins_plugins
+        (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}"
 

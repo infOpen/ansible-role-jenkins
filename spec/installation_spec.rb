@@ -23,29 +23,12 @@ describe 'jenkins Ansible role' do
             '/etc/default/jenkins',
             '/var/lib/jenkins/jenkins-cli.jar',
             '/var/lib/jenkins//updates_jenkins.json',
-            '/var/lib/jenkins/jenkins.model.ArtifactManagerConfiguration.xml',
-            '/var/lib/jenkins/jenkins.mvn.GlobalMavenConfig.xml',
             '/var/lib/jenkins/jenkins.model.JenkinsLocationConfiguration.xml',
-            '/var/lib/jenkins/hudson.tasks.Maven.xml',
-            '/var/lib/jenkins/hudson.tasks.Shell.xml',
-            '/var/lib/jenkins/org.jenkinsci.plugins.ansible.AnsibleInstallation.xml',
-            '/var/lib/jenkins/hudson.plugins.ansicolor.AnsiColorBuildWrapper.xml',
-            '/var/lib/jenkins/hudson.tasks.Ant.xml',
-            '/var/lib/jenkins/hudson.scm.CVSSCM.xml',
             '/var/lib/jenkins/ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml',
             '/var/lib/jenkins/ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher.xml',
-            '/var/lib/jenkins/envInject.xml',
-            '/var/lib/jenkins/envinject-plugin-configuration.xml',
             '/var/lib/jenkins/github-plugin-configuration.xml',
             '/var/lib/jenkins/hudson.plugins.git.GitSCM.xml',
-            '/var/lib/jenkins/org.jenkinsci.plugins.gitclient.JGitTool.xml',
-            '/var/lib/jenkins/org.jenkinsci.plugins.graphiteIntegrator.GraphitePublisher.xml',
             '/var/lib/jenkins/hudson.tasks.Mailer.xml',
-            '/var/lib/jenkins/hudson.maven.MavenModuleSet.xml',
-            '/var/lib/jenkins/jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin.xml',
-            '/var/lib/jenkins/hudson.plugins.redmine.RedmineProjectProperty.xml',
-            '/var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml',
-            '/var/lib/jenkins/hudson.scm.SubversionSCM.xml'
         ]
 
         FILES_MANAGED_ANSIBLE = [
@@ -71,6 +54,22 @@ describe 'jenkins Ansible role' do
 
     describe port(8080) do
         it { should be_listening }
+    end
+
+    describe file('/var/lib/jenkins/.ssh/id_rsa') do
+        it { should exist }
+        it { should be_file }
+        it { should be_owned_by 'jenkins' }
+        it { should be_grouped_into 'jenkins' }
+        it { should be_mode 600 }
+    end
+
+    describe file('/var/lib/jenkins/.ssh/id_rsa.pub') do
+        it { should exist }
+        it { should be_file }
+        it { should be_owned_by 'jenkins' }
+        it { should be_grouped_into 'jenkins' }
+        it { should be_mode 644 }
     end
 
 end
