@@ -194,6 +194,7 @@ jenkins_plugins_github_servers:
     client_cache_size: 20
 
 # Plugins: debian package builder
+jenkins_plugins_debian_package_builder_remove_repositories: True
 jenkins_plugins_debian_package_builder:
   gpg:
     name: 'Foo Bar'

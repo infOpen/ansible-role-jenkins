@@ -54,6 +54,13 @@
     passphrase: "{{ jenkins_plugins_debian_package_builder.gpg.passphrase }}"
   register: jenkins_change_plugin_debian_package_builder_gpg
 
+- name: Remove debian package builder plugin repositories configuration
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  remove_jenkins_debian_package_builder_repo:
+    do_task: True
+  when: jenkins_plugins_debian_package_builder_remove_repositories
+
 - name: Manage debian package builder plugin repositories configuration
   become : True
   become_user : "{{ jenkins_etc_user }}"
