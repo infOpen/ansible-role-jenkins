@@ -2,8 +2,7 @@
 
 import jenkins.model.*
 import jenkins.model.ProjectNamingStrategy
-import jenkins.model.ProjectNamingStrategy.PatternProjectNamingStrategy \
-    as PatternProjectNaming
+import jenkins.model.ProjectNamingStrategy.PatternProjectNamingStrategy
 import hudson.model.*
 import groovy.json.*
 
@@ -48,7 +47,8 @@ def Boolean set_disable_remember_me(Jenkins jenkins_instance,
     }
     catch(Exception e) {
         throw new Exception(
-            'An error occurs during disable remember me change')
+            'An error occurs during disable remember me change: '
+            + e.getMessage())
     }
 
     return true
@@ -74,7 +74,8 @@ def Boolean set_label(Jenkins jenkins_instance, String label) {
         jenkins_instance.setLabelString(label)
     }
     catch(Exception e) {
-        throw new Exception( 'An error occurs during label change')
+        throw new Exception(
+            'An error occurs during label change: ' + e.getMessage())
     }
 
     return true
@@ -101,7 +102,9 @@ def Boolean set_number_of_executors(Jenkins jenkins_instance,
         jenkins_instance.setNumExecutors(executors_number)
     }
     catch(Exception e) {
-        throw new Exception('An error occurs during number of executor change')
+        throw new Exception(
+            'An error occurs during number of executor change: '
+            + e.getMessage())
     }
 
     return true
@@ -128,7 +131,8 @@ def Boolean set_mode(Jenkins jenkins_instance, String mode) {
         jenkins_instance.setMode(new_mode)
     }
     catch(Exception e) {
-        throw new Exception('An error occurs during mode change')
+        throw new Exception(
+            'An error occurs during mode change: ' + e.getMessage())
     }
 
     return true
@@ -146,25 +150,30 @@ def Boolean set_project_naming_strategy(Jenkins jenkins_instance,
                                         Map strategy) {
 
     try {
-        def PatternProjectNaming new_value = new PatternProjectNaming(
-                                                        strategy.pattern,
-                                                        strategy.description,
-                                                        strategy.force)
+        def PatternProjectNamingStrategy new_value
+        new_value = new PatternProjectNamingStrategy(
+                                                strategy.pattern,
+                                                strategy.description,
+                                                strategy.force)
+
         // Get current value, used to check if changed
         def ProjectNamingStrategy cur_value = jenkins_instance
                                                .getProjectNamingStrategy()
 
-        if (cur_value.getNamePattern() == new_value.getNamePattern()
+        if (cur_value instanceof PatternProjectNamingStrategy
+          && cur_value.getNamePattern() == new_value.getNamePattern()
           && cur_value.getDescription() == new_value.getDescription()
           && cur_value.isForceExistingJobs() == new_value.isForceExistingJobs()
         ) {
             return false
         }
+
         jenkins_instance.setProjectNamingStrategy(new_value)
     }
     catch(Exception e) {
         throw new Exception(
-            'An error occurs during project naming strategy change')
+            'An error occurs during project naming strategy change: '
+            + e.getMessage())
     }
 
     return true
@@ -190,7 +199,8 @@ def Boolean set_quiet_period(Jenkins jenkins_instance, Integer quiet_period) {
         jenkins_instance.setQuietPeriod(quiet_period)
     }
     catch(Exception e) {
-        throw new Exception('An error occurs during quiet period change')
+        throw new Exception(
+            'An error occurs during quiet period change: ' + e.getMessage())
     }
 
     return true
@@ -218,7 +228,8 @@ def Boolean set_scm_checkout_retry_count(Jenkins jenkins_instance,
     }
     catch(Exception e) {
         throw new Exception(
-            'An error occurs during scm checkout retry count change')
+            'An error occurs during scm checkout retry count change: '
+            + e.getMessage())
     }
 
     return true
@@ -244,7 +255,9 @@ def Boolean set_slave_agent_port(Jenkins jenkins_instance, Integer port) {
         jenkins_instance.setSlaveAgentPort(port)
     }
     catch(Exception e) {
-        throw new Exception('An error occurs during slave agent port change')
+        throw new Exception(
+            'An error occurs during slave agent port change: '
+            + e.getMessage())
     }
 
     return true
