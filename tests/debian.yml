@@ -7,6 +7,8 @@ jenkins_plugins:
   - name: ansible
   - name: ansicolor
   - name: build-pipeline-plugin
+  - name: cloudbees-folder
+  - name: credentials
   - name: debian-package-builder
   - name: envinject
   - name: git
@@ -55,11 +57,13 @@ jenkins_credentials:
     text: 'loving_jenkins'
     description: 'Jenkins testing text credentials'
     state: 'present'
+jenkins_plugins_github_remove_servers: False
 jenkins_plugins_github_servers:
   - manage_hooks: False
     credentials_id: 'simple-text-credentials'
     custom_url: ''
     client_cache_size: 20
+jenkins_plugins_debian_package_builder_remove_repositories: False
 jenkins_plugins_debian_package_builder:
   gpg:
     name: 'Foo Bar'

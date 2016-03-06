@@ -76,7 +76,7 @@ describe 'jenkins Ansible role' do
         it { should exist }
         it { should be_file }
         it { should be_owned_by 'jenkins' }
-        it { should be_grouped_by 'jenkins' }
+        it { should be_grouped_into 'jenkins' }
         it { should be_mode 600 }
     end
 
@@ -84,7 +84,7 @@ describe 'jenkins Ansible role' do
         it { should exist }
         it { should be_file }
         it { should be_owned_by 'jenkins' }
-        it { should be_grouped_by 'jenkins' }
+        it { should be_grouped_into 'jenkins' }
         it { should be_mode 644 }
     end
 
