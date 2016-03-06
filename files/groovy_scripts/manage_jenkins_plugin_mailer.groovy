@@ -136,9 +136,9 @@ def Boolean set_mailer_plugin_smtp_port(Descriptor desc,
                                         Integer new_smtp_port) {
 
     // Get current value, used to check if changed
-    def Integer cur_smtp_port = desc.getSmtpPort().toInteger()
+    def Integer cur_smtp_port = desc.getSmtpPort()
 
-    if (cur_smtp_port == new_smtp_port) {
+    if (cur_smtp_port == null || cur_smtp_port == new_smtp_port) {
         return false
     }
 
