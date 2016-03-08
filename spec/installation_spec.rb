@@ -22,7 +22,6 @@ describe 'jenkins Ansible role' do
             '/etc/apt/sources.list.d/pkg_jenkins_ci_org_debian.list',
             '/etc/default/jenkins',
             '/var/lib/jenkins/jenkins-cli.jar',
-            '/var/lib/jenkins//updates_jenkins.json',
             '/var/lib/jenkins/jenkins.model.JenkinsLocationConfiguration.xml',
             '/var/lib/jenkins/ru.yandex.jenkins.plugins.debuilder.DebianPackageBuilder.xml',
             '/var/lib/jenkins/ru.yandex.jenkins.plugins.debuilder.DebianPackagePublisher.xml',
