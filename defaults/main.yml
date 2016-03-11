@@ -154,3 +154,6 @@ jenkins_plugins_debian_package_builder:
     passphrase: 'foo_passphrase'
   repo: []
 
+# Plugins: jira
+jenkins_plugins_jira_sites: []
+

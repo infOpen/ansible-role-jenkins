@@ -90,15 +90,39 @@
   when: "{{ 'debian-package-builder' in
                 (jenkins_plugins | map(attribute='name')) }}"
 
+- name: Manage jira plugin configuration
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_jira:
+    jira_url: "{{ item.url }}"
+    jira_alt_url: "{{ item.alt_url }}"
+    use_http_auth: "{{ item.use_http_auth }}"
+    user: "{{ item.user }}"
+    password: "{{ item.password }}"
+    group_visibility: "{{ item.group_visibility }}"
+    role_visibility: "{{ item.role_visibility }}"
+    supports_wiki_style: "{{ item.supports_wiki_style }}"
+    record_scm_changes: "{{ item.record_scm_changes }}"
+    timeout: "{{ item.timeout }}"
+    datetime_pattern: "{{ item.datetime_pattern }}"
+    user_pattern: "{{ item.user_pattern }}"
+    append_change_timestamp: "{{ item.append_timestamp }}"
+    update_for_all_status: "{{ item.update_for_all_status }}"
+    state: "{{ item.state }}"
+  register: jenkins_change_plugin_jira
+  with_items: "{{ jenkins_plugins_jira_sites }}"
+  when: "{{ 'jira' in (jenkins_plugins | map(attribute='name')) }}"
+
 - name : Waiting jenkins restarted
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{
             jenkins_change_plugin_git.changed
-              or jenkins_change_plugin_mailer
-              or jenkins_change_plugin_github_remove_servers
-              or jenkins_change_plugin_github
-              or jenkins_change_plugin_debian_package_builder_gpg
-              or jenkins_change_plugin_debian_package_builder_remove_repo
-              or jenkins_change_plugin_debian_package_builder_repo
+              or jenkins_change_plugin_mailer.changed
+              or jenkins_change_plugin_github_remove_servers.changed
+              or jenkins_change_plugin_github.changed
+              or jenkins_change_plugin_debian_package_builder_gpg.changed
+              or jenkins_change_plugin_debian_package_builder_remove_repo.changed
+              or jenkins_change_plugin_debian_package_builder_repo.changed
+              or jenkins_change_plugin_jira.changed
         }}"
 

@@ -4,19 +4,20 @@
 
 jenkins_etc_listen_address: '0.0.0.0'
 jenkins_plugins:
-  - name: ansible
-  - name: ansicolor
-  - name: build-pipeline-plugin
-  - name: cloudbees-folder
-  - name: credentials
-  - name: debian-package-builder
-  - name: envinject
-  - name: git
-  - name: github
-  - name: graphiteIntegrator
-  - name: mailer
-  - name: publish-over-ssh
-  - name: ssh
+  #- name: ansible
+  #- name: ansicolor
+  #- name: build-pipeline-plugin
+  #- name: cloudbees-folder
+  #- name: credentials
+  #- name: debian-package-builder
+  #- name: envinject
+  #- name: git
+  #- name: github
+  #- name: graphiteIntegrator
+  - name: jira
+  #- name: mailer
+  #- name: publish-over-ssh
+  #- name: ssh
 jenkins_users:
   - username: 'admin'
     full_name: 'Jenkins administrator user'
@@ -100,3 +101,22 @@ jenkins_plugin_mailer_reply_to: 'foo@bar.org'
 jenkins_plugin_mailer_smtp_host: 'localhost'
 jenkins_plugin_mailer_smtp_password: 'foobar'
 jenkins_plugin_mailer_smtp_user: 'foo'
+
+# Plugins: jira
+jenkins_plugins_jira_sites:
+  - url: 'http://jira.my-company.com/'
+    alt_url: ''
+    use_http_auth: False
+    user: ''
+    password: ''
+    group_visibility: ''
+    role_visibility: ''
+    supports_wiki_style: True
+    record_scm_changes: True
+    timeout: 60
+    datetime_pattern: ''
+    append_timestamp: False
+    update_for_all_status: True
+    user_pattern: ''
+    state: 'absent'
+
