@@ -185,6 +185,11 @@ Follow the possible variables with their default values
         passphrase: 'foo_passphrase'
       repo: []
 
+    # Plugins : gitlab
+    jenkins_plugins_gitlab_api_token: ''
+    jenkins_plugins_gitlab_host_url: ''
+    jenkins_plugins_gitlab_ignore_cert_error: False
+
 ### Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
