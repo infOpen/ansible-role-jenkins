@@ -90,6 +90,16 @@
   when: "{{ 'debian-package-builder' in
                 (jenkins_plugins | map(attribute='name')) }}"
 
+- name: Manage gitlab plugin configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_gitlab:
+    api_token: "{{ jenkins_plugins_gitlab_api_token }}"
+    host_url: "{{ jenkins_plugins_gitlab_host_url }}"
+    ignore_cert_error: "{{ jenkins_plugins_gitlab_ignore_cert_error }}"
+  register: jenkins_change_plugin_gitlab
+  when: "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+
 - name : Waiting jenkins restarted
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{
@@ -100,5 +110,6 @@
               or jenkins_change_plugin_debian_package_builder_gpg
               or jenkins_change_plugin_debian_package_builder_remove_repo
               or jenkins_change_plugin_debian_package_builder_repo
+              or jenkins_change_plugin_gitlab
         }}"
 

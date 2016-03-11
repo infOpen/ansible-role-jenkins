@@ -161,3 +161,8 @@ jenkins_plugins_debian_package_builder:
     passphrase: 'foo_passphrase'
   repo: []
 
+# Plugins : gitlab
+jenkins_plugins_gitlab_api_token: ''
+jenkins_plugins_gitlab_host_url: ''
+jenkins_plugins_gitlab_ignore_cert_error: False
+
