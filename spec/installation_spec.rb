@@ -29,6 +29,7 @@ describe 'jenkins Ansible role' do
             '/var/lib/jenkins/github-plugin-configuration.xml',
             '/var/lib/jenkins/hudson.plugins.git.GitSCM.xml',
             '/var/lib/jenkins/hudson.tasks.Mailer.xml',
+            '/var/lib/jenkins/jenkins.plugins.hipchat.HipChatNotifier.xml'
         ]
 
         FILES_MANAGED_ANSIBLE = [

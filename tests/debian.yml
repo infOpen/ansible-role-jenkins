@@ -16,6 +16,7 @@ jenkins_plugins:
   - name: github
   - name: gitlab-plugin
   - name: graphiteIntegrator
+  - name: hipchat
   - name: mailer
   - name: publish-over-ssh
   - name: ssh
@@ -107,4 +108,20 @@ jenkins_plugin_mailer_smtp_user: 'foo'
 jenkins_plugins_gitlab_api_token: 'my_token'
 jenkins_plugins_gitlab_host_url: 'http://localhost:443/gitlab'
 jenkins_plugins_gitlab_ignore_cert_error: True
+
+# Plugins: hipchat
+jenkins_plugins_hipchat_token: 'foo'
+jenkins_plugins_hipchat_notifications:
+  - notify_enabled: True
+    text_format: True
+    notification_type: 'STARTED'
+    color: 'GREEN'
+    message_template: 'foobar'
+    state: 'present'
+  - notify_enabled: True
+    text_format: True
+    notification_type: 'FAILURE'
+    color: 'RED'
+    message_template: null
+    state: 'absent'
 
