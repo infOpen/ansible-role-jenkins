@@ -159,3 +159,11 @@ jenkins_plugins_gitlab_api_token: ''
 jenkins_plugins_gitlab_host_url: ''
 jenkins_plugins_gitlab_ignore_cert_error: False
 
+# Plugins: hipchat
+jenkins_plugins_hipchat_server: 'api.hipchat.com'
+jenkins_plugins_hipchat_token: ''
+jenkins_plugins_hipchat_v2_enabled: False
+jenkins_plugins_hipchat_room: 'Continuous Integration'
+jenkins_plugins_hipchat_send_as: 'Jenkins'
+jenkins_plugins_hipchat_notifications: []
+

@@ -190,6 +190,14 @@ Follow the possible variables with their default values
     jenkins_plugins_gitlab_host_url: ''
     jenkins_plugins_gitlab_ignore_cert_error: False
 
+    # Plugins: hipchat
+    jenkins_plugins_hipchat_server: 'api.hipchat.com'
+    jenkins_plugins_hipchat_token: ''
+    jenkins_plugins_hipchat_v2_enabled: False
+    jenkins_plugins_hipchat_room: 'Continuous Integration'
+    jenkins_plugins_hipchat_send_as: 'Jenkins'
+    jenkins_plugins_hipchat_notifications: []
+
 ### Specific vars values for Debian family
 
     jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
@@ -318,6 +326,16 @@ You can manage Github plugin serveurs with this structure:
 
 You can remove all servers before plugin configuration. Just set True to
 "jenkins_plugins_github_remove_servers" variable.
+
+### Hipchat notifications
+
+You can manage Hipchat plugin notifications with this structure:
+    jenkins_plugins_hipchat_notifications:
+      - notify_enable: True
+        text_format: True
+        notification_type: STARTED
+        color: YELLOW
+        message_template: null
 
 ## Dependencies
 

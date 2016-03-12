@@ -100,6 +100,32 @@
   register: jenkins_change_plugin_gitlab
   when: "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
 
+- name: Manage hipchat plugin configuration
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_hipchat:
+    server: "{{ jenkins_plugins_hipchat_server }}"
+    token: "{{ jenkins_plugins_hipchat_token }}"
+    v2_enabled: "{{ jenkins_plugins_hipchat_v2_enabled }}"
+    room: "{{ jenkins_plugins_hipchat_room }}"
+    send_as: "{{ jenkins_plugins_hipchat_send_as }}"
+  register: jenkins_change_plugin_hipchat
+  when: "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+
+- name: Manage hipchat plugin notifications
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_hipchat_notifications:
+    notify_enabled: "{{ item.notify_enabled }}"
+    text_format: "{{ item.text_format }}"
+    notification_type: "{{ item.notification_type }}"
+    color: "{{ item.color }}"
+    message_template: "{{ item.message_template }}"
+    state: "{{ item.state }}"
+  register: jenkins_change_plugin_hipchat_notifications
+  with_items: "{{ jenkins_plugins_hipchat_notifications }}"
+  when: "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+
 - name : Waiting jenkins restarted
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{
