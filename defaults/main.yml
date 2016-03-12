@@ -51,13 +51,6 @@ jenkins_base_url         : "http://localhost:{{ jenkins_etc_http_port }}"
 jenkins_cli_download_url : "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
 jenkins_cli : "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
 
-# Jenkins update center variables
-jenkins_update_center_url_download : >
-  https://updates.jenkins-ci.org/update-center.json
-jenkins_update_center_url_post : >
-  {{ jenkins_base_url }}/updateCenter/byId/default/postBack
-jenkins_update_file : "{{ jenkins_etc_home_location }}/updates_jenkins.json"
-
 # Jenkins waiting availability test
 jenkins_waiting_available_retries : 10
 jenkins_waiting_available_delay   : 5
