@@ -5,7 +5,7 @@
 - hosts: all
   remote_user: vagrant
   pre_tasks:
-    - include_vars: "./{{ ansible_os_family | lower }}.yml"
+    - include_vars: "./test_vars.yml"
   roles:
     - "{{ role_name }}"
   post_tasks:
