@@ -126,6 +126,22 @@
   with_items: "{{ jenkins_plugins_hipchat_notifications }}"
   when: "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
 
+- name: Manage docker plugin clouds
+  become : True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_docker_clouds:
+    name: "{{ item.name }}"
+    server_url: "{{ item.server_url }}"
+    container_cap: "{{ item.container_cap }}"
+    connect_timeout: "{{ item.connect_timeout }}"
+    read_timeout: "{{ item.read_timeout }}"
+    credentials_id: "{{ item.credentials_id }}"
+    templates: "{{ item.templates }}"
+    state: "{{ item.state }}"
+  register: jenkins_change_plugin_docker_clouds
+  with_items: "{{ jenkins_plugins_docker_clouds }}"
+  when: "{{ 'docker-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+
 - name : Waiting jenkins restarted
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{

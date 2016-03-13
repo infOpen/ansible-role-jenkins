@@ -167,3 +167,6 @@ jenkins_plugins_hipchat_room: 'Continuous Integration'
 jenkins_plugins_hipchat_send_as: 'Jenkins'
 jenkins_plugins_hipchat_notifications: []
 
+# Plugins: docker
+jenkins_plugins_docker_clouds: []
+
