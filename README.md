@@ -176,14 +176,13 @@ Follow the possible variables with their default values
 
     # Plugins: debian package builder
     jenkins_plugins_debian_package_builder_remove_repositories: True
-    jenkins_plugins_debian_package_builder:
-      gpg:
-        name: 'Foo Bar'
-        email: 'foo@bar.fr'
-        public_key: 'foo_public_key'
-        private_key: 'foo_private_key'
-        passphrase: 'foo_passphrase'
-      repo: []
+    jenkins_plugins_debian_package_builder_gpg:
+      name: 'Foo Bar'
+      email: 'foo@bar.fr'
+      public_key: 'foo_public_key'
+      private_key: 'foo_private_key'
+      passphrase: 'foo_passphrase'
+    jenkins_plugins_debian_package_builder_repo: []
 
     # Plugins : gitlab
     jenkins_plugins_gitlab_api_token: ''
@@ -286,30 +285,29 @@ Example:
 You can manage the plugin configuration with these settings, example with
 repositories for publisher step:
 
-    jenkins_plugins_debian_package_builder:
-      gpg:
-        name: 'Foo Bar'
-        email: 'foo@bar.fr'
-        public_key: 'foo_public_key'
-        private_key: 'foo_private_key'
-        passphrase: 'foo_passphrase'
-      repo:
-        - name: 'repo_1'
-          method: 'scpb'
-          fqdn: 'foo.bar.fr'
-          incoming: '/foo'
-          login: 'foo'
-          key_path: '/bar/foo.key'
-          options: 'foo_options'
-          state: 'present'
-        - name: 'repo_2'
-          method: 'scpb'
-          fqdn: 'foobar.bar.fr'
-          incoming: '/foobar'
-          login: 'foobar'
-          key_path: '/bar/foobar.key'
-          options: 'foobar_options'
-          state: 'absent'
+    jenkins_plugins_debian_package_builder_gpg:
+      name: 'Foo Bar'
+      email: 'foo@bar.fr'
+      public_key: 'foo_public_key'
+      private_key: 'foo_private_key'
+      passphrase: 'foo_passphrase'
+    jenkins_plugins_debian_package_builder_repo:
+      - name: 'repo_1'
+        method: 'scpb'
+        fqdn: 'foo.bar.fr'
+        incoming: '/foo'
+        login: 'foo'
+        key_path: '/bar/foo.key'
+        options: 'foo_options'
+        state: 'present'
+      - name: 'repo_2'
+        method: 'scpb'
+        fqdn: 'foobar.bar.fr'
+        incoming: '/foobar'
+        login: 'foobar'
+        key_path: '/bar/foobar.key'
+        options: 'foobar_options'
+        state: 'absent'
 
 You can remove all repositories before plugin configuration. Just set True to
 "jenkins_plugins_debian_package_builder_remove_repositories" variable.

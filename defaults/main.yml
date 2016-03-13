@@ -145,14 +145,13 @@ jenkins_plugins_github_servers: []
 
 # Plugins: debian package builder
 jenkins_plugins_debian_package_builder_remove_repositories: True
-jenkins_plugins_debian_package_builder:
-  gpg:
-    name: 'Foo Bar'
-    email: 'foo@bar.fr'
-    public_key: 'foo_public_key'
-    private_key: 'foo_private_key'
-    passphrase: 'foo_passphrase'
-  repo: []
+jenkins_plugins_debian_package_builder_gpg:
+  name: 'Foo Bar'
+  email: 'foo@bar.fr'
+  public_key: 'foo_public_key'
+  private_key: 'foo_private_key'
+  passphrase: 'foo_passphrase'
+jenkins_plugins_debian_package_builder_repo: []
 
 # Plugins : gitlab
 jenkins_plugins_gitlab_api_token: ''
