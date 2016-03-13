@@ -160,7 +160,7 @@ def Boolean check_color(NotificationConfig notification, Map data) {
         def String new_color = data['color']
 
         // Check if setting need update
-        return (cur_color != new_color)
+        return (cur_color.toLowerCase() != new_color.toLowerCase())
     }
     catch(Exception e) {
         throw new Exception(
