@@ -337,6 +337,61 @@ You can manage Hipchat plugin notifications with this structure:
         color: YELLOW
         message_template: null
 
+### Docker clouds
+
+You can manage Docker plugin clouds with this structure:
+    jenkins_plugins_docker_clouds:
+      - name: 'docker-cloud-test'
+        server_url: 'http://127.0.0.1:8081'
+        container_cap: 10
+        connect_timeout: 10
+        read_timeout: 10
+        credentials_id: 'simple-jenkins-user'
+        version: null
+        state: 'present'
+        templates:
+          - config_version: 2
+            label_string: ''
+            remote_fs_mapping: '/tmp'
+            remote_fs: '/home/jenkins'
+            instance_cap: 20
+            mode: 'NORMAL'
+            num_executors: 1
+            remove_volumes: False
+            pull_strategy: 'PULL_LATEST'
+            launcher:
+              class: 'ssh'
+              credentials_id: 'simple-jenkins-user'
+              jvm_options: []
+              java_path: ''
+              launch_timeout: 0
+              max_num_retries: 0
+              port: 22
+              prefix_start_slave_cmd: ''
+              suffix_start_slave_cmd: ''
+              retry_wait_time: 0
+            template_base:
+              image: 'evarga/jenkins-slave'
+              docker_command: ''
+              lxc_conf_string: ''
+              hostname: ''
+              dns_hosts: []
+              volumes: []
+              volumes_from: []
+              environments: []
+              bind_ports: []
+              bind_all_ports: False
+              privileged: False
+              tty: False
+              extra_hosts: []
+              mac_address: ''
+              memory_limit: null
+              memory_swap: 0
+              cpu_shares: null
+            retention_strategy:
+              class: 'once'
+              idle_minutes: 10
+
 ## Dependencies
 
 - achaussier.openjdk-jre
