@@ -25,6 +25,10 @@ def main():
             passphrase=dict(
                 type='str',
                 required=True),
+            deployment_ssh_key=dict(
+                type='str',
+                required=False,
+                default='/var/lib/jenkins/.ssh/id_rsa'),
             cli_path=dict(
                 type='str',
                 required=False,
@@ -44,8 +48,9 @@ def main():
                                basename(__file__))
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' groovy %s '%s'" %
-        (module.params['cli_path'], module.params['url'], script,
+        "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+        (module.params['cli_path'], module.params['url'],
+         module.params['deployment_ssh_key'], script,
          json.dumps(module.params)))
 
     if (rc != 0):

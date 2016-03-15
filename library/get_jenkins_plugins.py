@@ -9,6 +9,10 @@ def main():
 
     module = AnsibleModule(
         argument_spec=dict(
+            deployment_ssh_key=dict(
+                type='str',
+                required=False,
+                default='/var/lib/jenkins/.ssh/id_rsa'),
             cli_path=dict(
                 type='str',
                 required=False,
@@ -26,12 +30,13 @@ def main():
 
     jenkins_cli_path = module.params['cli_path']
     jenkins_url = module.params['url']
+    deployment_ssh_key = module.params['deployment_ssh_key']
     script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
                                basename(__file__))
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' groovy %s" %
-        (jenkins_cli_path, jenkins_url, script))
+        "java -jar %s -s '%s' -i '%s' groovy %s" %
+        (jenkins_cli_path, jenkins_url, deployment_ssh_key, script))
 
     if (rc != 0):
         module.fail_json(msg=stderr)

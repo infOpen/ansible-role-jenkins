@@ -48,15 +48,28 @@
     - configure
     - jenkins
 
+- name: Include groovy main configuration
+  include: "{{ role_path }}/tasks/manage_main_config.yml"
+  tags:
+    - configure
+    - jenkins
+
 - name : Manage plugins installations and upgrades
   include: "{{ role_path }}/tasks/manage_plugins.yml"
   tags:
     - jenkins
     - install
 
-- name : Configure Jenkins application and its plugins
-  include : "{{ role_path }}/tasks/manage_configuration.yml"
-  tags :
-    - jenkins
+- name: Manage jenkins credentials
+  include: "{{ role_path }}/tasks/manage_credentials.yml"
+  tags:
     - configure
+    - jenkins
+
+- name: Include groovy plugins configuration
+  include: "{{ role_path }}/tasks/manage_plugins_config.yml"
+  when: jenkins_plugins
+  tags:
+    - configure
+    - jenkins
 

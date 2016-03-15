@@ -2,6 +2,60 @@
 
 # Tasks about Jenkins main configuration management
 
+# Manage deployment user configuration, without key for the first use
+- name: Manage deployment user configuration without using private key
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+    use_private_key: False
+  register: jenkins_change_deployment_user_without_ssh_key
+  ignore_errors: True
+  with_items:
+    - username: "{{ jenkins_deployment_user.username }}"
+      full_name: "{{ jenkins_deployment_user.full_name }}"
+      email: "{{ jenkins_deployment_user.email }}"
+      password: "{{ jenkins_deployment_user.password }}"
+      roles:
+        - 'jenkins-administer'
+      public_keys:
+        - "{{ jenkins_user_ssh_public_key.stdout }}"
+  when: jenkins_manage_users_and_security
+
+- name: Manage deployment user configuration using private key
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_deployment_user
+  with_items:
+    - username: "{{ jenkins_deployment_user.username }}"
+      full_name: "{{ jenkins_deployment_user.full_name }}"
+      email: "{{ jenkins_deployment_user.email }}"
+      password: "{{ jenkins_deployment_user.password }}"
+      roles:
+        - 'jenkins-administer'
+      public_keys:
+        - "{{ jenkins_user_ssh_public_key.stdout }}"
+  when:
+    - jenkins_manage_users_and_security
+    - jenkins_change_deployment_user_without_ssh_key | failed
+
+- name: Manage users and security
+  become: True
+  become_user : "{{ jenkins_etc_user }}"
+  manage_jenkins_users_and_security:
+    user: "{{ item }}"
+    security_realm: "{{ jenkins_security_realm }}"
+    authorization_strategy: "{{ jenkins_authorization_strategy }}"
+  register: jenkins_change_users_or_security
+  with_items: "{{ jenkins_users }}"
+  when: jenkins_manage_users_and_security
+
 - name: Manage main configuration with new settings
   become : True
   become_user : "{{ jenkins_etc_user }}"
@@ -31,34 +85,4 @@
     - jenkins_location_administrator_email != ''
     - jenkins_location_administrator_full_name != ''
     - jenkins_location_url != ''
-
-- name: Manage deployment user configuration
-  become: True
-  become_user : "{{ jenkins_etc_user }}"
-  manage_jenkins_users_and_security:
-    user: "{{ item }}"
-    security_realm: "{{ jenkins_security_realm }}"
-    authorization_strategy: "{{ jenkins_authorization_strategy }}"
-  register: jenkins_change_deployment_user
-  with_items:
-    - username: "{{ jenkins_deployment_user.username }}"
-      full_name: "{{ jenkins_deployment_user.full_name }}"
-      email: "{{ jenkins_deployment_user.email }}"
-      password: "{{ jenkins_deployment_user.password }}"
-      roles:
-        - 'jenkins-administer'
-      public_keys:
-        - "{{ jenkins_user_ssh_public_key.stdout }}"
-  when: jenkins_manage_users_and_security
-
-- name: Manage users and security
-  become: True
-  become_user : "{{ jenkins_etc_user }}"
-  manage_jenkins_users_and_security:
-    user: "{{ item }}"
-    security_realm: "{{ jenkins_security_realm }}"
-    authorization_strategy: "{{ jenkins_authorization_strategy }}"
-  register: jenkins_change_users_or_security
-  with_items: "{{ jenkins_users }}"
-  when: jenkins_manage_users_and_security
 
