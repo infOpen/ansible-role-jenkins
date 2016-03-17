@@ -133,12 +133,12 @@ def Boolean set_mailer_plugin_smtp_host(Descriptor desc,
     @return Boolean True if changed, else false
 */
 def Boolean set_mailer_plugin_smtp_port(Descriptor desc,
-                                        Integer new_smtp_port) {
+                                        String new_smtp_port) {
 
     // Get current value, used to check if changed
-    def Integer cur_smtp_port = desc.getSmtpPort()
+    def String cur_smtp_port = desc.getSmtpPort()
 
-    if (cur_smtp_port == null || cur_smtp_port == new_smtp_port) {
+    if (cur_smtp_port == new_smtp_port) {
         return false
     }
 
@@ -278,7 +278,7 @@ def String new_default_suffix = ""
 def String new_reply_to = ""
 def String new_smtp_host = ""
 def String new_smtp_password = ""
-def Integer new_smtp_port = 25
+def String new_smtp_port = '25'
 def String new_smtp_user = ""
 def Boolean new_use_ssl = false
 
@@ -296,13 +296,15 @@ try {
     new_reply_to = data['reply_to']
     new_smtp_host = data['smtp_host']
     new_smtp_password = data['smtp_password']
-    new_smtp_port = data['smtp_port']
+    new_smtp_port = data['smtp_port'].toString()
     new_smtp_user = data['smtp_user']
     new_use_ssl = data['use_ssl']
 
     // Manage configuration with user data
     has_changed.push(set_mailer_plugin_smtp_auth(desc, new_smtp_user,
                                                  new_smtp_password))
+    has_changed.push(set_mailer_plugin_default_suffix(desc,
+                                                      new_default_suffix))
     has_changed.push(set_mailer_plugin_smtp_host(desc, new_smtp_host))
     has_changed.push(set_mailer_plugin_smtp_port(desc, new_smtp_port))
     has_changed.push(set_mailer_plugin_reply_to(desc, new_reply_to))
