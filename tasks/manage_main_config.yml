@@ -10,6 +10,7 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
+    crumb_issuer: "{{ jenkins_crumb_issuer }}"
     use_private_key: False
   register: 'jenkins_change_deployment_user_without_ssh_key'
   ignore_errors: True
@@ -32,6 +33,7 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
+    crumb_issuer: "{{ jenkins_crumb_issuer }}"
   register: 'jenkins_change_deployment_user'
   with_items:
     - username: "{{ jenkins_deployment_user.username }}"
@@ -54,6 +56,7 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
+    crumb_issuer: "{{ jenkins_crumb_issuer }}"
   register: 'jenkins_change_users_or_security'
   with_items: "{{ jenkins_users }}"
   when: "{{ jenkins_manage_users_and_security }}"

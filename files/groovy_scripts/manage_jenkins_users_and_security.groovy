@@ -149,8 +149,7 @@ def set_user_full_name(User user, String new_full_name) {
     @param Map Data of user to be created
     @return Boolean True if user created
 */
-def create_user_account(HudsonPrivateSecurityRealm realm, HashMap data) {
-//def create_user_account(realm, HashMap data) {
+def create_user_account(HudsonPrivateSecurityRealm realm, Map data) {
 
     // Create user account
     def User user = realm.createAccount(data.username, data.password)
@@ -172,7 +171,7 @@ def create_user_account(HudsonPrivateSecurityRealm realm, HashMap data) {
     @param Map Data of user to be updated
     @return Boolean True if user updated
 */
-def update_user_account(HudsonPrivateSecurityRealm realm, HashMap data) {
+def update_user_account(HudsonPrivateSecurityRealm realm, Map data) {
 
     // Get user from realm
     def user = realm.getUser(data.username)
@@ -204,7 +203,7 @@ def update_user_account(HudsonPrivateSecurityRealm realm, HashMap data) {
     @param List User list to be created
     @return Boolean True if users created
 */
-def manage_user_account(HudsonPrivateSecurityRealm realm, HashMap user) {
+def manage_user_account(HudsonPrivateSecurityRealm realm, Map user) {
     def Boolean changed = false
 
     //if (is_user_exists(realm, user.username)) {
@@ -260,7 +259,7 @@ def manage_authorization(GlobalMatrixAuthorizationStrategy strategy,
     @param Jenkins Current jenkins instance
     @return SecurityRealm Security realm managed
 */
-def manage_security_realm(Jenkins jenkins_instance, HashMap needed_realm) {
+def manage_security_realm(Jenkins jenkins_instance, Map needed_realm) {
 
     // Get current realm
     def cur_realm = jenkins_instance.getSecurityRealm()
@@ -282,7 +281,7 @@ def manage_security_realm(Jenkins jenkins_instance, HashMap needed_realm) {
     @return AuthorizationStrategy Authorization strategy managed
 */
 def manage_authorization_strategy(Jenkins jenkins_instance,
-                                  HashMap needed_strategy) {
+                                  Map needed_strategy) {
 
     // Get current strategy
     def cur_strategy = jenkins_instance.getAuthorizationStrategy()
@@ -293,6 +292,29 @@ def manage_authorization_strategy(Jenkins jenkins_instance,
             return cur_strategy
         }
         return new GlobalMatrixAuthorizationStrategy()
+    }
+}
+
+
+/**
+    Manage crumb issuer
+
+    @param Jenkins Current jenkins instance
+    @return Boolean True if crumb issuer changed
+*/
+def manage_crumb_issuer(Jenkins jenkins_instance,
+                        String needed_crumb_issuer) {
+
+    // Get current strategy
+    def cur_crumb_issuer = jenkins_instance.getCrumbIssuer()
+
+    // Check if the current crumb issuer is needed crumb issuer
+    // Only null is managed today
+    if (needed_crumb_issuer == '') {
+        if (cur_crumb_issuer != null) {
+            jenkins_instance.setCrumbIssuer(null)
+            return true
+        }
     }
 }
 
@@ -323,6 +345,9 @@ try {
     auth_changed = manage_authorization(strategy, data['user'])
     jenkins_instance.setAuthorizationStrategy(strategy)
 
+    // Manage crumb issuer
+    crumb_changed = manage_crumb_issuer(jenkins_instance, data['crumb_issuer'])
+
     // Save new configuration to disk
     jenkins_instance.save()
 }
@@ -332,7 +357,7 @@ catch(Exception e) {
 
 // Build json result
 def result = new JsonBuilder()
-def has_changed = user_changed || auth_changed
+def has_changed = user_changed || auth_changed || crumb_changed
 result {
     changed has_changed
     output data
