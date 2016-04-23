@@ -2,31 +2,33 @@
 
 # Debian family specific installation tasks
 
-- name : Add Jenkins repository key
-  become : True
-  apt_key :
-    url   : "{{ jenkins_repository_key_url }}"
-    state : present
+- name: 'Add Jenkins repository key'
+  become: True
+  apt_key:
+    url: "{{ jenkins_repository_key_url }}"
+    state: 'present'
 
-- name : Create Jenkins repository file
-  become : True
-  apt_repository :
-    repo  : "{{ jenkins_repository_content }}"
-    state : present
-    update_cache : True
 
-- name : Install role system dependencies
-  register : jenkins_task_package_install
-  become   : True
-  apt :
-    name  : "{{ item }}"
-    state : "{{ jenkins_system_dependencies_state }}"
-  with_items: jenkins_system_dependencies
+- name: 'Create Jenkins repository file'
+  become: True
+  apt_repository:
+    repo: "{{ jenkins_repository_content }}"
+    state: 'present'
+    update_cache: True
 
-- name : Install Jenkins package
-  register : jenkins_task_package_install
-  become   : True
-  apt :
-    name  : "{{ jenkins_package_name }}"
-    state : "{{ jenkins_package_state }}"
 
+- name: 'Install role system dependencies'
+  register: 'jenkins_task_package_install'
+  become: True
+  apt:
+    name: "{{ item }}"
+    state: "{{ jenkins_system_dependencies_state }}"
+  with_items: "{{ jenkins_system_dependencies }}"
+
+
+- name: 'Install Jenkins package'
+  register: 'jenkins_task_package_install'
+  become: True
+  apt:
+    name: "{{ jenkins_package_name }}"
+    state: "{{ jenkins_package_state }}"

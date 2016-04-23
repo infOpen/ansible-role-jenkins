@@ -2,11 +2,10 @@
 
 # Tasks used to manange Jenkins CLI
 
-- name : Install Jenkins CLI
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  get_url :
-    url   : "{{ jenkins_cli_download_url }}"
-    dest  : "{{ jenkins_cli }}"
-    force : True
-
+- name: 'Install Jenkins CLI'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  get_url:
+    url: "{{ jenkins_cli_download_url }}"
+    dest: "{{ jenkins_cli }}"
+    force: True

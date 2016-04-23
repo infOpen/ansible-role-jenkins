@@ -4,23 +4,23 @@
 
 jenkins_etc_listen_address: '0.0.0.0'
 jenkins_plugins:
-  - name: ansible
-  - name: ansicolor
-  - name: antisamy-markup-formatter
-  - name: build-pipeline-plugin
-  - name: cloudbees-folder
-  - name: credentials
-  - name: debian-package-builder
-  - name: docker-plugin
-  - name: envinject
-  - name: git
-  - name: github
-  - name: gitlab-plugin
-  - name: graphiteIntegrator
-  - name: hipchat
-  - name: mailer
-  - name: publish-over-ssh
-  - name: ssh
+  - name: 'ansible'
+  - name: 'ansicolor'
+  - name: 'antisamy-markup-formatter'
+  - name: 'build-pipeline-plugin'
+  - name: 'cloudbees-folder'
+  - name: 'credentials'
+  - name: 'debian-package-builder'
+  - name: 'docker-plugin'
+  - name: 'envinject'
+  - name: 'git'
+  - name: 'github'
+  - name: 'gitlab-plugin'
+  - name: 'graphiteIntegrator'
+  - name: 'hipchat'
+  - name: 'mailer'
+  - name: 'publish-over-ssh'
+  - name: 'ssh'
 jenkins_users:
   - username: 'admin'
     full_name: 'Jenkins administrator user'
@@ -177,4 +177,3 @@ jenkins_plugins_docker_clouds:
         retention_strategy:
           class: 'once'
           idle_minutes: 10
-

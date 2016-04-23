@@ -11,9 +11,9 @@ in the metadata file.
 
 ## Testing
 
-This role has two test methods :
+This role has two test methods:
 
-- localy with Vagrant (need vagrant-triggers plugin installed) :
+- localy with Vagrant (need vagrant-triggers plugin installed):
     vagrant up
 
 - automaticaly by Travis
@@ -27,87 +27,87 @@ Follow the possible variables with their default values
 ### Defaults file for jenkins
 
     # Ubuntu repository vars
-    jenkins_repository_key_url : "https://jenkins-ci.org/debian/jenkins-ci.org.key"
-    jenkins_repository_content : "deb http://pkg.jenkins-ci.org/debian binary/"
-    jenkins_package_state      : "latest"
+    jenkins_repository_key_url: 'https://jenkins-ci.org/debian/jenkins-ci.org.key'
+    jenkins_repository_content: 'deb http://pkg.jenkins-ci.org/debian binary/'
+    jenkins_package_state: 'latest'
 
-    jenkins_system_dependencies : []
-    jenkins_system_dependencies_state : "present"
+    jenkins_system_dependencies: []
+    jenkins_system_dependencies_state: 'present'
 
     # Configuration file settings
-    jenkins_default_cfg_file_owner : root
-    jenkins_default_cfg_file_group : root
-    jenkins_default_cfg_file_mode  : "0640"
+    jenkins_default_cfg_file_owner: 'root'
+    jenkins_default_cfg_file_group: 'root'
+    jenkins_default_cfg_file_mode: '0640'
 
     # Configuration file content variables
-    jenkins_etc_name  : "jenkins"
-    jenkins_etc_user  : "jenkins"
-    jenkins_etc_group : "jenkins"
-    jenkins_etc_run_standalone : True
-    jenkins_etc_max_open_files : 8192
-    jenkins_etc_umask          : "022"
-    jenkins_etc_listen_address : 127.0.0.1
-    jenkins_etc_http_port      : 8080
-    jenkins_etc_ajp_port       : -1
-    jenkins_etc_servlet_context_prefix : "/{{ jenkins_etc_name }}"
+    jenkins_etc_name: 'jenkins'
+    jenkins_etc_user: 'jenkins'
+    jenkins_etc_group: 'jenkins'
+    jenkins_etc_run_standalone: True
+    jenkins_etc_max_open_files: 8192
+    jenkins_etc_umask: '022'
+    jenkins_etc_listen_address: '127.0.0.1'
+    jenkins_etc_http_port: '8080'
+    jenkins_etc_ajp_port: -1
+    jenkins_etc_servlet_context_prefix: "/{{ jenkins_etc_name }}"
 
     # Location and files configuration
-    jenkins_etc_java_location : "/usr/bin/java"
-    jenkins_etc_war_location  : >
+    jenkins_etc_java_location: '/usr/bin/java'
+    jenkins_etc_war_location: >
       /usr/share/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.war
-    jenkins_etc_home_location : "/var/lib/{{ jenkins_etc_name }}"
-    jenkins_etc_log_location  : >
+    jenkins_etc_home_location: "/var/lib/{{ jenkins_etc_name }}"
+    jenkins_etc_log_location: >
       /var/log/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.log
-    jenkins_etc_pid_file      : >
+    jenkins_etc_pid_file: >
       /var/run/{{ jenkins_etc_name }}/{{ jenkins_etc_name }}.pid
 
     # Java and jenkins arguments
-    jenkins_etc_java_args :
-      - "-Djava.awt.headless=true"
-    jenkins_etc_args :
+    jenkins_etc_java_args:
+      - '-Djava.awt.headless=true'
+    jenkins_etc_args:
       - "--webroot=/var/cache/{{ jenkins_etc_name }}/war"
       - "--httpListenAddress={{ jenkins_etc_listen_address }}"
       - "--httpPort={{ jenkins_etc_http_port }}"
       - "--ajp13Port={{ jenkins_etc_ajp_port }}"
 
     # Jenkins cli
-    jenkins_base_url         : "http://localhost:{{ jenkins_etc_http_port }}"
-    jenkins_cli_download_url : "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
-    jenkins_cli : "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
+    jenkins_base_url: "http://localhost:{{ jenkins_etc_http_port }}"
+    jenkins_cli_download_url: "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
+    jenkins_cli: "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
 
     # Jenkins update center variables
-    jenkins_update_center_url_download : >
+    jenkins_update_center_url_download: >
       https://updates.jenkins-ci.org/update-center.json
-    jenkins_update_center_url_post : >
+    jenkins_update_center_url_post: >
       {{ jenkins_base_url }}/updateCenter/byId/default/postBack
-    jenkins_update_file : "{{ jenkins_etc_home_location }}/updates_jenkins.json"
+    jenkins_update_file: "{{ jenkins_etc_home_location }}/updates_jenkins.json"
 
     # Jenkins waiting availability test
-    jenkins_waiting_available_retries : 10
-    jenkins_waiting_available_delay   : 5
+    jenkins_waiting_available_retries: 10
+    jenkins_waiting_available_delay: 5
 
     # Jenkins clouds
-    jenkins_main_cfg_clouds : []
+    jenkins_main_cfg_clouds: []
 
 
     # CONFIGURATION
     #--------------
-    jenkins_configuration_files_owner : "{{ jenkins_etc_user }}"
-    jenkins_configuration_files_group : "{{ jenkins_etc_group }}"
-    jenkins_configuration_files_mode  : "0644"
+    jenkins_configuration_files_owner: "{{ jenkins_etc_user }}"
+    jenkins_configuration_files_group: "{{ jenkins_etc_group }}"
+    jenkins_configuration_files_mode: '0644'
 
     # Main configuration
-    jenkins_config_disable_remember_me : False
-    jenkins_config_label : ''
-    jenkins_config_mode : 'NORMAL'
-    jenkins_config_num_executors : 2
-    jenkins_config_project_naming_strategy :
+    jenkins_config_disable_remember_me: False
+    jenkins_config_label: ''
+    jenkins_config_mode: 'NORMAL'
+    jenkins_config_num_executors: 2
+    jenkins_config_project_naming_strategy:
       pattern: '\w+'
       description: 'Alphanumeric pattern'
       force: True
-    jenkins_config_quiet_period : 5
-    jenkins_config_scm_checkout_retry_count : 0
-    jenkins_config_slave_agent_port : 0
+    jenkins_config_quiet_period: 5
+    jenkins_config_scm_checkout_retry_count: 0
+    jenkins_config_slave_agent_port: 0
 
     # Jenkins users configuration
     jenkins_manage_users_and_security: True
@@ -152,15 +152,15 @@ Follow the possible variables with their default values
     #======================
 
     # Plugins management
-    jenkins_plugins : []
+    jenkins_plugins: []
     jenkins_plugins_state: 'latest'
 
-    # Plugins : git
-    jenkins_plugin_git_global_full_name  : "Jenkins GitUser"
-    jenkins_plugin_git_global_email : "git@foo.bar"
-    jenkins_plugin_git_create_account_based_on_email : False
+    # Plugins: git
+    jenkins_plugin_git_global_full_name: 'Jenkins GitUser'
+    jenkins_plugin_git_global_email: 'git@foo.bar'
+    jenkins_plugin_git_create_account_based_on_email: False
 
-    # Plugins : mailer
+    # Plugins: mailer
     jenkins_plugin_mailer_charset: 'UTF-8'
     jenkins_plugin_mailer_default_suffix: ''
     jenkins_plugin_mailer_reply_to: ''
@@ -170,7 +170,7 @@ Follow the possible variables with their default values
     jenkins_plugin_mailer_smtp_user: ''
     jenkins_plugin_mailer_use_ssl: False
 
-    # Plugins : github
+    # Plugins: github
     jenkins_plugins_github_remove_servers: True
     jenkins_plugins_github_servers: []
 
@@ -184,7 +184,7 @@ Follow the possible variables with their default values
       passphrase: 'foo_passphrase'
     jenkins_plugins_debian_package_builder_repo: []
 
-    # Plugins : gitlab
+    # Plugins: gitlab
     jenkins_plugins_gitlab_api_token: ''
     jenkins_plugins_gitlab_host_url: ''
     jenkins_plugins_gitlab_ignore_cert_error: False
@@ -199,17 +199,17 @@ Follow the possible variables with their default values
 
 ### Specific vars values for Debian family
 
-    jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
-    jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
+    jenkins_repository_file_prefix: '/etc/apt/sources.list.d'
+    jenkins_repository_file: 'pkg_jenkins_ci_org_debian.list'
 
-    jenkins_default_cfg_prefix : "/etc/default"
-    jenkins_default_cfg_file   : "jenkins"
+    jenkins_default_cfg_prefix: '/etc/default'
+    jenkins_default_cfg_file: 'jenkins'
 
-    jenkins_package_name : "jenkins"
-    jenkins_service_name : "jenkins"
+    jenkins_package_name: 'jenkins'
+    jenkins_service_name: 'jenkins'
 
-    jenkins_system_dependencies :
-      - python-httplib2
+    jenkins_system_dependencies:
+      - 'python-httplib2'
 
 ## How configure ...
 
@@ -218,7 +218,7 @@ Follow the possible variables with their default values
 Default settings create an administrator account, follows the structure to
 manage your Jenkins users
 
-Example :
+Example:
 
     jenkins_users:
       - username: 'admin'
@@ -238,7 +238,7 @@ Example :
 
 ### Credentials
 
-We manage three credentials types :
+We manage three credentials types:
   - SSH with passphrase
   - User/Password
   - String
@@ -399,7 +399,7 @@ You can manage Docker plugin clouds with this structure:
 
     - hosts: servers
       roles:
-         - { role: achaussier.jenkins }
+         - { role: infOpen.jenkins }
 
 ## License
 

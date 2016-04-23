@@ -2,76 +2,75 @@
 
 # Common tests between local Vagrant and Travis
 
-- name : Jenkins repository key should exists
-  become : True
-  apt_key :
-    url : "{{ jenkins_repository_key_url }}"
-  register : jenkins_apt_key_test
-  when :
-    - ansible_os_family == "Debian"
+- name: 'Jenkins repository key should exists'
+  become: True
+  apt_key:
+    url: "{{ jenkins_repository_key_url }}"
+  register: 'jenkins_apt_key_test'
+  when:
+    - "{{ ansible_os_family == 'Debian' }}"
 
-- name : Fail if Jenkins repository key reimport change
-  fail :
-    msg : "Key import task change if we import twice"
-  when :
-    - ansible_os_family == "Debian"
-    - jenkins_apt_key_test.changed
+- name: 'Fail if Jenkins repository key reimport change'
+  fail:
+    msg: 'Key import task change if we import twice'
+  when:
+    - "{{ ansible_os_family == 'Debian' }}"
+    - "{{ jenkins_apt_key_test.changed }}"
 
-- name : Jenkins homepage should return 403
-  register : jenkins_homepage_test
-  uri :
-    url : "{{ jenkins_base_url }}"
-    status_code : 403
-    return_content : True
+- name: 'Jenkins homepage should return 403'
+  register: 'jenkins_homepage_test'
+  uri:
+    url: "{{ jenkins_base_url }}"
+    status_code: 403
+    return_content: True
 
-- name : Check homepage not contains error
-  fail :
-    msg : Jenkins not return expected homepage
-  when : "'Authentication required' not in jenkins_homepage_test.content"
+- name: 'Check homepage not contains error'
+  fail:
+    msg: 'Jenkins not return expected homepage'
+  when: "{{ 'Authentication required' not in jenkins_homepage_test.content }}"
 
-- name : Get installed plugins
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_list_plugins_test
-  shell : >
+- name: 'Get installed plugins'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  register: 'jenkins_list_plugins_test'
+  shell: >
     java
     -jar {{ jenkins_cli }}
     -s {{ jenkins_base_url }}
     list-plugins
     | awk '{ print $1 }'
-  changed_when : False
+  changed_when: False
 
-- name : Check if needed plugins installed
-  fail :
-    msg : >
-      Some needed plugins not installed :
+- name: 'Check if needed plugins installed'
+  fail:
+    msg: >
+      Some needed plugins not installed:
       {{
         (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}
-  when :
+  when:
     - "{{
         (jenkins_plugins | map(attribute='name'))
         | difference(jenkins_list_plugins_test.stdout_lines)
       }}"
 
-- name : Get plugins should be upgraded
-  become      : True
-  become_user : "{{ jenkins_etc_user }}"
-  register    : jenkins_list_plugins_with_upgrade_test
-  shell : >
+- name: 'Get plugins should be upgraded'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  register: 'jenkins_list_plugins_with_upgrade_test'
+  shell: >
     java
     -jar {{ jenkins_cli }}
     -s {{ jenkins_base_url }}
     list-plugins
     | grep ')$'
     | awk '{ print $1 }'
-  changed_when : False
+  changed_when: False
 
-- name : Check if some plugins should be upgraded
-  fail :
-    msg : >
-      Some needed plugins should be upgraded :
+- name: 'Check if some plugins should be upgraded'
+  fail:
+    msg: >
+      Some needed plugins should be upgraded:
       {{ jenkins_list_plugins_with_upgrade_test.stdout_lines }}
-  when : jenkins_list_plugins_with_upgrade_test.stdout_lines
-
+  when: "{{ jenkins_list_plugins_with_upgrade_test.stdout_lines }}"

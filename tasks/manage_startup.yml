@@ -2,17 +2,17 @@
 
 # Manage Jenkins configuration
 
-- name : Generate default config file
-  become   : True
-  register : jenkins_task_default_config
-  template :
-    src   : "{{ role_path }}/templates/default/jenkins.j2"
-    dest  : "{{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}"
-    owner : "{{ jenkins_default_cfg_file_owner }}"
-    group : "{{ jenkins_default_cfg_file_group }}"
-    mode  : "{{ jenkins_default_cfg_file_mode }}"
+- name: 'Generate default config file'
+  become: True
+  register: 'jenkins_task_default_config'
+  template:
+    src: "{{ role_path }}/templates/default/jenkins.j2"
+    dest: "{{ jenkins_default_cfg_prefix }}/{{ jenkins_default_cfg_file }}"
+    owner: "{{ jenkins_default_cfg_file_owner }}"
+    group: "{{ jenkins_default_cfg_file_group }}"
+    mode: "{{ jenkins_default_cfg_file_mode }}"
 
-- name : Restart Jenkins if main configuration change
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when : jenkins_task_default_config.changed
 
+- name: 'Restart Jenkins if main configuration change'
+  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  when: "{{ jenkins_task_default_config.changed }}"

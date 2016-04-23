@@ -2,74 +2,86 @@
 
 # Tasks file for jenkins
 
-- name: Load the OS specific varibles
+- name: 'Load the OS specific varibles'
   include_vars: "{{ role_path }}/vars/{{ ansible_os_family }}.yml"
 
-- include: install_debian.yml
-  tags:
-    - install
-    - jenkins
-  when: ansible_os_family == "Debian"
 
-- name: Configure Jenkins user
+- name: 'Include debian install tasks'
+  include: "{{ role_path }}/tasks/install_debian.yml"
+  tags:
+    - 'install'
+    - 'jenkins'
+  when: "{{ ansible_os_family == 'Debian' }}"
+
+
+- name: 'Configure Jenkins user'
   include: "{{ role_path }}/tasks/manage_jenkins_user.yml"
   tags:
-    - install
-    - jenkins
+    - 'install'
+    - 'jenkins'
 
-- name : Ensure Jenkins is started
-  become  : True
-  service :
-    name  : "{{ jenkins_service_name }}"
-    state : started
 
-- name : Restart jenkins if new version installed
-  include : "{{ role_path }}/handlers/restart_jenkins.yml"
-  when : jenkins_task_package_install.changed
+- name: 'Ensure Jenkins is started'
+  become: True
+  service:
+    name: "{{ jenkins_service_name }}"
+    state: 'started'
 
-- name : Waiting the application is available
-  include : "{{ role_path }}/handlers/waiting_jenkins.yml"
 
-- name : Install and configure Jenkins CLI
+- name: 'Restart jenkins if new version installed'
+  include: "{{ role_path }}/handlers/restart_jenkins.yml"
+  when: "{{ jenkins_task_package_install.changed }}"
+
+
+- name: 'Waiting the application is available'
+  include: "{{ role_path }}/handlers/waiting_jenkins.yml"
+
+
+- name: 'Install and configure Jenkins CLI'
   include: "{{ role_path }}/tasks/manage_cli.yml"
   tags:
-    - jenkins
-    - install
+    - 'jenkins'
+    - 'install'
 
-- name : Install groovy scripts
+
+- name: 'Install groovy scripts'
   include: "{{ role_path }}/tasks/manage_groovy_scripts.yml"
   tags:
-    - jenkins
-    - install
+    - 'jenkins'
+    - 'install'
 
-- name : Configure jenkins launching settings
+
+- name: 'Configure jenkins launching settings'
   include: "{{ role_path }}/tasks/manage_startup.yml"
   tags:
-    - configure
-    - jenkins
+    - 'configure'
+    - 'jenkins'
 
-- name: Include groovy main configuration
+
+- name: 'Include groovy main configuration'
   include: "{{ role_path }}/tasks/manage_main_config.yml"
   tags:
-    - configure
-    - jenkins
+    - 'configure'
+    - 'jenkins'
 
-- name : Manage plugins installations and upgrades
+
+- name: 'Manage plugins installations and upgrades'
   include: "{{ role_path }}/tasks/manage_plugins.yml"
   tags:
-    - jenkins
-    - install
+    - 'jenkins'
+    - 'install'
 
-- name: Manage jenkins credentials
+
+- name: 'Manage jenkins credentials'
   include: "{{ role_path }}/tasks/manage_credentials.yml"
   tags:
-    - configure
-    - jenkins
+    - 'configure'
+    - 'jenkins'
 
-- name: Include groovy plugins configuration
+
+- name: 'Include groovy plugins configuration'
   include: "{{ role_path }}/tasks/manage_plugins_config.yml"
-  when: jenkins_plugins
+  when: "{{ jenkins_plugins }}"
   tags:
-    - configure
-    - jenkins
-
+    - 'configure'
+    - 'jenkins'
