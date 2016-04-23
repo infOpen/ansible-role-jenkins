@@ -2,66 +2,72 @@
 
 # Tasks about Jenkins plugins
 
-- name: Get all plugin dependencies
+- name: 'Get all plugin dependencies'
   become: True
   become_user: "{{ jenkins_etc_user }}"
-  register: jenkins_tasks_dependencies_plugins
+  register: 'jenkins_tasks_dependencies_plugins'
   get_plugin_dependencies:
     name: "{{ item.name }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
   with_items: "{{ jenkins_plugins }}"
   changed_when: False
 
-- name: Install plugins
+
+- name: 'Install plugins'
   become: True
   become_user: "{{ jenkins_etc_user }}"
-  register: jenkins_tasks_install_plugins
+  register: 'jenkins_tasks_install_plugins'
   install_jenkins_plugin:
     name: "{{ item.1 }}"
     state: "{{ jenkins_plugins_state }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
   with_subelements:
     - "{{ jenkins_tasks_dependencies_plugins.results }}"
-    - "output"
+    - 'output'
 
-- name : Restart Jenkins once all plugins installed
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+
+- name: 'Restart Jenkins once all plugins installed'
+  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{ jenkins_tasks_install_plugins.changed }}"
 
-- name: Get plugins should be upgraded
+
+- name: 'Get plugins should be upgraded'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   get_jenkins_plugins:
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-  register: jenkins_list_plugins_for_upgrade
+  register: 'jenkins_list_plugins_for_upgrade'
   changed_when: False
 
-- name: Upgrade plugins
+
+- name: 'Upgrade plugins'
   become: True
   become_user: "{{ jenkins_etc_user }}"
-  register: jenkins_tasks_upgrade_plugins
+  register: 'jenkins_tasks_upgrade_plugins'
   install_jenkins_plugin:
     name: "{{ item }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
     state: 'latest'
-  with_items : "{{ jenkins_list_plugins_for_upgrade.has_update }}"
+  with_items: "{{ jenkins_list_plugins_for_upgrade.has_update }}"
 
-- name : Restart Jenkins once all plugins upgraded
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+
+- name: 'Restart Jenkins once all plugins upgraded'
+  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when: "{{ jenkins_tasks_upgrade_plugins.changed }}"
 
-- name: Enable plugins
+
+- name: 'Enable plugins'
   become: True
   become_user: "{{ jenkins_etc_user }}"
-  register: jenkins_tasks_enable_plugins
+  register: 'jenkins_tasks_enable_plugins'
   enable_jenkins_plugin:
     name: "{{ item.name }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-  with_items : "{{ jenkins_plugins }}"
+  with_items: "{{ jenkins_plugins }}"
 
-- name : Restart Jenkins once all plugins enabled
-  include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+
+- name: 'Restart Jenkins once all plugins enabled'
+  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
   when:
     - "{{ jenkins_tasks_enable_plugins is defined }}"
     - "{{ jenkins_tasks_enable_plugins.changed }}"
-

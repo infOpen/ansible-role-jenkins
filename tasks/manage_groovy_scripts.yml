@@ -2,12 +2,11 @@
 
 # Copy groovy scripts used to interact with Jenkins instance
 
-- name: Copy Groovy scripts
+- name: 'Copy Groovy scripts'
   become: True
   copy:
     src: "{{ role_path }}/files/groovy_scripts"
     dest: "{{ jenkins_etc_home_location }}/"
     owner: "{{ jenkins_etc_user }}"
     group: "{{ jenkins_etc_group }}"
-    mode: "0640"
-
+    mode: '0640'

@@ -3,15 +3,15 @@
 # Tasks about Jenkins main configuration management
 
 # Manage deployment user configuration, without key for the first use
-- name: Manage deployment user configuration without using private key
+- name: 'Manage deployment user configuration without using private key'
   become: True
-  become_user : "{{ jenkins_etc_user }}"
+  become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     use_private_key: False
-  register: jenkins_change_deployment_user_without_ssh_key
+  register: 'jenkins_change_deployment_user_without_ssh_key'
   ignore_errors: True
   with_items:
     - username: "{{ jenkins_deployment_user.username }}"
@@ -24,14 +24,15 @@
         - "{{ jenkins_user_ssh_public_key.stdout }}"
   when: "{{ jenkins_manage_users_and_security }}"
 
-- name: Manage deployment user configuration using private key
+
+- name: 'Manage deployment user configuration using private key'
   become: True
-  become_user : "{{ jenkins_etc_user }}"
+  become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
-  register: jenkins_change_deployment_user
+  register: 'jenkins_change_deployment_user'
   with_items:
     - username: "{{ jenkins_deployment_user.username }}"
       full_name: "{{ jenkins_deployment_user.full_name }}"
@@ -45,20 +46,22 @@
     - "{{ jenkins_manage_users_and_security }}"
     - "{{ jenkins_change_deployment_user_without_ssh_key | failed }}"
 
-- name: Manage users and security
+
+- name: 'Manage users and security'
   become: True
-  become_user : "{{ jenkins_etc_user }}"
+  become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
-  register: jenkins_change_users_or_security
+  register: 'jenkins_change_users_or_security'
   with_items: "{{ jenkins_users }}"
   when: "{{ jenkins_manage_users_and_security }}"
 
-- name: Manage main configuration with new settings
-  become : True
-  become_user : "{{ jenkins_etc_user }}"
+
+- name: 'Manage main configuration with new settings'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_main_configuration:
     disable_remember_me: "{{ jenkins_config_disable_remember_me }}"
     label: "{{ jenkins_config_label }}"
@@ -71,18 +74,18 @@
     quiet_period: "{{ jenkins_config_quiet_period }}"
     scm_checkout_retry_count: "{{ jenkins_config_scm_checkout_retry_count }}"
     slave_agent_port: "{{ jenkins_config_slave_agent_port }}"
-  register: jenkins_change_main_configuration
+  register: 'jenkins_change_main_configuration'
 
-- name: Manage administrator email address
+
+- name: 'Manage administrator email address'
   become: True
-  become_user : "{{ jenkins_etc_user }}"
+  become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_location_settings:
     email: "{{ jenkins_location_administrator_email }}"
     full_name: "{{ jenkins_location_administrator_full_name }}"
     jenkins_url: "{{ jenkins_location_url }}"
-  register: jenkins_change_administrator_email_address
+  register: 'jenkins_change_administrator_email_address'
   when:
     - "{{ jenkins_location_administrator_email != '' }}"
     - "{{ jenkins_location_administrator_full_name != '' }}"
     - "{{ jenkins_location_url != '' }}"
-

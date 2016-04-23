@@ -2,7 +2,7 @@
 
 # Tasks about jenkins user management
 
-- name: Create RSA SSH key for Jenkins user if defined
+- name: 'Create RSA SSH key for Jenkins user if defined'
   become: True
   copy:
     dest: "{{ jenkins_etc_home_location }}/.ssh/{{ item.name }}"
@@ -21,15 +21,16 @@
     - "{{ jenkins_deployment_user.ssh.private }}"
     - "{{ jenkins_deployment_user.ssh.public }}"
 
-- name: Create SSH key for Jenkins user if not defined
+
+- name: 'Create SSH key for Jenkins user if not defined'
   become: True
   user:
     name: "{{ jenkins_etc_user }}"
     generate_ssh_key: True
 
-- name: Get Jenkins user deployed public key
+
+- name: 'Get Jenkins user deployed public key'
   become: True
   command: "cat {{ jenkins_etc_home_location }}/.ssh/id_rsa.pub"
-  register: jenkins_user_ssh_public_key
+  register: 'jenkins_user_ssh_public_key'
   changed_when: False
-

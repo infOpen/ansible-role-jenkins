@@ -1,15 +1,14 @@
 ---
 
 # Specific vars values for Debian family
-jenkins_repository_file_prefix : "/etc/apt/sources.list.d"
-jenkins_repository_file        : "pkg_jenkins_ci_org_debian.list"
+jenkins_repository_file_prefix: '/etc/apt/sources.list.d'
+jenkins_repository_file: 'pkg_jenkins_ci_org_debian.list'
 
-jenkins_default_cfg_prefix : "/etc/default"
-jenkins_default_cfg_file   : "jenkins"
+jenkins_default_cfg_prefix: '/etc/default'
+jenkins_default_cfg_file: 'jenkins'
 
-jenkins_package_name : "jenkins"
-jenkins_service_name : "jenkins"
+jenkins_package_name: 'jenkins'
+jenkins_service_name: 'jenkins'
 
-jenkins_system_dependencies :
-  - python-httplib2
-
+jenkins_system_dependencies:
+  - 'python-httplib2'

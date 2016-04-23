@@ -1,5 +1,6 @@
 # Ignore vagrant data
 .vagrant
+*.retry
 
 # Ignore swap files
 *.swp

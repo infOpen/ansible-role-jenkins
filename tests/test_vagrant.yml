@@ -2,14 +2,13 @@
 
 # Tests for jenkins role
 
-- hosts: all
-  remote_user: vagrant
+- hosts: 'all'
+  remote_user: 'vagrant'
   pre_tasks:
-    - include_vars: "./test_vars.yml"
+    - include_vars: './test_vars.yml'
   roles:
     - "{{ role_name }}"
   post_tasks:
-    - include: ./common_tests.yml
+    - include: './common_tests.yml'
   vars:
     role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
-
