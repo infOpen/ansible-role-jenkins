@@ -9,7 +9,7 @@
   tags:
     - install
     - jenkins
-  when: ansible_os_family == "Debian"
+  when: "{{ ansible_os_family == 'Debian' }}"
 
 - name: Configure Jenkins user
   include: "{{ role_path }}/tasks/manage_jenkins_user.yml"
@@ -25,7 +25,7 @@
 
 - name : Restart jenkins if new version installed
   include : "{{ role_path }}/handlers/restart_jenkins.yml"
-  when : jenkins_task_package_install.changed
+  when : "{{ jenkins_task_package_install.changed }}"
 
 - name : Waiting the application is available
   include : "{{ role_path }}/handlers/waiting_jenkins.yml"
@@ -68,7 +68,7 @@
 
 - name: Include groovy plugins configuration
   include: "{{ role_path }}/tasks/manage_plugins_config.yml"
-  when: jenkins_plugins
+  when: "{{ jenkins_plugins }}"
   tags:
     - configure
     - jenkins

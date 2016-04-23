@@ -14,5 +14,5 @@
 
 - name : Restart Jenkins if main configuration change
   include : "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when : jenkins_task_default_config.changed
+  when : "{{ jenkins_task_default_config.changed }}"
 

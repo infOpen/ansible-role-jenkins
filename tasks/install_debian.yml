@@ -21,7 +21,7 @@
   apt :
     name  : "{{ item }}"
     state : "{{ jenkins_system_dependencies_state }}"
-  with_items: jenkins_system_dependencies
+  with_items: "{{ jenkins_system_dependencies }}"
 
 - name : Install Jenkins package
   register : jenkins_task_package_install

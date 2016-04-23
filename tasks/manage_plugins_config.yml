@@ -35,7 +35,7 @@
   register: jenkins_change_plugin_github_remove_servers
   when:
     - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - jenkins_plugins_github_remove_servers
+    - "{{ jenkins_plugins_github_remove_servers }}"
 
 - name: Manage github plugin configuration with new settings
   become : True
@@ -69,7 +69,7 @@
     do_task: True
   register: jenkins_change_plugin_debian_package_builder_remove_repo
   when:
-    - jenkins_plugins_debian_package_builder_remove_repositories
+    - "{{ jenkins_plugins_debian_package_builder_remove_repositories }}"
     - "{{ 'debian-package-builder' in
               (jenkins_plugins | map(attribute='name')) }}"
 

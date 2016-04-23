@@ -22,7 +22,7 @@
         - 'jenkins-administer'
       public_keys:
         - "{{ jenkins_user_ssh_public_key.stdout }}"
-  when: jenkins_manage_users_and_security
+  when: "{{ jenkins_manage_users_and_security }}"
 
 - name: Manage deployment user configuration using private key
   become: True
@@ -42,8 +42,8 @@
       public_keys:
         - "{{ jenkins_user_ssh_public_key.stdout }}"
   when:
-    - jenkins_manage_users_and_security
-    - jenkins_change_deployment_user_without_ssh_key | failed
+    - "{{ jenkins_manage_users_and_security }}"
+    - "{{ jenkins_change_deployment_user_without_ssh_key | failed }}"
 
 - name: Manage users and security
   become: True
@@ -54,7 +54,7 @@
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
   register: jenkins_change_users_or_security
   with_items: "{{ jenkins_users }}"
-  when: jenkins_manage_users_and_security
+  when: "{{ jenkins_manage_users_and_security }}"
 
 - name: Manage main configuration with new settings
   become : True
@@ -82,7 +82,7 @@
     jenkins_url: "{{ jenkins_location_url }}"
   register: jenkins_change_administrator_email_address
   when:
-    - jenkins_location_administrator_email != ''
-    - jenkins_location_administrator_full_name != ''
-    - jenkins_location_url != ''
+    - "{{ jenkins_location_administrator_email != '' }}"
+    - "{{ jenkins_location_administrator_full_name != '' }}"
+    - "{{ jenkins_location_url != '' }}"
 
