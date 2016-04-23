@@ -58,8 +58,9 @@
     - 'jenkins'
 
 
-- name: 'Include groovy main configuration'
-  include: "{{ role_path }}/tasks/manage_main_config.yml"
+- name: 'Jenkins 2.0 default password protection workaround'
+  include: "{{ role_path }}/tasks/jenkins_2_workaround.yml"
+  register: 'jenkins_authentication_disabled'
   tags:
     - 'configure'
     - 'jenkins'
@@ -70,6 +71,13 @@
   tags:
     - 'jenkins'
     - 'install'
+
+
+- name: 'Include groovy main configuration'
+  include: "{{ role_path }}/tasks/manage_main_config.yml"
+  tags:
+    - 'configure'
+    - 'jenkins'
 
 
 - name: 'Manage jenkins credentials'
