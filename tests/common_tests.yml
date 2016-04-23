@@ -24,11 +24,6 @@
     status_code: 403
     return_content: True
 
-- name: 'Check homepage not contains error'
-  fail:
-    msg: 'Jenkins not return expected homepage'
-  when: "{{ 'Authentication required' not in jenkins_homepage_test.content }}"
-
 - name: 'Get installed plugins'
   become: True
   become_user: "{{ jenkins_etc_user }}"
