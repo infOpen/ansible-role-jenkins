@@ -126,7 +126,9 @@ jenkins_credentials: []
 #======================
 
 # Plugins management
-jenkins_plugins: []
+jenkins_plugins:
+  - 'mailer'
+  - 'matrix-auth'
 jenkins_plugins_state: 'latest'
 
 # Plugins: git
