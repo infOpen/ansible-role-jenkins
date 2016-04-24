@@ -68,3 +68,5 @@ script:
   # Run serverspec tests
   - rvmsudo rspec
 
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

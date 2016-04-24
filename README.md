@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/infOpen/ansible-role-jenkins.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-jenkins)
 
-Install jenkins package.
+Install and configure Jenkins and some plugins.
 
 ## Requirements
 
