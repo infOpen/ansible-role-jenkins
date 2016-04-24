@@ -1,0 +1,36 @@
+---
+
+# A workaround of blocking default Jenkins 2.0 administrative password
+
+- name: 'Add environment variable on Jenkins startup'
+  become: True
+  lineinfile:
+    dest: '/etc/init.d/jenkins'
+    line: 'DAEMON_ARGS="$DAEMON_ARGS --env=jenkins.install.state=INITIAL_SETUP_COMPLETED"'
+    state: 'present'
+    insertafter: '^DAEMON_ARGS='
+
+
+- name: 'Add start comment block to disable security and authentication'
+  become: True
+  lineinfile:
+    dest: "{{ jenkins_etc_home_location }}/config.xml"
+    line: '<!--'
+    state: 'present'
+    insertbefore: '^\s*<useSecurity>'
+
+
+- name: 'Add end comment block to disable security and authentication'
+  become: True
+  lineinfile:
+    dest: "{{ jenkins_etc_home_location }}/config.xml"
+    line: '-->'
+    state: 'present'
+    insertafter: '^\s*</securityRealm>'
+  notify:
+    - 'Remove Jenkins 2 administrative password file'
+    - 'Remove Jenkins 2 administrative password workaround'
+
+
+- name: 'Restart jenkins to apply the workarround'
+  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"

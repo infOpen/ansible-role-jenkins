@@ -14,6 +14,7 @@ jenkins_system_dependencies_state: 'present'
 jenkins_default_cfg_file_owner: 'root'
 jenkins_default_cfg_file_group: 'root'
 jenkins_default_cfg_file_mode: '0640'
+jenkins_default_adm_passd_file: '/var/lib/jenkins/secrets/initialAdminPassword'
 
 # Configuration file content variables
 jenkins_etc_name: 'jenkins'
@@ -39,6 +40,7 @@ jenkins_etc_pid_file: >
 
 # Java and jenkins arguments
 jenkins_etc_java_args:
+  - '-Dhudson.diyChunking=false'
   - '-Djava.awt.headless=true'
 jenkins_etc_args:
   - "--webroot=/var/cache/{{ jenkins_etc_name }}/war"
@@ -105,6 +107,9 @@ jenkins_security_realm:
 # Jenkins authorization strategy management
 jenkins_authorization_strategy:
   class: 'GlobalMatrixAuthorizationStrategy'
+
+# Jenkins crumb issuer, set to disable because not work with CLI
+jenkins_crumb_issuer: ''
 
 # Jenkins location settings
 jenkins_location_administrator_email: 'root@localhost'

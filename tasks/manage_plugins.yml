@@ -9,6 +9,8 @@
   get_plugin_dependencies:
     name: "{{ item.name }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
+                        and (jenkins_authentication_disabled | skipped) }}"
   with_items: "{{ jenkins_plugins }}"
   changed_when: False
 
@@ -21,6 +23,8 @@
     name: "{{ item.1 }}"
     state: "{{ jenkins_plugins_state }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
+                        and (jenkins_authentication_disabled | skipped) }}"
   with_subelements:
     - "{{ jenkins_tasks_dependencies_plugins.results }}"
     - 'output'
@@ -36,6 +40,8 @@
   become_user: "{{ jenkins_etc_user }}"
   get_jenkins_plugins:
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
+                        and (jenkins_authentication_disabled | skipped) }}"
   register: 'jenkins_list_plugins_for_upgrade'
   changed_when: False
 
@@ -48,6 +54,8 @@
     name: "{{ item }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
     state: 'latest'
+    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
+                        and (jenkins_authentication_disabled | skipped) }}"
   with_items: "{{ jenkins_list_plugins_for_upgrade.has_update }}"
 
 
@@ -63,6 +71,8 @@
   enable_jenkins_plugin:
     name: "{{ item.name }}"
     cli_path: '/var/lib/jenkins/jenkins-cli.jar'
+    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
+                        and (jenkins_authentication_disabled | skipped) }}"
   with_items: "{{ jenkins_plugins }}"
 
 

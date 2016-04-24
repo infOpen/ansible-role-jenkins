@@ -58,8 +58,20 @@
     - 'jenkins'
 
 
-- name: 'Include groovy main configuration'
-  include: "{{ role_path }}/tasks/manage_main_config.yml"
+- name: 'Check if Jenkins v2 default administrative password file exists'
+  become: True
+  stat:
+    path: "{{ jenkins_default_adm_passd_file }}"
+  register: 'jenkins_administrative_password_file_test'
+  changed_when: False
+
+
+- name: 'Jenkins 2.0 default password protection workaround'
+  include: "{{ role_path }}/tasks/jenkins_2_workaround.yml"
+  register: 'jenkins_authentication_disabled'
+  when:
+    - "{{ jenkins_administrative_password_file_test.stat.exists is defined }}"
+    - "{{ jenkins_administrative_password_file_test.stat.exists }}"
   tags:
     - 'configure'
     - 'jenkins'
@@ -70,6 +82,13 @@
   tags:
     - 'jenkins'
     - 'install'
+
+
+- name: 'Include groovy main configuration'
+  include: "{{ role_path }}/tasks/manage_main_config.yml"
+  tags:
+    - 'configure'
+    - 'jenkins'
 
 
 - name: 'Manage jenkins credentials'

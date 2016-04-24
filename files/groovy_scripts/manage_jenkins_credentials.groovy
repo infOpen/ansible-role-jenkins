@@ -166,11 +166,11 @@ def BasicSSHUserPrivateKey.PrivateKeySource get_private_key_source(
 /**
     Create SSH credentials with passphrase management
 
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return BasicSSHUserPrivateKey Credentials object
 */
 def BasicSSHUserPrivateKey create_ssh_credentials_with_passphrase(
-                                HashMap credentials_desc) {
+                                Map credentials_desc) {
 
     try {
         def BasicSSHUserPrivateKey crendentials
@@ -197,11 +197,11 @@ def BasicSSHUserPrivateKey create_ssh_credentials_with_passphrase(
 /**
     Create username with password credentials
 
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return UsernamePasswordCredentialsImpl Credentials object
 */
 def UsernamePasswordCredentialsImpl create_password_credentials(
-                                            HashMap credentials_desc) {
+                                            Map credentials_desc) {
 
     try {
         def UsernamePasswordCredentialsImpl crendentials
@@ -226,10 +226,10 @@ def UsernamePasswordCredentialsImpl create_password_credentials(
 /**
     Create text credentials
 
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return StringCredentialsImpl Credentials object
 */
-def StringCredentialsImpl create_text_credentials(HashMap credentials_desc) {
+def StringCredentialsImpl create_text_credentials(Map credentials_desc) {
 
     try {
         def StringCredentialsImpl crendentials
@@ -283,10 +283,10 @@ def BaseStandardCredentials get_credentials_by_id(CredentialsStore store,
 /**
     Create credentials
 
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return BaseStandardCredentials Return created credentials
 */
-def BaseStandardCredentials create_credentials(HashMap credentials_desc) {
+def BaseStandardCredentials create_credentials(Map credentials_desc) {
 
     try {
         def String credentials_type = credentials_desc['credentials_type']
@@ -322,12 +322,12 @@ def BaseStandardCredentials create_credentials(HashMap credentials_desc) {
 
     @param CredentialsStore Credentials store
     @param Domain Credentials domain
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return Boolean Return True if credentials added
 */
 def Boolean add_credentials(CredentialsStore store,
                             Domain domain,
-                            HashMap credentials_desc) {
+                            Map credentials_desc) {
 
     try {
         // Create new credentials
@@ -349,13 +349,13 @@ def Boolean add_credentials(CredentialsStore store,
     @param CredentialsStore Credentials store
     @param Domain Credentials domain
     @param BaseStandardCredentials Existing credentials
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return Boolean Return True if credentials updated
 */
 def Boolean update_credentials(CredentialsStore store,
                                Domain domain,
                                BaseStandardCredentials cur_credentials,
-                               HashMap credentials_desc) {
+                               Map credentials_desc) {
 
     try {
         // Create new credentials
@@ -398,11 +398,11 @@ def Boolean remove_credentials(CredentialsStore store,
     Manage credentials
 
     @param CredentialsStore Credentials store
-    @param HashMap Credentials description
+    @param Map Credentials description
     @return Boolean Return True if credentials state or content changed
 */
 def Boolean manage_credentials(CredentialsStore store,
-                               HashMap credentials_desc) {
+                               Map credentials_desc) {
 
     try {
         // Get credential domain
