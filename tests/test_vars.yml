@@ -29,12 +29,16 @@ jenkins_users:
     roles:
       - 'jenkins-administer'
     public_keys: []
-  - username: 'user'
+  - username: 'read'
     full_name: 'Jenkins read only user'
-    email: 'user@foo.bar'
-    password: 'user'
+    email: 'read@foo.bar'
+    password: 'read'
     roles:
       - 'jenkins-read'
+      - 'item-build'
+      - 'item-discover'
+      - 'item-read'
+      - 'view-read'
     public_keys: []
 jenkins_credentials:
   - credentials_type: 'ssh_with_passphrase'

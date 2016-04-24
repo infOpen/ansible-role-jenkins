@@ -94,10 +94,21 @@ jenkins_deployment_user:
 jenkins_users:
   - username: 'admin'
     full_name: 'Jenkins administrator user'
-    email: 'ansible@foo.bar'
+    email: 'admin@foo.bar'
     password: 'admin'
     roles:
       - 'jenkins-administer'
+    public_keys: []
+  - username: 'read'
+    full_name: 'Jenkins read only user'
+    email: 'read@foo.bar'
+    password: 'read'
+    roles:
+      - 'jenkins-read'
+      - 'item-build'
+      - 'item-discover'
+      - 'item-read'
+      - 'view-read'
     public_keys: []
 
 # Jenkins realm management
