@@ -7,7 +7,6 @@ jenkins_plugins:
   - name: 'ansible'
   - name: 'ansicolor'
   - name: 'antisamy-markup-formatter'
-  - name: 'build-pipeline-plugin'
   - name: 'cloudbees-folder'
   - name: 'credentials'
   - name: 'debian-package-builder'
@@ -19,8 +18,10 @@ jenkins_plugins:
   - name: 'graphiteIntegrator'
   - name: 'hipchat'
   - name: 'mailer'
+  - name: 'pipeline-stage-view'
   - name: 'publish-over-ssh'
   - name: 'ssh'
+  - name: 'workflow-aggregator'
 jenkins_users:
   - username: 'admin'
     full_name: 'Jenkins administrator user'
