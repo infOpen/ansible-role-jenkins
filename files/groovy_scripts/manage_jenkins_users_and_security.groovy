@@ -241,6 +241,18 @@ def manage_authorization(GlobalMatrixAuthorizationStrategy strategy,
             case "jenkins-read":
                 permission = Jenkins.READ
                 break
+            case "item-build":
+                permission = Item.BUILD
+                break
+            case "item-discover":
+                permission = Item.DISCOVER
+                break
+            case "item-read":
+                permission = Item.READ
+                break
+            case "view-read":
+                permission = View.READ
+                break
         }
 
         if (! strategy.hasPermission(user.username, permission)) {
