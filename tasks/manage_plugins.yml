@@ -1,67 +1,15 @@
 ---
 
-# Tasks about Jenkins plugins
+# Tasks about plugin management
 
-- name: 'Get all plugin dependencies'
-  become: True
-  become_user: "{{ jenkins_etc_user }}"
-  register: 'jenkins_tasks_dependencies_plugins'
-  get_plugin_dependencies:
-    name: "{{ item.name }}"
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
-                        and (jenkins_authentication_disabled | skipped) }}"
-  with_items: "{{ jenkins_plugins }}"
-  changed_when: False
+- name: 'Manage plugins installation'
+  include: "{{ role_path }}/tasks/manage_plugins_installation.yml"
+  when: "{{ jenkins_manage_plugin_install }}"
 
 
-- name: 'Install plugins'
-  become: True
-  become_user: "{{ jenkins_etc_user }}"
-  register: 'jenkins_tasks_install_plugins'
-  install_jenkins_plugin:
-    name: "{{ item.1 }}"
-    state: "{{ jenkins_plugins_state }}"
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
-                        and (jenkins_authentication_disabled | skipped) }}"
-  with_subelements:
-    - "{{ jenkins_tasks_dependencies_plugins.results }}"
-    - 'output'
-
-
-- name: 'Restart Jenkins once all plugins installed'
-  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when: "{{ jenkins_tasks_install_plugins.changed }}"
-
-
-- name: 'Get plugins should be upgraded'
-  become: True
-  become_user: "{{ jenkins_etc_user }}"
-  get_jenkins_plugins:
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
-                        and (jenkins_authentication_disabled | skipped) }}"
-  register: 'jenkins_list_plugins_for_upgrade'
-  changed_when: False
-
-
-- name: 'Upgrade plugins'
-  become: True
-  become_user: "{{ jenkins_etc_user }}"
-  register: 'jenkins_tasks_upgrade_plugins'
-  install_jenkins_plugin:
-    name: "{{ item }}"
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
-    state: 'latest'
-    use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
-                        and (jenkins_authentication_disabled | skipped) }}"
-  with_items: "{{ jenkins_list_plugins_for_upgrade.has_update }}"
-
-
-- name: 'Restart Jenkins once all plugins upgraded'
-  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when: "{{ jenkins_tasks_upgrade_plugins.changed }}"
+- name: 'Manage plugins upgrade'
+  include: "{{ role_path }}/tasks/manage_plugins_upgrade.yml"
+  when: "{{ jenkins_manage_plugin_upgrade }}"
 
 
 - name: 'Enable plugins'

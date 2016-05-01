@@ -60,6 +60,9 @@ jenkins_waiting_available_delay: 5
 # Jenkins clouds
 jenkins_main_cfg_clouds: []
 
+# Jenkins plugin management
+jenkins_manage_plugin_install: True
+jenkins_manage_plugin_upgrade: False
 
 # CONFIGURATION
 #--------------

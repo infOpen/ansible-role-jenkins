@@ -86,6 +86,10 @@ Follow the possible variables with their default values
     jenkins_waiting_available_retries: 10
     jenkins_waiting_available_delay: 5
 
+    # Jenkins plugin management
+    jenkins_manage_plugin_install: True
+    jenkins_manage_plugin_upgrade: False
+
     # Jenkins clouds
     jenkins_main_cfg_clouds: []
 
