@@ -160,11 +160,13 @@ Follow the possible variables with their default values
     jenkins_plugins_state: 'latest'
 
     # Plugins: git
+    jenkins_plugin_git_manage_configuration: True
     jenkins_plugin_git_global_full_name: 'Jenkins GitUser'
     jenkins_plugin_git_global_email: 'git@foo.bar'
     jenkins_plugin_git_create_account_based_on_email: False
 
     # Plugins: mailer
+    jenkins_plugin_mailer_manage_configuration: True
     jenkins_plugin_mailer_charset: 'UTF-8'
     jenkins_plugin_mailer_default_suffix: ''
     jenkins_plugin_mailer_reply_to: ''
@@ -175,10 +177,12 @@ Follow the possible variables with their default values
     jenkins_plugin_mailer_use_ssl: False
 
     # Plugins: github
+    jenkins_plugins_github_manage_configuration: True
     jenkins_plugins_github_remove_servers: True
     jenkins_plugins_github_servers: []
 
     # Plugins: debian package builder
+    jenkins_plugins_debian_package_builder_manage_configuration: True
     jenkins_plugins_debian_package_builder_remove_repositories: True
     jenkins_plugins_debian_package_builder_gpg:
       name: 'Foo Bar'
@@ -189,17 +193,23 @@ Follow the possible variables with their default values
     jenkins_plugins_debian_package_builder_repo: []
 
     # Plugins: gitlab
+    jenkins_plugins_gitlab_manage_configuration: True
     jenkins_plugins_gitlab_api_token: ''
     jenkins_plugins_gitlab_host_url: ''
     jenkins_plugins_gitlab_ignore_cert_error: False
 
     # Plugins: hipchat
+    jenkins_plugins_hipchat_manage_configuration: True
     jenkins_plugins_hipchat_server: 'api.hipchat.com'
     jenkins_plugins_hipchat_token: ''
     jenkins_plugins_hipchat_v2_enabled: False
     jenkins_plugins_hipchat_room: 'Continuous Integration'
     jenkins_plugins_hipchat_send_as: 'Jenkins'
     jenkins_plugins_hipchat_notifications: []
+
+    # Plugins: docker
+    jenkins_plugins_docker_manage_configuration: True
+    jenkins_plugins_docker_clouds: []
 
 ### Specific vars values for Debian family
 
