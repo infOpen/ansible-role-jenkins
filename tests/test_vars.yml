@@ -110,6 +110,7 @@ jenkins_plugin_mailer_smtp_password: 'foobar'
 jenkins_plugin_mailer_smtp_user: 'foo'
 
 # plugins: gitlab
+jenkins_plugin_gitlab_manage_configuration: False
 jenkins_plugin_gitlab_api_token: 'my_token'
 jenkins_plugin_gitlab_host_url: 'http://localhost:443/gitlab'
 jenkins_plugin_gitlab_ignore_cert_error: True
