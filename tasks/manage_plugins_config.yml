@@ -10,7 +10,9 @@
     email: "{{ jenkins_plugin_git_global_email }}"
     full_name: "{{ jenkins_plugin_git_global_full_name }}"
   register: 'jenkins_change_plugin_git'
-  when: "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
+  when:
+    - "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_git_manage_configuration }}"
 
 
 - name: 'Manage mailer plugin configuration with new settings'
@@ -27,7 +29,9 @@
     use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
   no_log: True
   register: 'jenkins_change_plugin_mailer'
-  when: "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
+  when:
+    - "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_mailer_manage_configuration }}"
 
 
 - name: 'Remove github plugin servers configuration'
@@ -38,7 +42,8 @@
   register: 'jenkins_change_plugin_github_remove_servers'
   when:
     - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugins_github_remove_servers }}"
+    - "{{ jenkins_plugin_github_remove_servers }}"
+    - "{{ jenkins_plugin_github_manage_configuration }}"
 
 
 - name: 'Manage github plugin configuration with new settings'
@@ -50,23 +55,27 @@
     custom_url: "{{ item.custom_url }}"
     client_cache_size: "{{ item.client_cache_size }}"
   register: 'jenkins_change_plugin_github'
-  with_items: "{{ jenkins_plugins_github_servers }}"
-  when: "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
+  with_items: "{{ jenkins_plugin_github_servers }}"
+  when:
+    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_github_manage_configuration }}"
 
 
 - name: 'Manage debian package builder plugin gpg configuration'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_debian_package_builder_gpg:
-    name: "{{ jenkins_plugins_debian_package_builder_gpg.name }}"
-    email: "{{ jenkins_plugins_debian_package_builder_gpg.email }}"
-    public_key: "{{ jenkins_plugins_debian_package_builder_gpg.public_key }}"
-    private_key: "{{ jenkins_plugins_debian_package_builder_gpg.private_key }}"
-    passphrase: "{{ jenkins_plugins_debian_package_builder_gpg.passphrase }}"
+    name: "{{ jenkins_plugin_debian_package_builder_gpg.name }}"
+    email: "{{ jenkins_plugin_debian_package_builder_gpg.email }}"
+    public_key: "{{ jenkins_plugin_debian_package_builder_gpg.public_key }}"
+    private_key: "{{ jenkins_plugin_debian_package_builder_gpg.private_key }}"
+    passphrase: "{{ jenkins_plugin_debian_package_builder_gpg.passphrase }}"
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_gpg'
-  when: "{{ 'debian-package-builder' in
-                (jenkins_plugins | map(attribute='name')) }}"
+  when:
+    - "{{ 'debian-package-builder' in
+              (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
 
 
 - name: 'Remove debian package builder plugin repositories configuration'
@@ -76,9 +85,10 @@
     do_task: True
   register: 'jenkins_change_plugin_debian_package_builder_remove_repo'
   when:
-    - "{{ jenkins_plugins_debian_package_builder_remove_repositories }}"
+    - "{{ jenkins_plugin_debian_package_builder_remove_repositories }}"
     - "{{ 'debian-package-builder' in
               (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
 
 
 - name: 'Manage debian package builder plugin repositories configuration'
@@ -95,35 +105,41 @@
     state: "{{ item.state }}"
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_repo'
-  with_items: "{{ jenkins_plugins_debian_package_builder_repo }}"
-  when: "{{ 'debian-package-builder' in
-                (jenkins_plugins | map(attribute='name')) }}"
+  with_items: "{{ jenkins_plugin_debian_package_builder_repo }}"
+  when:
+    - "{{ 'debian-package-builder' in
+              (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
 
 
 - name: 'Manage gitlab plugin configuration'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_gitlab:
-    api_token: "{{ jenkins_plugins_gitlab_api_token }}"
-    host_url: "{{ jenkins_plugins_gitlab_host_url }}"
-    ignore_cert_error: "{{ jenkins_plugins_gitlab_ignore_cert_error }}"
+    api_token: "{{ jenkins_plugin_gitlab_api_token }}"
+    host_url: "{{ jenkins_plugin_gitlab_host_url }}"
+    ignore_cert_error: "{{ jenkins_plugin_gitlab_ignore_cert_error }}"
   no_log: True
   register: 'jenkins_change_plugin_gitlab'
-  when: "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+  when:
+    - "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_gitlab_manage_configuration }}"
 
 
 - name: 'Manage hipchat plugin configuration'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_hipchat:
-    server: "{{ jenkins_plugins_hipchat_server }}"
-    token: "{{ jenkins_plugins_hipchat_token }}"
-    v2_enabled: "{{ jenkins_plugins_hipchat_v2_enabled }}"
-    room: "{{ jenkins_plugins_hipchat_room }}"
-    send_as: "{{ jenkins_plugins_hipchat_send_as }}"
+    server: "{{ jenkins_plugin_hipchat_server }}"
+    token: "{{ jenkins_plugin_hipchat_token }}"
+    v2_enabled: "{{ jenkins_plugin_hipchat_v2_enabled }}"
+    room: "{{ jenkins_plugin_hipchat_room }}"
+    send_as: "{{ jenkins_plugin_hipchat_send_as }}"
   no_log: True
   register: 'jenkins_change_plugin_hipchat'
-  when: "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+  when:
+    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
 
 
 - name: 'Manage hipchat plugin notifications'
@@ -137,8 +153,10 @@
     message_template: "{{ item.message_template }}"
     state: "{{ item.state }}"
   register: 'jenkins_change_plugin_hipchat_notifications'
-  with_items: "{{ jenkins_plugins_hipchat_notifications }}"
-  when: "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+  with_items: "{{ jenkins_plugin_hipchat_notifications }}"
+  when:
+    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
 
 
 - name: 'Manage docker plugin clouds'
@@ -154,8 +172,10 @@
     templates: "{{ item.templates }}"
     state: "{{ item.state }}"
   register: 'jenkins_change_plugin_docker_clouds'
-  with_items: "{{ jenkins_plugins_docker_clouds }}"
-  when: "{{ 'docker-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+  with_items: "{{ jenkins_plugin_docker_clouds }}"
+  when:
+    - "{{ 'docker-plugin' in (jenkins_plugins | map(attribute='name')) }}"
+    - "{{ jenkins_plugin_docker_manage_configuration }}"
 
 
 - name: 'Waiting jenkins restarted'

@@ -60,6 +60,9 @@ jenkins_waiting_available_delay: 5
 # Jenkins clouds
 jenkins_main_cfg_clouds: []
 
+# Jenkins plugin management
+jenkins_manage_plugin_install: True
+jenkins_manage_plugin_upgrade: False
 
 # CONFIGURATION
 #--------------
@@ -143,11 +146,13 @@ jenkins_plugins:
 jenkins_plugins_state: 'latest'
 
 # Plugins: git
+jenkins_plugin_git_manage_configuration: True
 jenkins_plugin_git_global_full_name: "Jenkins GitUser"
 jenkins_plugin_git_global_email: "git@foo.bar"
 jenkins_plugin_git_create_account_based_on_email: False
 
 # Plugins: mailer
+jenkins_plugin_mailer_manage_configuration: True
 jenkins_plugin_mailer_charset: 'UTF-8'
 jenkins_plugin_mailer_default_suffix: ''
 jenkins_plugin_mailer_reply_to: ''
@@ -158,31 +163,36 @@ jenkins_plugin_mailer_smtp_user: ''
 jenkins_plugin_mailer_use_ssl: False
 
 # Plugins: github
-jenkins_plugins_github_remove_servers: True
-jenkins_plugins_github_servers: []
+jenkins_plugin_github_manage_configuration: True
+jenkins_plugin_github_remove_servers: True
+jenkins_plugin_github_servers: []
 
 # Plugins: debian package builder
-jenkins_plugins_debian_package_builder_remove_repositories: True
-jenkins_plugins_debian_package_builder_gpg:
+jenkins_plugin_debian_package_builder_manage_configuration: True
+jenkins_plugin_debian_package_builder_remove_repositories: True
+jenkins_plugin_debian_package_builder_gpg:
   name: 'Foo Bar'
   email: 'foo@bar.fr'
   public_key: 'foo_public_key'
   private_key: 'foo_private_key'
   passphrase: 'foo_passphrase'
-jenkins_plugins_debian_package_builder_repo: []
+jenkins_plugin_debian_package_builder_repo: []
 
 # Plugins: gitlab
-jenkins_plugins_gitlab_api_token: ''
-jenkins_plugins_gitlab_host_url: ''
-jenkins_plugins_gitlab_ignore_cert_error: False
+jenkins_plugin_gitlab_manage_configuration: True
+jenkins_plugin_gitlab_api_token: ''
+jenkins_plugin_gitlab_host_url: ''
+jenkins_plugin_gitlab_ignore_cert_error: False
 
 # Plugins: hipchat
-jenkins_plugins_hipchat_server: 'api.hipchat.com'
-jenkins_plugins_hipchat_token: ''
-jenkins_plugins_hipchat_v2_enabled: False
-jenkins_plugins_hipchat_room: 'Continuous Integration'
-jenkins_plugins_hipchat_send_as: 'Jenkins'
-jenkins_plugins_hipchat_notifications: []
+jenkins_plugin_hipchat_manage_configuration: True
+jenkins_plugin_hipchat_server: 'api.hipchat.com'
+jenkins_plugin_hipchat_token: ''
+jenkins_plugin_hipchat_v2_enabled: False
+jenkins_plugin_hipchat_room: 'Continuous Integration'
+jenkins_plugin_hipchat_send_as: 'Jenkins'
+jenkins_plugin_hipchat_notifications: []
 
 # Plugins: docker
-jenkins_plugins_docker_clouds: []
+jenkins_plugin_docker_manage_configuration: True
+jenkins_plugin_docker_clouds: []

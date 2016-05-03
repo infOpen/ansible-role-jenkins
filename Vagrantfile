@@ -46,7 +46,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         if ANSIBLE_DOWNLOAD_SOURCE == 'git'
           sh.inline = "test -d /usr/local/src/ansible \
                         || (sudo apt-get update \
-                            && sudo apt-get install python-pip curl git -y \
+                            && sudo apt-get install python-dev python-pip \
+                                                    curl git libffi-dev \
+                                                    libssl-dev -y \
                             && sudo pip install paramiko PyYAML Jinja2 \
                                                 httplib2 six pytest \
                                                 ansible-lint \
@@ -60,7 +62,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         else
           sh.inline = "test -f /usr/local/bin/ansible \
                         || (sudo apt-get update \
-                            && sudo apt-get install python-pip curl git -y \
+                            && sudo apt-get install python-dev python-pip \
+                                                    curl git libffi-dev \
+                                                    libssl-dev -y \
                             && sudo pip install paramiko PyYAML Jinja2 \
                                                 httplib2 six pytest ansible \
                                                 ansible-lint)"
