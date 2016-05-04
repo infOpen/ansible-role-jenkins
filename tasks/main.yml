@@ -37,6 +37,13 @@
   include: "{{ role_path }}/handlers/waiting_jenkins.yml"
 
 
+- name: 'Configure jenkins launching settings'
+  include: "{{ role_path }}/tasks/manage_startup.yml"
+  tags:
+    - 'configure'
+    - 'jenkins'
+
+
 - name: 'Install and configure Jenkins CLI'
   include: "{{ role_path }}/tasks/manage_cli.yml"
   tags:
@@ -49,13 +56,6 @@
   tags:
     - 'jenkins'
     - 'install'
-
-
-- name: 'Configure jenkins launching settings'
-  include: "{{ role_path }}/tasks/manage_startup.yml"
-  tags:
-    - 'configure'
-    - 'jenkins'
 
 
 - name: 'Check if Jenkins v2 default administrative password file exists'
