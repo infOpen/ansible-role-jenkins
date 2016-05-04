@@ -27,6 +27,7 @@ jenkins_etc_listen_address: '127.0.0.1'
 jenkins_etc_http_port: 8080
 jenkins_etc_ajp_port: -1
 jenkins_etc_servlet_context_prefix: "/{{ jenkins_etc_name }}"
+jenkins_etc_prefix: '/'
 
 # Location and files configuration
 jenkins_etc_java_location: '/usr/bin/java'
@@ -47,6 +48,7 @@ jenkins_etc_args:
   - "--httpListenAddress={{ jenkins_etc_listen_address }}"
   - "--httpPort={{ jenkins_etc_http_port }}"
   - "--ajp13Port={{ jenkins_etc_ajp_port }}"
+  - "--prefix={{ jenkins_etc_prefix }}"
 
 # Jenkins cli
 jenkins_base_url: "http://localhost:{{ jenkins_etc_http_port }}"
