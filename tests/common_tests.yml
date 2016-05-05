@@ -30,7 +30,7 @@
   register: 'jenkins_list_plugins_test'
   shell: >
     java
-    -jar {{ jenkins_cli }}
+    -jar {{ jenkins_cli_path }}
     -s {{ jenkins_base_url }}
     list-plugins
     | awk '{ print $1 }'
@@ -56,7 +56,7 @@
   register: 'jenkins_list_plugins_with_upgrade_test'
   shell: >
     java
-    -jar {{ jenkins_cli }}
+    -jar {{ jenkins_cli_path }}
     -s {{ jenkins_base_url }}
     list-plugins
     | grep ')$'

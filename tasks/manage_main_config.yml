@@ -12,6 +12,10 @@
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb_issuer }}"
     use_private_key: False
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_deployment_user_without_ssh_key'
   ignore_errors: True
@@ -35,6 +39,10 @@
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb_issuer }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_deployment_user'
   with_items:
@@ -59,6 +67,10 @@
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb_issuer }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_users_or_security'
   with_items: "{{ jenkins_users }}"
@@ -80,6 +92,10 @@
     quiet_period: "{{ jenkins_config_quiet_period }}"
     scm_checkout_retry_count: "{{ jenkins_config_scm_checkout_retry_count }}"
     slave_agent_port: "{{ jenkins_config_slave_agent_port }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_main_configuration'
 
 
@@ -90,6 +106,10 @@
     email: "{{ jenkins_location_administrator_email }}"
     full_name: "{{ jenkins_location_administrator_full_name }}"
     jenkins_url: "{{ jenkins_location_url }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_administrator_email_address'
   when:
     - "{{ jenkins_location_administrator_email != '' }}"

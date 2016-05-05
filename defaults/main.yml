@@ -51,9 +51,12 @@ jenkins_etc_args:
   - "--prefix={{ jenkins_etc_prefix }}"
 
 # Jenkins cli
-jenkins_base_url: "http://localhost:{{ jenkins_etc_http_port }}"
+jenkins_base_url: "{{ 'http://' ~ jenkins_etc_listen_address ~ ':'
+  ~ jenkins_etc_http_port ~ jenkins_etc_prefix }}"
 jenkins_cli_download_url: "{{ jenkins_base_url }}/jnlpJars/jenkins-cli.jar"
-jenkins_cli: "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
+jenkins_cli_path: "{{ jenkins_etc_home_location }}/jenkins-cli.jar"
+jenkins_deployment_ssh_key: "{{ jenkins_etc_home_location }}/.ssh/id_rsa"
+jenkins_groovy_scripts_path: "{{ jenkins_etc_home_location }}/groovy_scripts"
 
 # Jenkins waiting availability test
 jenkins_waiting_available_retries: 10
