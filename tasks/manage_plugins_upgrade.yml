@@ -6,9 +6,12 @@
   become: True
   become_user: "{{ jenkins_etc_user }}"
   get_jenkins_plugins:
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
     use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
                         and (jenkins_authentication_disabled | skipped) }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_list_plugins_for_upgrade'
   changed_when: False
 
@@ -19,10 +22,13 @@
   register: 'jenkins_tasks_upgrade_plugins'
   install_jenkins_plugin:
     name: "{{ item }}"
-    cli_path: '/var/lib/jenkins/jenkins-cli.jar'
     state: 'latest'
     use_ssh_key: "{{ (jenkins_authentication_disabled is defined)
                         and (jenkins_authentication_disabled | skipped) }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   with_items: "{{ jenkins_list_plugins_for_upgrade.has_update }}"
 
 

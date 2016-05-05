@@ -9,6 +9,10 @@
     create_accounts: "{{ jenkins_plugin_git_create_account_based_on_email }}"
     email: "{{ jenkins_plugin_git_global_email }}"
     full_name: "{{ jenkins_plugin_git_global_full_name }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_git'
   when:
     - "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
@@ -27,6 +31,10 @@
     smtp_port: "{{ jenkins_plugin_mailer_smtp_port }}"
     smtp_user: "{{ jenkins_plugin_mailer_smtp_user }}"
     use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_mailer'
   when:
@@ -39,6 +47,10 @@
   become_user: "{{ jenkins_etc_user }}"
   remove_jenkins_github_servers:
     do_task: True
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_github_remove_servers'
   when:
     - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
@@ -54,6 +66,10 @@
     credentials_id: "{{ item.credentials_id }}"
     custom_url: "{{ item.custom_url }}"
     client_cache_size: "{{ item.client_cache_size }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_github'
   with_items: "{{ jenkins_plugin_github_servers }}"
   when:
@@ -70,6 +86,10 @@
     public_key: "{{ jenkins_plugin_debian_package_builder_gpg.public_key }}"
     private_key: "{{ jenkins_plugin_debian_package_builder_gpg.private_key }}"
     passphrase: "{{ jenkins_plugin_debian_package_builder_gpg.passphrase }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_gpg'
   when:
@@ -83,6 +103,10 @@
   become_user: "{{ jenkins_etc_user }}"
   remove_jenkins_debian_package_builder_repo:
     do_task: True
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_debian_package_builder_remove_repo'
   when:
     - "{{ jenkins_plugin_debian_package_builder_remove_repositories }}"
@@ -103,6 +127,10 @@
     key_path: "{{ item.key_path }}"
     options: "{{ item.options }}"
     state: "{{ item.state }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_repo'
   with_items: "{{ jenkins_plugin_debian_package_builder_repo }}"
@@ -119,6 +147,10 @@
     api_token: "{{ jenkins_plugin_gitlab_api_token }}"
     host_url: "{{ jenkins_plugin_gitlab_host_url }}"
     ignore_cert_error: "{{ jenkins_plugin_gitlab_ignore_cert_error }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_gitlab'
   when:
@@ -135,6 +167,10 @@
     v2_enabled: "{{ jenkins_plugin_hipchat_v2_enabled }}"
     room: "{{ jenkins_plugin_hipchat_room }}"
     send_as: "{{ jenkins_plugin_hipchat_send_as }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_hipchat'
   when:
@@ -152,6 +188,10 @@
     color: "{{ item.color }}"
     message_template: "{{ item.message_template }}"
     state: "{{ item.state }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_hipchat_notifications'
   with_items: "{{ jenkins_plugin_hipchat_notifications }}"
   when:
@@ -171,6 +211,10 @@
     credentials_id: "{{ item.credentials_id }}"
     templates: "{{ item.templates }}"
     state: "{{ item.state }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_docker_clouds'
   with_items: "{{ jenkins_plugin_docker_clouds }}"
   when:
