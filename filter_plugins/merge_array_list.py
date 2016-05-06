@@ -14,7 +14,7 @@ def merge_array_list(arg):
         :rtype: list
     """
 
-    # Check if arg is a string with managed content or boolean
+    # Check if arg is a list
     if type(arg) != list:
         raise errors.AnsibleFilterError('Invalid value type, should be array')
 
