@@ -50,6 +50,9 @@ script:
   # Run filter plugins tests
   - py.test -v
 
+  # Set tmp files world readable
+  - echo "allow_world_readable_tmpfiles = true" > ansible.cfg
+
   # Run the role/playbook with ansible-playbook.
   - >
     ansible-playbook -i tests/inventory tests/test_travis.yml

@@ -6,10 +6,6 @@
   remote_user: 'root'
   pre_tasks:
     - include_vars: './test_vars.yml'
-    - name: 'Install setfacl support'
-      become: True
-      apt:
-        pkg: 'acl'
   roles:
     - "{{ role_name }}"
   post_tasks:
