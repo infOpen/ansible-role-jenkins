@@ -51,7 +51,7 @@ script:
   - py.test -v
 
   # Set tmp files world readable
-  - echo "allow_world_readable_tmpfiles = true" > ansible.cfg
+  - echo "[defaults]\nallow_world_readable_tmpfiles = true" > ansible.cfg
 
   # Run the role/playbook with ansible-playbook.
   - >
