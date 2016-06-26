@@ -250,6 +250,9 @@ def manage_authorization(GlobalMatrixAuthorizationStrategy strategy,
             case "item-read":
                 permission = Item.READ
                 break
+            case "item-workspace":
+                permission = Item.WORKSPACE
+                break
             case "view-read":
                 permission = View.READ
                 break
