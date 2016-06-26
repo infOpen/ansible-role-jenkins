@@ -53,7 +53,7 @@ script:
   # Run the role/playbook with ansible-playbook.
   - >
     ansible-playbook -i tests/inventory tests/test_travis.yml
-    --connection=local --sudo -e 'allow_world_readeable_tmpfiles=True'
+    --connection=local --sudo -e 'allow_world_readable_tmpfiles=True'
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   # Set change=1 due to a bug in ansible service module always return changed
