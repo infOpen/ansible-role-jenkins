@@ -342,6 +342,7 @@ You can remove all servers before plugin configuration. Just set True to
 ### Hipchat notifications
 
 You can manage Hipchat plugin notifications with this structure:
+
     jenkins_plugins_hipchat_notifications:
       - notify_enable: True
         text_format: True
@@ -352,6 +353,7 @@ You can manage Hipchat plugin notifications with this structure:
 ### Docker clouds
 
 You can manage Docker plugin clouds with this structure:
+
     jenkins_plugins_docker_clouds:
       - name: 'docker-cloud-test'
         server_url: 'http://127.0.0.1:8081'
