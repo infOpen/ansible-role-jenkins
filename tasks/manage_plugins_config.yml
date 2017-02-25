@@ -223,7 +223,7 @@
 
 
 - name: 'Waiting jenkins restarted'
-  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
+  include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
   when: "{{
             jenkins_change_plugin_git.changed
               or jenkins_change_plugin_mailer
