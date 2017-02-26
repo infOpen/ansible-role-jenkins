@@ -3,8 +3,8 @@
 # Defaults file for jenkins
 
 # Ubuntu repository vars
-jenkins_repository_key_url: 'https://jenkins-ci.org/debian/jenkins-ci.org.key'
-jenkins_repository_content: 'deb http://pkg.jenkins-ci.org/debian binary/'
+jenkins_repository_key_url: 'https://pkg.jenkins.io/debian/jenkins.io.key'
+jenkins_repository_content: 'deb http://pkg.jenkins.io/debian binary/'
 jenkins_package_state: 'latest'
 
 jenkins_system_dependencies: []
@@ -146,8 +146,8 @@ jenkins_credentials: []
 
 # Plugins management
 jenkins_plugins:
-  - 'mailer'
-  - 'matrix-auth'
+  - name: 'mailer'
+  - name: 'matrix-auth'
 jenkins_plugins_state: 'latest'
 
 # Plugins: git
