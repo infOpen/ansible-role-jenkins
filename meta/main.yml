@@ -1,32 +1,23 @@
 ---
 
 galaxy_info:
-  author: Alexandre Chaussier
-  description: Install and configure Jenkins and some plugins
-  company: Infopen (http://infopen.pro)
-  license: MIT
-  min_ansible_version: 2.0
-  github_branch: master
-
+  author: 'Alexandre Chaussier'
+  description: 'Install and configure Jenkins and some plugins'
+  company: 'Infopen (http://infopen.pro)'
+  license: 'MIT'
+  min_ansible_version: '2.0'
+  github_branch: 'master'
   platforms:
-    - name: Ubuntu
+    - name: 'Ubuntu'
       versions:
-        - precise
-        - quantal
-        - raring
-        - saucy
-        - trusty
-        - utopic
-        - vivid
-    - name: Debian
+        - 'trusty'
+        - 'xenial'
+    - name: 'Debian'
       versions:
-        - wheezy
-        - jessie
+        - 'jessie'
   galaxy_tags:
-    - development
-    - web
-
+    - 'development'
+    - 'web'
 dependencies:
-  - achaussier.openjdk-jre
-  - achaussier.openjdk-jdk
-
+  - 'infOpen.openjdk-jre'
+  - 'infOpen.openjdk-jdk'
