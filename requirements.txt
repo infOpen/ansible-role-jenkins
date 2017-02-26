@@ -1,0 +1,6 @@
+docker-py==1.10.6
+molecule==1.20.3
+pytest==3.0.6
+python-vagrant==0.5.14
+testinfra==1.5.3
+tox==2.6.0
