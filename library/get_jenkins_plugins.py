@@ -35,8 +35,9 @@ def main():
     jenkins_cli_path = module.params['cli_path']
     jenkins_url = module.params['url']
     deployment_ssh_key = module.params['deployment_ssh_key']
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+
+    script = "%s/get_jenkins_plugins.groovy" % (
+        module.params['groovy_scripts_path'])
 
     if module.params['use_ssh_key'] is False:
         rc, stdout, stderr = module.run_command(

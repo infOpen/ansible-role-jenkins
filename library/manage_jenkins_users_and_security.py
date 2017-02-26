@@ -47,8 +47,8 @@ def main():
 
     module = AnsibleModule(module_args)
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/manage_jenkins_users_and_security.groovy" % (
+        module.params['groovy_scripts_path'])
 
     if (module.params['use_private_key']):
         rc, stdout, stderr = module.run_command(

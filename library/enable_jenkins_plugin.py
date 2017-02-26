@@ -36,8 +36,8 @@ def main():
         )
     )
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/enable_jenkins_plugin.groovy" % (
+        module.params['groovy_scripts_path'])
 
     if module.params['use_ssh_key'] is False:
         rc, stdout, stderr = module.run_command(

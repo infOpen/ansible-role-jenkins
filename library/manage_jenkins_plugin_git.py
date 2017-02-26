@@ -38,8 +38,8 @@ def main():
         )
     )
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/manage_jenkins_plugin_git.groovy" % (
+        module.params['groovy_scripts_path'])
 
     rc, stdout, stderr = module.run_command(
         "java -jar %s -s '%s' -i '%s' groovy %s '%s' '%s' '%s'" %
