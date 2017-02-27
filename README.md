@@ -11,14 +11,33 @@ in the metadata file.
 
 ## Testing
 
-This role has two test methods:
+This role use [Molecule](https://github.com/metacloud/molecule/) to run tests.
 
-- localy with Vagrant (need vagrant-triggers plugin installed):
-    vagrant up
+Locally, you can run tests on Docker (default driver) or Vagrant.
+Travis run tests using Docker driver only.
 
-- automaticaly by Travis
+Currently, tests are done on:
+- Debian Jessie
+- Ubuntu Trusty
+- Ubuntu Xenial
+and use:
+- Ansible 2.0.x
+- Ansible 2.1.x
+- Ansible 2.2.x
 
-Vagrant should be used to check the role before push changes to Github.
+### Running tests
+
+#### Using Docker driver
+
+```
+$ tox
+```
+
+#### Using Vagrant driver
+
+```
+$ MOLECULE_DRIVER=vagrant tox
+```````
 
 ## Role Variables
 
