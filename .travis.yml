@@ -10,6 +10,11 @@ services:
 
 language: 'python'
 
+matrix:
+  - TOXENV='py27-ansible20'
+  - TOXENV='py27-ansible21'
+  - TOXENV='py27-ansible22'
+
 before_install:
   - 'sudo apt-get update -qq'
   - 'sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine'
@@ -18,7 +23,7 @@ script:
   - 'pip install tox-travis'
 
 script:
-  - 'tox'
+  - 'tox -e "${TOXENV}"'
 
 notifications:
   webhooks: 'https://galaxy.ansible.com/api/v1/notifications/'
