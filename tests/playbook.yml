@@ -2,7 +2,7 @@
 
 # Role tests
 
-- hosts: 'os_xenial'
+- hosts: 'os_xenial:jenkins-vagrant-xenial64'
   name: 'Install tests prerequisites - Python 2.7'
   gather_facts: False
   tasks:
@@ -16,7 +16,7 @@
       changed_when: False
 
 
-- hosts: 'debian_family'
+- hosts: 'all'
   name: 'PREREQUISITES | SSH utils and curl'
   tasks:
     - name: 'PREREQUISITES | APT | Install SSH utils and curl'
@@ -28,6 +28,7 @@
       with_items:
         - 'curl'
         - 'openssh-client'
+      when: "{{ (ansible_os_family | lower) == 'debian' }}"
 
 
 - hosts: 'all'

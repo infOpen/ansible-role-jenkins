@@ -10,6 +10,10 @@ ansible:
     os_xenial:
       openjdk_jdk_version: 8
       openjdk_jre_version: 8
+  host_vars:
+    jenkins-vagrant-xenial64:
+      openjdk_jdk_version: 8
+      openjdk_jre_version: 8
 dependency:
   name: 'galaxy'
   requirements_file: 'requirements.yml'
@@ -20,18 +24,13 @@ docker:
     - name: 'jenkins-docker-jessie'
       image: 'debian'
       image_version: 'jessie'
-      ansible_groups:
-        - 'debian_family'
     - name: 'jenkins-docker-trusty'
       image: 'ubuntu'
       image_version: 'trusty'
-      ansible_groups:
-        - 'debian_family'
     - name: 'jenkins-docker-xenial'
       image: 'ubuntu'
       image_version: 'xenial'
       ansible_groups:
-        - 'debian_family'
         - 'os_xenial'
 molecule:
   ignore_paths:
@@ -44,19 +43,12 @@ vagrant:
     - name: 'jessie64'
       box: 'debian/jessie64'
       linked_clone: True
-      ansible_groups:
-        - 'debian_family'
     - name: 'trusty64'
       box: 'ubuntu/trusty64'
       linked_clone: True
-      ansible_groups:
-        - 'debian_family'
     - name: 'xenial64'
       box: 'ubuntu/xenial64'
       linked_clone: True
-      ansible_groups:
-        - 'debian_family'
-        - 'os_xenial'
   providers:
     - name: 'virtualbox'
       type: 'virtualbox'
