@@ -349,6 +349,61 @@ def BaseStandardCredentials create_credentials(Map credentials_desc) {
 
 
 /**
+    Check if two credentials have same values
+
+    @param String credentials_type
+    @param BaseStandardCredentials credentials_a
+    @param BaseStandardCredentials credentials_b
+    @return Boolean True if attributes are equals
+*/
+def Boolean are_same_credentials(
+                                String credentials_type,
+                                BaseStandardCredentials cred_a,
+                                BaseStandardCredentials cred_b) {
+
+    def List<Boolean> has_changed = []
+
+    // Check ID and description
+    has_changed.push(cred_a.getId() != cred_b.getId())
+    has_changed.push(cred_a.getDescription() != cred_b.getDescription())
+
+    try {
+        switch (credentials_type) {
+
+            case "ssh_with_passphrase":
+                has_changed.push(cred_a.getUsername() != cred_b.getUsername())
+                has_changed.push(cred_a.getPrivateKey() != cred_b.getPrivateKey())
+                has_changed.push(cred_a.getPassphrase() != cred_b.getPassphrase())
+                break
+
+            case "password":
+                has_changed.push(cred_a.getUsername() != cred_b.getUsername())
+                has_changed.push(cred_a.getPassword() != cred_b.getPassword())
+                break
+
+            case "text":
+                has_changed.push(cred_a.getSecret() != cred_b.getSecret())
+                break
+
+            case "gitlab_api_token":
+                has_changed.push(cred_a.getApiToken() != cred_b.getApiToken())
+                break
+
+            default:
+                throw new Exception(
+                    "Unknown credentials type : " + credentials_type)
+        }
+
+        return !has_changed.any()
+    }
+    catch(Exception e) {
+        throw new Exception(
+            "Compare credentials error, error message : ${e.getMessage()}")
+    }
+}
+
+
+/**
     Add credentials
 
     @param CredentialsStore Credentials store
@@ -392,6 +447,12 @@ def Boolean update_credentials(CredentialsStore store,
         // Create new credentials
         def BaseStandardCredentials new_credentials
         new_credentials = create_credentials(credentials_desc)
+        credentials_type = credentials_desc['credentials_type']
+
+        // Check differences
+        if (are_same_credentials(credentials_type, cur_credentials, new_credentials)) {
+            return false
+        }
 
         return store.updateCredentials(
                     domain, cur_credentials, new_credentials)
