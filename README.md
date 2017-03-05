@@ -434,8 +434,8 @@ You can manage Docker plugin clouds with this structure:
 
 ## Dependencies
 
-- achaussier.openjdk-jre
-- achaussier.openjdk-jdk
+- infOpen.openjdk-jre
+- infOpen.openjdk-jdk
 
 ## Example Playbook
 
