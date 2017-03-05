@@ -8,6 +8,7 @@ import com.cloudbees.plugins.credentials.CredentialsStore
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials
 import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
+import com.dabsquared.gitlabjenkins.connection.GitLabApiTokenImpl
 import hudson.plugins.sshslaves.*
 import hudson.util.Secret
 import groovy.json.*
@@ -250,6 +251,32 @@ def StringCredentialsImpl create_text_credentials(Map credentials_desc) {
 
 
 /**
+    Create Gitlab API credentials
+
+    @param Map Credentials description
+    @return GitLabApiTokenImpl Credentials object
+*/
+def GitLabApiTokenImpl create_gitlab_api_credentials(Map credentials_desc) {
+
+    try {
+        def GitLabApiTokenImpl crendentials
+
+        credentials = new GitLabApiTokenImpl(
+                            get_credentials_scope(credentials_desc['scope']),
+                            credentials_desc['id'],
+                            credentials_desc['description'],
+                            Secret.fromString(credentials_desc['text']))
+
+        return credentials
+    }
+    catch(Exception e) {
+        throw new Exception(
+            "Text credentials create error, error message : ${e.getMessage()}")
+    }
+}
+
+
+/**
     Get credentials by its id
 
     @param CredentialsStore Credentials store
@@ -303,6 +330,10 @@ def BaseStandardCredentials create_credentials(Map credentials_desc) {
 
             case "text":
                 return create_text_credentials(credentials_desc)
+                break
+
+            case "gitlab_api_token":
+                return create_gitlab_api_credentials(credentials_desc)
                 break
 
             default:

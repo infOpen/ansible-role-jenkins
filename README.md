@@ -304,6 +304,13 @@ This is an example of YAML structure to create these credentials for Jenkins.
         text: 'loving_jenkins'
         description: 'Jenkins testing text credentials'
         state: 'present'
+      - credentials_type: 'gitlab_api_token'
+        credentials_domain: 'global'
+        scope: 'global'
+        id: 'simple-gitlab-api-token-credentials'
+        text: 'loving_jenkins'
+        description: 'Jenkins testing Gitlab API credentials'
+        state: 'present'
 
 You can remove all credentials linked to a domain. Just set the domain list to
 "jenkins_credentials_domains_to_empty".
