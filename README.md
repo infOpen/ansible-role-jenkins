@@ -423,6 +423,7 @@ You can manage Docker plugin clouds with this structure:
               retry_wait_time: 0
             template_base:
               image: 'evarga/jenkins-slave'
+              network: ''
               docker_command: ''
               lxc_conf_string: ''
               hostname: ''
