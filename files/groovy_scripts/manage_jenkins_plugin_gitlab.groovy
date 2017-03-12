@@ -56,56 +56,50 @@ def Boolean is_same_connection(GitLabConnection old_connection, GitLabConnection
 }
 
 
-/* SCRIPT */
+/**
+    Manage GitLab
 
-def Boolean has_changed = false
+    @param Jenkins Jenkins instance
+    @param Map Needed configuration
+    @return Boolean True if configuration change everything, else false
+*/
+def Boolean manage_gitlab(Jenkins jenkins_instance, Map data) {
+    try {
+        def desc = jenkins_instance.getDescriptor(
+            'com.dabsquared.gitlabjenkins.GitLabPushTrigger')
+        // Manage new empty connections list
+        def List<GitLabConnection> new_connections = new ArrayList<>()
 
-try {
-    def Jenkins jenkins_instance = Jenkins.getInstance()
-    def desc = jenkins_instance.getDescriptor(
-        'com.dabsquared.gitlabjenkins.GitLabPushTrigger')
+        // Manage existing connection with this name
+        def GitLabConnection old_connection
 
-    // Get arguments data
-    def Map data = parse_data(args[0])
+        // Manage a connection for needed connection
+        def GitLabConnection new_connection = new GitLabConnection(
+            data['name'],
+            data['host_url'],
+            data['api_token'],
+            data['ignore_cert_error'],
+            data['connection_timeout'],
+            data['read_timeout'])
 
-    // Manage new empty connections list
-    def List<GitLabConnection> new_connections = new ArrayList<>()
+        // Get current plugin configuration
+        GitLabConnectionConfig gitLabConfig = (GitLabConnectionConfig) Jenkins.getInstance().getDescriptor(GitLabConnectionConfig.class)
 
-    // Manage existing connection with this name
-    def GitLabConnection old_connection
-
-    // Manage a connection for needed connection
-    def GitLabConnection new_connection = new GitLabConnection(
-        data['name'],
-        data['host_url'],
-        data['api_token'],
-        data['ignore_cert_error'],
-        data['connection_timeout'],
-        data['read_timeout'])
-
-    // Get current plugin configuration
-    GitLabConnectionConfig gitLabConfig = (GitLabConnectionConfig) Jenkins.getInstance().getDescriptor(GitLabConnectionConfig.class)
-
-    // Copy existing connections if name is different
-    for (GitLabConnection connection : gitLabConfig.getConnections()) {
-        if (connection.getName() != data['name']) {
-            new_connections.add(connection)
-        } else {
-            old_connection = connection
+        // Copy existing connections if name is different
+        for (GitLabConnection connection : gitLabConfig.getConnections()) {
+            if (connection.getName() != data['name']) {
+                new_connections.add(connection)
+            } else {
+                old_connection = connection
+            }
         }
-    }
-    new_connections.add(new_connection)
+        new_connections.add(new_connection)
 
-    // If we have an existing connection with this name, check if properties
-    // have changed
-    if (old_connection == null) {
-        has_changed = true
-    } else {
-        has_changed = !is_same_connection(old_connection, new_connection)
-    }
+        // Return false if same config
+        if ((old_connection != null) && is_same_connection(old_connection, new_connection)) {
+            return false
+        }
 
-    // Update Jenkins configuration if anything has changed
-    if (has_changed) {
         // Clear current configuration
         gitLabConfig.getConnections().clear()
 
@@ -117,6 +111,31 @@ try {
         // Save new configuration to disk
         gitLabConfig.save()
         desc.save()
+
+        return true
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Gitlab management error, error message : ' + e.getMessage())
+    }
+}
+
+
+/* SCRIPT */
+
+def Boolean has_changed = false
+
+try {
+    def Jenkins jenkins_instance = Jenkins.getInstance()
+
+    // Get arguments data
+    def Map data = parse_data(args[0])
+
+    // Manage new configuration
+    has_changed = manage_gitlab(jenkins_instance, data)
+
+    // Save new configuration to disk
+    if (has_changed) {
         jenkins_instance.save()
     }
 }
