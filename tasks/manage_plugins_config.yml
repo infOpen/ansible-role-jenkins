@@ -144,15 +144,19 @@
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_gitlab:
-    api_token: "{{ jenkins_plugin_gitlab_api_token }}"
-    host_url: "{{ jenkins_plugin_gitlab_host_url }}"
-    ignore_cert_error: "{{ jenkins_plugin_gitlab_ignore_cert_error }}"
+    name: "{{ item.name }}"
+    api_token: "{{ item.api_token }}"
+    host_url: "{{ item.host_url }}"
+    ignore_cert_error: "{{ item.ignore_cert_error }}"
+    connection_timeout: "{{ item.connection_timeout }}"
+    read_timeout: "{{ item.read_timeout }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
     url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_gitlab'
+  with_items: "{{ jenkins_plugin_gitlab }}"
   when:
     - "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
     - "{{ jenkins_plugin_gitlab_manage_configuration }}"

@@ -185,9 +185,7 @@ jenkins_plugin_debian_package_builder_repo: []
 
 # Plugins: gitlab
 jenkins_plugin_gitlab_manage_configuration: True
-jenkins_plugin_gitlab_api_token: ''
-jenkins_plugin_gitlab_host_url: ''
-jenkins_plugin_gitlab_ignore_cert_error: False
+jenkins_plugin_gitlab: []
 
 # Plugins: hipchat
 jenkins_plugin_hipchat_manage_configuration: True

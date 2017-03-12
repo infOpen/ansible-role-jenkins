@@ -10,6 +10,9 @@ def main():
 
     module = AnsibleModule(
         argument_spec=dict(
+            name=dict(
+                type='str',
+                required=True),
             api_token=dict(
                 type='str',
                 required=True),
@@ -20,6 +23,14 @@ def main():
                 type='bool',
                 required=False,
                 default=False),
+            connection_timeout=dict(
+                type='int',
+                required=False,
+                default=10),
+            read_timeout=dict(
+                type='int',
+                required=False,
+                default=10),
             deployment_ssh_key=dict(
                 type='str',
                 required=False,

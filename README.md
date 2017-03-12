@@ -213,9 +213,7 @@ Follow the possible variables with their default values
 
     # Plugins: gitlab
     jenkins_plugin_gitlab_manage_configuration: True
-    jenkins_plugin_gitlab_api_token: ''
-    jenkins_plugin_gitlab_host_url: ''
-    jenkins_plugin_gitlab_ignore_cert_error: False
+    jenkins_plugin_gitlab: []
 
     # Plugins: hipchat
     jenkins_plugin_hipchat_manage_configuration: True
@@ -364,6 +362,19 @@ You can manage Github plugin serveurs with this structure:
 
 You can remove all servers before plugin configuration. Just set True to
 "jenkins_plugins_github_remove_servers" variable.
+
+### Gitlab connections
+
+You can manage GitLab plugin connections with this structure:
+```
+jenkins_plugin_gitlab:
+  - name: 'foo'
+    api_token: 'gitlab-api'
+    host_url: 'http://localhost:443/gitlab'
+    ignore_cert_error: True
+    connection_timeout: 10
+    read_timeout: 10
+```
 
 ### Hipchat notifications
 
