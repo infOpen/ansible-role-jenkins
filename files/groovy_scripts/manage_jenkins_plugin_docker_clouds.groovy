@@ -11,6 +11,7 @@ import groovy.json.*
 import hudson.model.*
 import hudson.plugins.sshslaves.SSHConnector
 import hudson.slaves.Cloud
+import hudson.slaves.CloudRetentionStrategy
 import hudson.slaves.RetentionStrategy
 import jenkins.model.*
 
@@ -330,6 +331,204 @@ def Boolean add_cloud(Jenkins jenkins_instance, Map data) {
 
 
 /**
+    Check if two docker cloud base templates have same properties
+
+    @param DockerTemplateBase First cloud template base object
+    @param DockerTemplateBase Second cloud template base object
+    @return Boolean True if configuration have same properties
+*/
+def Boolean are_same_template_bases(DockerTemplateBase base_a, DockerTemplateBase base_b) {
+
+    try {
+        def List<Boolean> has_changed = []
+
+        has_changed.push(base_a.getImage() != base_b.getImage())
+        has_changed.push(base_a.getDnsString() != base_b.getDnsString())
+        has_changed.push(base_a.getVolumesString() != base_b.getVolumesString())
+        has_changed.push(base_a.getVolumesFromString() != base_b.getVolumesFromString())
+        has_changed.push(base_a.getMacAddress() != base_b.getMacAddress())
+        has_changed.push(base_a.getDisplayName() != base_b.getDisplayName())
+        has_changed.push(base_a.getMemoryLimit() != base_b.getMemoryLimit())
+        has_changed.push(base_a.getMemorySwap() != base_b.getMemorySwap())
+        has_changed.push(base_a.getCpuShares() != base_b.getCpuShares())
+        has_changed.push(base_a.getDockerCommandArray() != base_b.getDockerCommandArray())
+        has_changed.push(base_a.getPortMappings() != base_b.getPortMappings())
+        has_changed.push(base_a.getLxcConf() != base_b.getLxcConf())
+        has_changed.push(base_a.getEnvironmentsString() != base_b.getEnvironmentsString())
+        has_changed.push(base_a.getExtraHostsString() != base_b.getExtraHostsString())
+
+        return !has_changed.any()
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Check if two Docker retention policies have same properties error, '
+            + 'error message : ' + e.getMessage())
+    }
+}
+
+
+/**
+    Check if two docker cloud retention policies have same properties
+
+    @param CloudRetentionStrategy First cloud retention policy object
+    @param CloudRetentionStrategy Second cloud retention policy object
+    @return Boolean True if configuration have same properties
+*/
+def Boolean are_same_retention_policies(CloudRetentionStrategy retention_a, CloudRetentionStrategy retention_b) {
+
+    try {
+        if (retention_a.getClass() != retention_b.getClass()) {
+            return false
+        }
+
+        if (retention_a.getIdleMinutes() != retention_b.getIdleMinutes()) {
+            return false
+        }
+
+        return true
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Check if two Docker retention policies have same properties error, '
+            + 'error message : ' + e.getMessage())
+    }
+}
+
+
+/**
+    Check if two docker cloud launchers have same properties
+
+    @param DockerComputerLauncher First launcher object
+    @param DockerComputerLauncher Second launcher object
+    @return Boolean True if configuration have same properties
+*/
+def Boolean are_same_launchers(DockerComputerLauncher launcher_a,
+                               DockerComputerLauncher launcher_b) {
+
+    try {
+        def List<Boolean> has_changed = []
+
+        if (launcher_a.getClass().getName() != launcher_b.getClass().getName()) {
+            return false
+        }
+
+        def String launchers_class = launcher_a.getClass().getName()
+        if (launchers_class == 'com.nirima.jenkins.plugins.docker.launcher.DockerComputerSSHLauncher') {
+            def SSHConnector connector_a = launcher_a.getSshConnector()
+            def SSHConnector connector_b = launcher_b.getSshConnector()
+
+            has_changed.push(connector_a.port != connector_b.port)
+            has_changed.push(connector_a.getCredentialsId() != connector_b.getCredentialsId())
+            has_changed.push(connector_a.retryWaitTime != connector_b.retryWaitTime)
+            has_changed.push(connector_a.maxNumRetries != connector_b.maxNumRetries)
+            has_changed.push(connector_a.launchTimeoutSeconds != connector_b.launchTimeoutSeconds)
+            has_changed.push(connector_a.suffixStartSlaveCmd != connector_b.suffixStartSlaveCmd)
+            has_changed.push(connector_a.prefixStartSlaveCmd != connector_b.prefixStartSlaveCmd)
+            has_changed.push(connector_a.javaPath != connector_b.javaPath)
+            has_changed.push(connector_a.jvmOptions != connector_b.jvmOptions)
+
+            if ((connector_a.jdkInstaller != null) && (connector_b.jdkInstaller != null)) {
+                has_changed.push(connector_a.jdkInstaller.id != connector_b.jdkInstaller.id)
+            } else if ((connector_a.jdkInstaller != null) || (connector_b.jdkInstaller != null)) {
+                has_changed.push(true)
+            }
+        } else if (launchers_class == 'com.nirima.jenkins.plugins.docker.launcher.DockerComputerJNLPLauncher') {
+            has_changed.push(launcher_a.getJnlpLauncher().equals(launcher_b.getJnlpLauncher()))
+            has_changed.push(launcher_a.getUser() != launcher_b.getUser())
+        } else {
+            throw new Exception('Docker launcher class unmanaged')
+        }
+
+        return !has_changed.any()
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Check if two Docker launchers have same content error, '
+            + 'error message : ' + e.getMessage())
+    }
+}
+
+
+/**
+    Check if two docker cloud templates have same properties
+
+    @param List<DockerTemplate> First cloud object
+    @param List<DockerTemplate> Second cloud object
+    @return Boolean True if configuration have same properties
+*/
+def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemplate> templates_b) {
+
+    try {
+        def List<Boolean> has_changed = []
+        def int index = 0
+
+        if (templates_a.size() != templates_b.size()) {
+            return false
+        }
+
+        for (DockerTemplate template_a : templates_a) {
+            has_changed.push(!are_same_template_bases(
+                template_a.getDockerTemplateBase(),
+                templates_b[index].getDockerTemplateBase()))
+            has_changed.push(template_a.getLabelString() != templates_b[index].getLabelString())
+            has_changed.push(template_a.getMode() != templates_b[index].getMode())
+            has_changed.push(template_a.getNumExecutors() != templates_b[index].getNumExecutors())
+            has_changed.push(!are_same_retention_policies(
+                template_a.getRetentionStrategy(),
+                templates_b[index].getRetentionStrategy()))
+            has_changed.push(!are_same_launchers(
+                template_a.getLauncher(), templates_b[index].getLauncher()))
+            has_changed.push(template_a.getRemoteFs() != templates_b[index].getRemoteFs())
+            has_changed.push(template_a.getInstanceCap() != templates_b[index].getInstanceCap())
+            has_changed.push(template_a.getRemoteFsMapping() != templates_b[index].getRemoteFsMapping())
+            has_changed.push(template_a.getLabelSet() != templates_b[index].getLabelSet())
+            has_changed.push(template_a.getPullStrategy() != templates_b[index].getPullStrategy())
+            has_changed.push(template_a.getShortDescription() != templates_b[index].getShortDescription())
+            index++
+        }
+
+        return !has_changed.any()
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Check if two Docker templates lists have same content error, '
+            + 'error message : ' + e.getMessage())
+    }
+}
+
+
+/**
+    Check if two docker cloud configurations have same properties
+
+    @param DockerCloud First cloud object
+    @param DockerCloud Second cloud object
+    @return Boolean True if configuration have same properties
+*/
+def Boolean is_same_cloud(DockerCloud cloud_a, DockerCloud cloud_b) {
+
+    try {
+        def List<Boolean> has_changed = []
+
+        has_changed.push(cloud_a.containerCap != cloud_b.containerCap)
+        has_changed.push(cloud_a.connectTimeout != cloud_b.connectTimeout)
+        has_changed.push(cloud_a.readTimeout != cloud_b.readTimeout)
+        has_changed.push(!are_same_templates(cloud_a.templates, cloud_b.templates))
+        has_changed.push(cloud_a.serverUrl != null ? !cloud_a.serverUrl.equals(cloud_b.serverUrl) : cloud_b.serverUrl != null)
+        has_changed.push(cloud_a.version != null ? !cloud_a.version.equals(cloud_b.version) : cloud_b.version != null)
+        has_changed.push(cloud_a.credentialsId != null ? !cloud_a.credentialsId.equals(cloud_b.credentialsId) : cloud_b.credentialsId != null)
+        has_changed.push(cloud_a.connection != null ? !cloud_a.connection.equals(cloud_b.connection) : cloud_b.connection != null)
+
+        return !has_changed.any()
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Check if two Docker cloud have same properties error, '
+            + 'error message : ' + e.getMessage())
+    }
+}
+
+
+/**
     Manage docker cloud configuration update
 
     @param Jenkins Jenkins instance
@@ -346,7 +545,7 @@ def Boolean update_cloud(Jenkins jenkins_instance,
         def DockerCloud new_cloud = create_cloud(data)
 
         // Check if something changes
-        if (cloud.equals(new_cloud)) {
+        if (is_same_cloud(cloud, new_cloud)) {
             return false
         }
         jenkins_instance.clouds.replace(cloud, new_cloud)
