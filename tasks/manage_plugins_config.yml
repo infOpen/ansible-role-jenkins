@@ -237,4 +237,5 @@
       or jenkins_change_plugin_debian_package_builder_remove_repo.changed
       or jenkins_change_plugin_debian_package_builder_repo.changed
       or jenkins_change_plugin_gitlab.changed
+      or jenkins_change_plugin_docker_clouds.changed
   }}"
