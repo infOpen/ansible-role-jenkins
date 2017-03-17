@@ -186,14 +186,15 @@ Follow the possible variables with their default values
 
     # Plugins: mailer
     jenkins_plugin_mailer_manage_configuration: True
-    jenkins_plugin_mailer_charset: 'UTF-8'
-    jenkins_plugin_mailer_default_suffix: ''
-    jenkins_plugin_mailer_reply_to: ''
-    jenkins_plugin_mailer_smtp_host: ''
-    jenkins_plugin_mailer_smtp_password: ''
-    jenkins_plugin_mailer_smtp_port: 25
-    jenkins_plugin_mailer_smtp_user: ''
-    jenkins_plugin_mailer_use_ssl: False
+    jenkins_plugin_mailer:
+      charset: 'UTF-8'
+      default_suffix: ''
+      reply_to: ''
+      smtp_host: ''
+      smtp_password: ''
+      smtp_port: 25
+      smtp_user: ''
+      use_ssl: False
 
     # Plugins: github
     jenkins_plugin_github_manage_configuration: True
