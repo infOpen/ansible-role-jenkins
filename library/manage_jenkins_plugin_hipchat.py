@@ -14,9 +14,13 @@ def main():
                 type='str',
                 required=False,
                 default='api.hipchat.com'),
-            token=dict(
+            credential_id=dict(
                 type='str',
                 required=True),
+            card_provider=dict(
+                type='str',
+                required=False,
+                default='jenkins.plugins.hipchat.impl.DefaultCardProvider'),
             v2_enabled=dict(
                 type='bool',
                 required=False,

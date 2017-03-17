@@ -166,11 +166,12 @@
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_hipchat:
-    server: "{{ jenkins_plugin_hipchat_server }}"
-    token: "{{ jenkins_plugin_hipchat_token }}"
-    v2_enabled: "{{ jenkins_plugin_hipchat_v2_enabled }}"
-    room: "{{ jenkins_plugin_hipchat_room }}"
-    send_as: "{{ jenkins_plugin_hipchat_send_as }}"
+    server: "{{ jenkins_plugin_hipchat.server | default(omit) }}"
+    card_provider: "{{ jenkins_plugin_hipchat.card_provider | default(omit) }}"
+    credential_id: "{{ jenkins_plugin_hipchat.credential_id }}"
+    v2_enabled: "{{ jenkins_plugin_hipchat.v2_enabled | default(omit) }}"
+    room: "{{ jenkins_plugin_hipchat.room }}"
+    send_as: "{{ jenkins_plugin_hipchat.send_as | default(omit) }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
@@ -238,4 +239,6 @@
       or jenkins_change_plugin_debian_package_builder_repo.changed
       or jenkins_change_plugin_gitlab.changed
       or jenkins_change_plugin_docker_clouds.changed
+      or jenkins_change_plugin_hipchat.changed
+      or jenkins_change_plugin_hipchat_notifications.changed
   }}"

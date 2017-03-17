@@ -217,11 +217,11 @@ Follow the possible variables with their default values
 
     # Plugins: hipchat
     jenkins_plugin_hipchat_manage_configuration: True
-    jenkins_plugin_hipchat_server: 'api.hipchat.com'
-    jenkins_plugin_hipchat_token: ''
-    jenkins_plugin_hipchat_v2_enabled: False
-    jenkins_plugin_hipchat_room: 'Continuous Integration'
-    jenkins_plugin_hipchat_send_as: 'Jenkins'
+    jenkins_plugin_hipchat:
+      server: 'api.hipchat.com'
+      v2_enabled: True
+      room: 'Continuous Integration'
+      send_as: 'Jenkins'
     jenkins_plugin_hipchat_notifications: []
 
     # Plugins: docker
