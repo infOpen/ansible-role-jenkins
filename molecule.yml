@@ -7,6 +7,203 @@ ansible:
   raw_env_vars:
     ANSIBLE_NOCOWS: 1
   group_vars:
+    all:
+      jenkins_etc_listen_address: '0.0.0.0'
+      jenkins_plugins:
+        - name: 'ansible'
+        - name: 'ansicolor'
+        - name: 'antisamy-markup-formatter'
+        - name: 'blueocean'
+        - name: 'cloudbees-folder'
+        - name: 'credentials-binding'
+        - name: 'debian-package-builder'
+        - name: 'docker-plugin'
+        - name: 'envinject'
+        - name: 'github'
+        - name: 'gitlab-plugin'
+        - name: 'graphiteIntegrator'
+        - name: 'hipchat'
+        - name: 'mailer'
+        - name: 'matrix-auth'
+        - name: 'pipeline-stage-view'
+        - name: 'ssh'
+        - name: 'workflow-aggregator'
+      jenkins_credentials:
+        - credentials_type: 'ssh_with_passphrase'
+          credentials_domain: 'global'
+          scope: 'global'
+          id: 'ssh-jenkins-master-user'
+          username: 'jenkins'
+          private_key_source_type: 'user'
+          private_key_source_data: 'foo'
+          private_key_passphrase: 'bar'
+          description: 'Jenkins user on local server'
+          state: 'present'
+        - credentials_type: 'password'
+          credentials_domain: 'global'
+          scope: 'global'
+          id: 'simple-jenkins-user'
+          username: 'jenkins'
+          password: 'jenkins'
+          description: 'Jenkins testing password credentials'
+          state: 'present'
+        - credentials_type: 'text'
+          credentials_domain: 'global'
+          scope: 'global'
+          id: 'simple-text-credentials'
+          text: 'loving_jenkins'
+          description: 'Jenkins testing text credentials'
+          state: 'present'
+        - credentials_type: 'gitlab_api_token'
+          credentials_domain: 'global'
+          scope: 'global'
+          id: 'gitlab-api'
+          text: 'gitlab_jenkins'
+          description: 'Gitlab Jenkins testing text credentials'
+          state: 'present'
+      jenkins_plugin_github_remove_servers: False
+      jenkins_plugin_github_servers:
+        - manage_hooks: False
+          credentials_id: 'simple-text-credentials'
+          custom_url: ''
+          client_cache_size: 20
+      jenkins_plugin_gitlab_manage_configuration: True
+      jenkins_plugin_gitlab:
+        - name: 'foo'
+          api_token: 'gitlab-api'
+          host_url: 'http://localhost:443/gitlab'
+          ignore_cert_error: True
+          connection_timeout: 10
+          read_timeout: 10
+        - name: 'bar'
+          api_token: 'gitlab-api'
+          host_url: 'http://localhost:443/gitlab2'
+          ignore_cert_error: True
+          connection_timeout: 10
+          read_timeout: 10
+      jenkins_plugin_hipchat:
+        server: 'api.hipchat.com'
+        credential_id: 'simple-text-credentials'
+        v2_enabled: True
+        room: 'Continuous Integration'
+        send_as: 'Jenkins'
+      jenkins_plugin_hipchat_notifications:
+        - notify_enabled: True
+          text_format: True
+          notification_type: 'STARTED'
+          color: 'GREEN'
+          message_template: 'foobar'
+          state: 'present'
+        - notify_enabled: True
+          text_format: True
+          notification_type: 'FAILURE'
+          color: 'RED'
+          message_template: null
+          state: 'absent'
+      jenkins_plugin_debian_package_builder_remove_repositories: False
+      jenkins_plugin_debian_package_builder_gpg:
+        name: 'Foo Bar'
+        email: 'foo@bar.fr'
+        public_key: 'foo_public_key'
+        private_key: 'foo_private_key'
+        passphrase: 'foo_passphrase'
+      jenkins_plugin_debian_package_builder_repo:
+        - name: 'repo_1'
+          method: 'scpb'
+          fqdn: 'foo.bar.fr'
+          incoming: '/foo'
+          login: 'foo'
+          key_path: '/bar/foo.key'
+          options: 'foo_options'
+          state: 'present'
+        - name: 'repo_2'
+          method: 'scpb'
+          fqdn: 'foobar.bar.fr'
+          incoming: '/foobar'
+          login: 'foobar'
+          key_path: '/bar/foobar.key'
+          options: 'foobar_options'
+          state: 'absent'
+      jenkins_plugin_docker_clouds:
+        - name: 'docker-cloud-test'
+          server_url: 'http://127.0.0.1:8081'
+          container_cap: 10
+          connect_timeout: 10
+          read_timeout: 10
+          credentials_id: 'simple-jenkins-user'
+          version: null
+          state: 'present'
+          templates:
+            - config_version: 2
+              label_string: ''
+              remote_fs_mapping: '/tmp'
+              remote_fs: '/home/jenkins'
+              instance_cap: 20
+              mode: 'NORMAL'
+              num_executors: 1
+              remove_volumes: False
+              pull_strategy: 'PULL_LATEST'
+              launcher:
+                class: 'ssh'
+                credentials_id: 'simple-jenkins-user'
+                jvm_options: []
+                java_path: ''
+                launch_timeout: 0
+                max_num_retries: 0
+                port: 22
+                prefix_start_slave_cmd: ''
+                suffix_start_slave_cmd: ''
+                retry_wait_time: 0
+              template_base:
+                image: 'evarga/jenkins-slave'
+                network: ''
+                docker_command: ''
+                lxc_conf_string: ''
+                hostname: ''
+                dns_hosts: []
+                volumes: []
+                volumes_from: []
+                environments: []
+                bind_ports: []
+                bind_all_ports: False
+                privileged: False
+                tty: False
+                extra_hosts: []
+                mac_address: ''
+                memory_limit: null
+                memory_swap: 0
+                cpu_shares: null
+              retention_strategy:
+                class: 'once'
+                idle_minutes: 10
+      jenkins_plugin_mailer:
+        charset: 'UTF-8'
+        default_suffix: 'bar.org'
+        reply_to: 'foo@bar.org'
+        smtp_host: 'localhost'
+        smtp_password: 'foobar'
+        smtp_user: 'foo'
+        smtp_port: 25
+        use_ssl: False
+      jenkins_users:
+        - username: 'admin'
+          full_name: 'Jenkins administrator user'
+          email: 'admin@foo.bar'
+          password: 'admin'
+          roles:
+            - 'jenkins-administer'
+          public_keys: []
+        - username: 'read'
+          full_name: 'Jenkins read only user'
+          email: 'read@foo.bar'
+          password: 'read'
+          roles:
+            - 'jenkins-read'
+            - 'item-build'
+            - 'item-discover'
+            - 'item-read'
+            - 'view-read'
+          public_keys: []
     os_xenial:
       openjdk_jdk_version: 8
       openjdk_jre_version: 8
