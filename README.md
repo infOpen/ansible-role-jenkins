@@ -160,6 +160,11 @@ Follow the possible variables with their default values
     jenkins_authorization_strategy:
       class: 'GlobalMatrixAuthorizationStrategy'
 
+    # Jenkins crumb issuer, set to disable because not work with CLI
+    jenkins_crumb:
+      issuer: ''
+      exclude_client_ip: False
+
     # Jenkins location settings
     jenkins_location_administrator_email: 'root@localhost'
     jenkins_location_administrator_full_name: 'Jenkins administrator'

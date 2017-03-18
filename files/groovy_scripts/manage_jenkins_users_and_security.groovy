@@ -4,6 +4,7 @@ import groovy.json.*
 import jenkins.model.*
 import hudson.model.*
 import hudson.security.*
+import hudson.security.csrf.CrumbIssuer
 
 
 /**
@@ -315,19 +316,34 @@ def manage_authorization_strategy(Jenkins jenkins_instance,
     @return Boolean True if crumb issuer changed
 */
 def manage_crumb_issuer(Jenkins jenkins_instance,
-                        String needed_crumb_issuer) {
+                        String crumb_issuer,
+                        Boolean crumb_ignore_client_ip) {
 
     // Get current strategy
-    def cur_crumb_issuer = jenkins_instance.getCrumbIssuer()
+    def CrumbIssuer cur_crumb_issuer = jenkins_instance.getCrumbIssuer()
+    def String cur_crumb_issuer_class = jenkins_instance.getCrumbIssuer().getClass().getName()
 
     // Check if the current crumb issuer is needed crumb issuer
-    // Only null is managed today
-    if (needed_crumb_issuer == '') {
+    if (crumb_issuer == '') {
         if (cur_crumb_issuer != null) {
             jenkins_instance.setCrumbIssuer(null)
             return true
         }
     }
+    else if (crumb_issuer == 'hudson.security.csrf.DefaultCrumbIssuer') {
+        if ((cur_crumb_issuer_class != crumb_issuer)
+            || (cur_crumb_issuer.isExcludeClientIPFromCrumb() != crumb_ignore_client_ip)) {
+            jenkins_instance.setCrumbIssuer(
+              new hudson.security.csrf.DefaultCrumbIssuer(crumb_ignore_client_ip)
+            )
+            return true
+        }
+    }
+    else {
+        throw new Exception("Unmanaged crumb issuer : " + crumb_issuer)
+    }
+
+    return false
 }
 
 
@@ -358,7 +374,10 @@ try {
     jenkins_instance.setAuthorizationStrategy(strategy)
 
     // Manage crumb issuer
-    crumb_changed = manage_crumb_issuer(jenkins_instance, data['crumb_issuer'])
+    crumb_changed = manage_crumb_issuer(
+                        jenkins_instance,
+                        data['crumb_issuer'],
+                        data['crumb_exclude_client_ip'])
 
     // Save new configuration to disk
     jenkins_instance.save()
