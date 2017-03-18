@@ -82,7 +82,9 @@ Follow the possible variables with their default values
 
     # Java and jenkins arguments
     jenkins_etc_java_args:
+      - '-Dhudson.diyChunking=false'
       - '-Djava.awt.headless=true'
+      - -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox; default-src 'none'; img-src 'self'; style-src 'self';\"
     jenkins_etc_args:
       - "--webroot=/var/cache/{{ jenkins_etc_name }}/war"
       - "--httpListenAddress={{ jenkins_etc_listen_address }}"
@@ -249,6 +251,14 @@ Follow the possible variables with their default values
       - 'python-httplib2'
 
 ## How configure ...
+
+### CSP
+
+Update "jenkins_etc_java_args" variable values, to set new CSP setting on this
+line:
+```
+-Dhudson.model.DirectoryBrowserSupport.CSP=
+```
 
 ### Application accounts
 
