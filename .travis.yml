@@ -24,7 +24,7 @@ script:
   - 'pip install tox-travis'
 
 script:
-  - 'tox -e "${TOXENV}"'
+  - 'travis_wait tox -e "${TOXENV}"'
 
 notifications:
   webhooks: 'https://galaxy.ansible.com/api/v1/notifications/'
