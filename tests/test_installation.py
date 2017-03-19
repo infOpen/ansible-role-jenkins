@@ -81,13 +81,18 @@ def test_jenkins_user_ssh_key(File):
     assert public_key.mode == 0o644
 
 
-def test_jenkins_service_state(Command, Service):
+def test_jenkins_service_state(Command, Service, SystemInfo):
     """
     Test Jenkins service state
     """
 
     assert Service('jenkins').is_enabled
-    assert 'is running' in Command.check_output('service jenkins status')
+
+    if SystemInfo.release == '16.04':
+        assert 'Active: active' in Command.check_output(
+                                        'service jenkins status')
+    else:
+        assert 'is running' in Command.check_output('service jenkins status')
 
 
 def test_listening_port(Socket):
