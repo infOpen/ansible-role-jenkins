@@ -87,12 +87,7 @@ def test_jenkins_service_state(Command, Service, SystemInfo):
     """
 
     assert Service('jenkins').is_enabled
-
-    if SystemInfo.release == '16.04':
-        assert 'Active: active' in Command.check_output(
-                                        'service jenkins status')
-    else:
-        assert 'is running' in Command.check_output('service jenkins status')
+    assert 'is running' in Command.check_output('service jenkins status')
 
 
 def test_listening_port(Socket):
