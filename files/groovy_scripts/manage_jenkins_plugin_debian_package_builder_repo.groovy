@@ -263,8 +263,8 @@ def Boolean add_repository(Descriptor desc,
                                                         data['fqdn'],
                                                         data['incoming'],
                                                         data['login'],
-                                                        data['key_path'],
-                                                        data['options'])
+                                                        data['options'],
+                                                        data['key_path'])
 
         repositories.push(repository)
         desc.repos = repositories
