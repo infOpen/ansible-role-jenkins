@@ -13,21 +13,15 @@ ansible:
         - name: 'ansible'
         - name: 'ansicolor'
         - name: 'antisamy-markup-formatter'
-        - name: 'blueocean'
-        - name: 'cloudbees-folder'
         - name: 'credentials-binding'
         - name: 'debian-package-builder'
         - name: 'docker-plugin'
-        - name: 'envinject'
         - name: 'github'
         - name: 'gitlab-plugin'
-        - name: 'graphiteIntegrator'
         - name: 'hipchat'
         - name: 'mailer'
         - name: 'matrix-auth'
-        - name: 'pipeline-stage-view'
         - name: 'ssh'
-        - name: 'workflow-aggregator'
       jenkins_credentials:
         - credentials_type: 'ssh_with_passphrase'
           credentials_domain: 'global'
@@ -61,6 +55,9 @@ ansible:
           text: 'gitlab_jenkins'
           description: 'Gitlab Jenkins testing text credentials'
           state: 'present'
+      jenkins_crumb:
+        issuer: 'hudson.security.csrf.DefaultCrumbIssuer'
+        exclude_client_ip: True
       jenkins_plugin_github_remove_servers: False
       jenkins_plugin_github_servers:
         - manage_hooks: False
