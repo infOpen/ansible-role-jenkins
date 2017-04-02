@@ -7,19 +7,14 @@ from os.path import basename
 
 
 module_args = dict(
-    user=dict(
-        type='dict',
-        required=True),
-    crumb_issuer=dict(
+    realm_class=dict(
         type='str',
-        required=False,
-        default=''),
-    crumb_exclude_client_ip=dict(
+        required=True),
+    allow_signup=dict(
         type='bool',
-        required=False,
-        default=False),
-    authorization_strategy=dict(
-        type='dict',
+        required=True),
+    capcha_enabled=dict(
+        type='bool',
         required=True),
     use_private_key=dict(
         type='bool',
@@ -48,7 +43,7 @@ def main():
 
     module = AnsibleModule(module_args)
 
-    script = "%s/manage_jenkins_users_and_security.groovy" % (
+    script = "%s/manage_jenkins_security_realm.groovy" % (
         module.params['groovy_scripts_path'])
 
     if (module.params['use_private_key']):

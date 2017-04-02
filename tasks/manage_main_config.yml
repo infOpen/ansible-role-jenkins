@@ -8,7 +8,6 @@
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
-    security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb.issuer }}"
     crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"
@@ -37,7 +36,6 @@
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
-    security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb.issuer }}"
     crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"
@@ -61,12 +59,60 @@
     - "{{ jenkins_change_deployment_user_without_ssh_key | failed }}"
 
 
+- name: 'Manage internal security realm'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  manage_jenkins_internal_security_realm:
+    realm_class: "{{ jenkins_security_realm.class }}"
+    allow_signup: "{{ jenkins_security_realm.allow_signup | default(false) }}"
+    capcha_enabled: "{{ jenkins_security_realm.capcha_enabled | default(false) }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
+  no_log: True
+  register: 'jenkins_change_users_or_security'
+  when: "{{ jenkins_security_realm.class == 'HudsonPrivateSecurityRealm' }}"
+
+
+- name: 'Manage LDAP security realm'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  manage_jenkins_ldap_security_realm:
+    realm_class: "{{ jenkins_security_realm.class }}"
+    server: "{{ jenkins_security_realm.server }}"
+    root_dn: "{{ jenkins_security_realm.root_dn }}"
+    user_search_base: "{{ jenkins_security_realm.user_search_base | default(omit) }}"
+    user_search: "{{ jenkins_security_realm.user_search | default(omit) }}"
+    group_search_base: "{{ jenkins_security_realm.group_search_base | default(omit) }}"
+    group_search_filter: "{{ jenkins_security_realm.group_search_filter | default(omit) }}"
+    group_membership_strategy_class: "{{ jenkins_security_realm.group_membership_strategy_class }}"
+    group_membership_strategy_value: "{{ jenkins_security_realm.group_membership_strategy_value }}"
+    manager_dn: "{{ jenkins_security_realm.manager_dn | default(omit) }}"
+    manager_password_secret: "{{ jenkins_security_realm.manager_password_secret | default(omit) }}"
+    inhibit_infer_root_dn: "{{ jenkins_security_realm.inhibit_infer_root_dn | default(omit) }}"
+    disable_mail_address_resolver: "{{ jenkins_security_realm.disable_mail_address_resolver | default(omit) }}"
+    cache_size: "{{ jenkins_security_realm.cache_size | default(omit) }}"
+    cache_ttl: "{{ jenkins_security_realm.cache_ttl | default(omit) }}"
+    environment_properties: "{{ jenkins_security_realm.environment_properties | default(omit) }}"
+    display_name_attribute_name: "{{ jenkins_security_realm.display_name_attribute_name | default(omit) }}"
+    mail_address_attribute_name: "{{ jenkins_security_realm.mail_address_attribute_name | default(omit) }}"
+    user_id_strategy: "{{ jenkins_security_realm.user_id_strategy | default(omit) }}"
+    group_id_strategy: "{{ jenkins_security_realm.group_id_strategy | default(omit) }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
+  no_log: True
+  register: 'jenkins_change_users_or_security'
+  when: "{{ jenkins_security_realm.class == 'LDAPSecurityRealm' }}"
+
+
 - name: 'Manage users and security'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_users_and_security:
     user: "{{ item }}"
-    security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
     crumb_issuer: "{{ jenkins_crumb.issuer }}"
     crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"

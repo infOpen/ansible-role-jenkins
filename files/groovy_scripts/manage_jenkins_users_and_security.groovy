@@ -267,27 +267,6 @@ def manage_authorization(GlobalMatrixAuthorizationStrategy strategy,
 
 
 /**
-    Manage jenkins realm
-
-    @param Jenkins Current jenkins instance
-    @return SecurityRealm Security realm managed
-*/
-def manage_security_realm(Jenkins jenkins_instance, Map needed_realm) {
-
-    // Get current realm
-    def cur_realm = jenkins_instance.getSecurityRealm()
-
-    // Check if the current realm is needed realm
-    if (needed_realm['class'] == 'HudsonPrivateSecurityRealm') {
-        if (cur_realm instanceof HudsonPrivateSecurityRealm) {
-            return cur_realm
-        }
-        return new HudsonPrivateSecurityRealm(false)
-    }
-}
-
-
-/**
     Manage authorization strategy
 
     @param Jenkins Current jenkins instance
@@ -358,12 +337,14 @@ try {
     // Get user data
     data = parse_data(args[0])
 
-    // Manage security realm
-    def realm = manage_security_realm(jenkins_instance, data['security_realm'])
+    // Get security realm
+    def realm = jenkins_instance.getSecurityRealm()
 
-    // Manage user account
-    user_changed = manage_user_account(realm, data['user'])
-    jenkins_instance.setSecurityRealm(realm)
+    // Manage user account if instance use internal database
+    if (realm.getClass().getName() == 'HudsonPrivateSecurityRealm') {
+        user_changed = manage_user_account(realm, data['user'])
+        jenkins_instance.setSecurityRealm(realm)
+    }
 
     // Manage authorization strategy
     def strategy = manage_authorization_strategy(
