@@ -15,9 +15,19 @@
   become: True
   lineinfile:
     dest: "{{ jenkins_etc_home_location }}/config.xml"
+    line: '\1<useSecurity>false</useSecurity>'
+    state: 'present'
+    backrefs: True
+    regexp: '^(\s*)<useSecurity>'
+
+
+- name: 'Add start comment block to disable security and authentication'
+  become: True
+  lineinfile:
+    dest: "{{ jenkins_etc_home_location }}/config.xml"
     line: '<!--'
     state: 'present'
-    insertbefore: '^\s*<useSecurity>'
+    insertafter: '^\s*<useSecurity>'
 
 
 - name: 'Add end comment block to disable security and authentication'
@@ -26,7 +36,7 @@
     dest: "{{ jenkins_etc_home_location }}/config.xml"
     line: '-->'
     state: 'present'
-    insertafter: '^\s*</securityRealm>'
+    insertafter: '\s*(</securityRealm|<securityRealm .*/)>'
   notify:
     - 'HANDLER | Remove Jenkins 2 administrative password file'
     - 'HANDLER | Remove Jenkins 2 administrative password workaround'
