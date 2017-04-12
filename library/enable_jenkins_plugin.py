@@ -41,12 +41,12 @@ def main():
 
     if module.params['use_ssh_key'] is False:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -noKeyAuth groovy %s %s" %
+            "java -jar %s -remoting -s '%s' -noKeyAuth groovy %s %s" %
             (module.params['cli_path'], module.params['url'],
              script, module.params['name']))
     else:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -i '%s' groovy %s %s" %
+            "java -jar %s -remoting -s '%s' -i '%s' groovy %s %s" %
             (module.params['cli_path'], module.params['url'],
              module.params['deployment_ssh_key'], script,
              module.params['name']))

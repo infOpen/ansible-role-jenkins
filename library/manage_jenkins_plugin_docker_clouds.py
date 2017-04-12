@@ -59,7 +59,7 @@ def main():
         module.params['groovy_scripts_path'])
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+        "java -jar %s -remoting -s '%s' -i '%s' groovy %s '%s'" %
         (module.params['cli_path'], module.params['url'],
          module.params['deployment_ssh_key'], script,
          json.dumps(module.params)))

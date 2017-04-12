@@ -9,3 +9,13 @@
     url: "{{ jenkins_cli_download_url }}"
     dest: "{{ jenkins_cli_path }}"
     force: True
+
+
+# Enable CLI
+- name: 'Enable CLI to use Groovy configuration for Jenkins'
+  copy:
+    src: "{{ role_path }}/files/jenkins.CLI.xml"
+    dest: "{{ jenkins_etc_home_location }}/jenkins.CLI.xml"
+    owner: "{{ jenkins_etc_user }}"
+    group: "{{ jenkins_etc_user }}"
+    mode: '0644'

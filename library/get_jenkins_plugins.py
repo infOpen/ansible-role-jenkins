@@ -41,11 +41,11 @@ def main():
 
     if module.params['use_ssh_key'] is False:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -noKeyAuth groovy %s" %
+            "java -jar %s -remoting -s '%s' -noKeyAuth groovy %s" %
             (jenkins_cli_path, jenkins_url, script))
     else:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -i '%s' groovy %s" %
+            "java -jar %s -remoting -s '%s' -i '%s' groovy %s" %
             (jenkins_cli_path, jenkins_url, deployment_ssh_key, script))
 
     if (rc != 0):

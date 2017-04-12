@@ -208,13 +208,6 @@ ansible:
         smtp_port: 25
         use_ssl: False
       jenkins_users:
-        - username: 'admin'
-          full_name: 'Jenkins administrator user'
-          email: 'admin@foo.bar'
-          password: 'admin'
-          roles:
-            - 'jenkins-administer'
-          public_keys: []
         - username: 'read'
           full_name: 'Jenkins read only user'
           email: 'read@foo.bar'
@@ -225,6 +218,13 @@ ansible:
             - 'item-discover'
             - 'item-read'
             - 'view-read'
+          public_keys: []
+        - username: 'write'
+          full_name: 'Jenkins rw user'
+          email: 'write@foo.bar'
+          password: 'write'
+          roles:
+            - 'jenkins-administer'
           public_keys: []
     os_xenial:
       openjdk_jdk_version: 8

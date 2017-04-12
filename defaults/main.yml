@@ -92,10 +92,10 @@ jenkins_config_slave_agent_port: 0
 # Jenkins users configuration
 jenkins_manage_users_and_security: True
 jenkins_deployment_user:
-  username: 'ansible'
-  full_name: 'Ansible deployment user'
-  email: 'ansible@foo.bar'
-  password: 'ansible'
+  username: 'admin'
+  full_name: 'Jenkins deployment user'
+  email: 'admin@foo.bar'
+  password: 'admin'
   ssh:
     private: ''
     public: ''

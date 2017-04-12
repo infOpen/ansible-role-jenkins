@@ -53,13 +53,13 @@ def main():
 
     if (module.params['use_private_key']):
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+            "java -jar %s -remoting -s '%s' -i '%s' groovy %s '%s'" %
             (module.params['cli_path'], module.params['url'],
              module.params['deployment_ssh_key'], script,
              json.dumps(module.params)))
     else:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' groovy %s '%s'" %
+            "java -jar %s -remoting -s '%s' -noKeyAuth groovy %s '%s'" %
             (module.params['cli_path'], module.params['url'], script,
              json.dumps(module.params)))
 
