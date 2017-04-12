@@ -10,8 +10,10 @@ ansible:
     all:
       jenkins_etc_listen_address: '0.0.0.0'
       jenkins_security_realm:
-        class: 'HudsonPrivateSecurityRealm'
-        #class: 'LDAPSecurityRealm'
+        realm_class: 'HudsonPrivateSecurityRealm'
+        allow_signup: False
+        capcha_enabled: False
+        #realm_class: 'LDAPSecurityRealm'
         #server: '127.0.0.1'
         #root_dn: 'dc=foo, dc=bar'
         #user_search_base: 'cn=foo'
@@ -251,6 +253,8 @@ docker:
       image_version: 'xenial'
       ansible_groups:
         - 'os_xenial'
+      port_bindings:
+        8080: 8080
 molecule:
   ignore_paths:
     - '.git'
