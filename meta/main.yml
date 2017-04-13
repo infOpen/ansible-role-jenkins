@@ -10,11 +10,7 @@ galaxy_info:
   platforms:
     - name: 'Ubuntu'
       versions:
-        - 'trusty'
         - 'xenial'
-    - name: 'Debian'
-      versions:
-        - 'jessie'
   galaxy_tags:
     - 'development'
     - 'web'

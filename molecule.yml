@@ -8,6 +8,8 @@ ansible:
     ANSIBLE_NOCOWS: 1
   group_vars:
     all:
+      openjdk_jdk_version: 8
+      openjdk_jre_version: 8
       jenkins_etc_listen_address: '0.0.0.0'
       jenkins_security_realm:
         realm_class: 'HudsonPrivateSecurityRealm'
@@ -228,13 +230,6 @@ ansible:
           roles:
             - 'jenkins-administer'
           public_keys: []
-    os_xenial:
-      openjdk_jdk_version: 8
-      openjdk_jre_version: 8
-  host_vars:
-    jenkins-vagrant-xenial64:
-      openjdk_jdk_version: 8
-      openjdk_jre_version: 8
 dependency:
   name: 'galaxy'
   requirements_file: 'requirements.yml'
@@ -242,12 +237,6 @@ driver:
   name: 'docker'
 docker:
   containers:
-    - name: 'jenkins-docker-jessie'
-      image: 'debian'
-      image_version: 'jessie'
-    - name: 'jenkins-docker-trusty'
-      image: 'ubuntu'
-      image_version: 'trusty'
     - name: 'jenkins-docker-xenial'
       image: 'ubuntu'
       image_version: 'xenial'
@@ -263,12 +252,6 @@ molecule:
     - '.vagrant'
 vagrant:
   platforms:
-    - name: 'jessie64'
-      box: 'debian/jessie64'
-      linked_clone: True
-    - name: 'trusty64'
-      box: 'ubuntu/trusty64'
-      linked_clone: True
     - name: 'xenial64'
       box: 'ubuntu/xenial64'
       linked_clone: True

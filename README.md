@@ -17,8 +17,6 @@ Locally, you can run tests on Docker (default driver) or Vagrant.
 Travis run tests using Docker driver only.
 
 Currently, tests are done on:
-- Debian Jessie
-- Ubuntu Trusty
 - Ubuntu Xenial
 and use:
 - Ansible 2.0.x
