@@ -95,4 +95,4 @@ def test_listening_port(Socket):
     Test process is running
     """
 
-    assert Socket('tcp://127.0.0.1:8080').is_listening
+    assert Socket('tcp://:::8080').is_listening
