@@ -48,6 +48,7 @@ ansible:
         - name: 'github'
         - name: 'gitlab-plugin'
         - name: 'hipchat'
+        - name: 'ldap'
         - name: 'mailer'
         - name: 'matrix-auth'
         - name: 'ssh'
