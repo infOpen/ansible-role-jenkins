@@ -6,12 +6,11 @@
   include_vars: "{{ role_path }}/vars/{{ ansible_os_family }}.yml"
 
 
-- name: 'INSTALL | Include debian install tasks'
-  include: "{{ role_path }}/tasks/install_debian.yml"
+- name: 'INSTALL | Include OS family install tasks'
+  include: "{{ role_path }}/tasks/install_{{ ansible_os_family | lower }}.yml"
   tags:
     - 'install'
     - 'jenkins'
-  when: "{{ ansible_os_family == 'Debian' }}"
 
 
 - name: 'CONFIG | Configure Jenkins user'
@@ -37,9 +36,8 @@
 
 - name: 'INSTALL | Restart jenkins if new version installed or startup change'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
-  when: "{{
-    jenkins_task_package_install.changed
-    or jenkins_task_default_config.changed }}"
+  when: "( jenkins_task_package_install.changed
+             or jenkins_task_default_config.changed)"
 
 
 - name: 'INSTALL | Install and configure Jenkins CLI'
@@ -68,8 +66,8 @@
   include: "{{ role_path }}/tasks/jenkins_2_workaround.yml"
   register: 'jenkins_authentication_disabled'
   when:
-    - "{{ jenkins_administrative_password_file_test.stat.exists is defined }}"
-    - "{{ jenkins_administrative_password_file_test.stat.exists }}"
+    - "jenkins_administrative_password_file_test.stat.exists is defined"
+    - "jenkins_administrative_password_file_test.stat.exists"
   tags:
     - 'configure'
     - 'jenkins'
@@ -98,7 +96,7 @@
 
 - name: 'CONFIG | Include groovy plugins configuration'
   include: "{{ role_path }}/tasks/manage_plugins_config.yml"
-  when: "{{ jenkins_plugins }}"
+  when: "(jenkins_plugins | length) > 1"
   tags:
     - 'configure'
     - 'jenkins'

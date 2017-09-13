@@ -15,8 +15,8 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_git'
   when:
-    - "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_git_manage_configuration }}"
+    - "'git' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_git_manage_configuration"
 
 
 - name: 'Manage mailer plugin configuration with new settings'
@@ -38,8 +38,8 @@
   no_log: True
   register: 'jenkins_change_plugin_mailer'
   when:
-    - "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_mailer_manage_configuration }}"
+    - "'mailer' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_mailer_manage_configuration"
 
 
 - name: 'Remove github plugin servers configuration'
@@ -53,9 +53,9 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_github_remove_servers'
   when:
-    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_github_remove_servers }}"
-    - "{{ jenkins_plugin_github_manage_configuration }}"
+    - "'github' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_github_remove_servers"
+    - "jenkins_plugin_github_manage_configuration"
 
 
 - name: 'Manage github plugin configuration with new settings'
@@ -73,8 +73,8 @@
   register: 'jenkins_change_plugin_github'
   with_items: "{{ jenkins_plugin_github_servers }}"
   when:
-    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_github_manage_configuration }}"
+    - "'github' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_github_manage_configuration"
 
 
 - name: 'Manage debian package builder plugin gpg configuration'
@@ -93,9 +93,8 @@
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_gpg'
   when:
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Remove debian package builder plugin repositories configuration'
@@ -109,10 +108,9 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_debian_package_builder_remove_repo'
   when:
-    - "{{ jenkins_plugin_debian_package_builder_remove_repositories }}"
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "jenkins_plugin_debian_package_builder_remove_repositories"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Manage debian package builder plugin repositories configuration'
@@ -135,9 +133,8 @@
   register: 'jenkins_change_plugin_debian_package_builder_repo'
   with_items: "{{ jenkins_plugin_debian_package_builder_repo }}"
   when:
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Manage gitlab plugin configuration'
@@ -158,8 +155,8 @@
   register: 'jenkins_change_plugin_gitlab'
   with_items: "{{ jenkins_plugin_gitlab }}"
   when:
-    - "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_gitlab_manage_configuration }}"
+    - "'gitlab-plugin' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_gitlab_manage_configuration"
 
 
 - name: 'Manage hipchat plugin configuration'
@@ -179,8 +176,8 @@
   no_log: True
   register: 'jenkins_change_plugin_hipchat'
   when:
-    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
+    - "'hipchat' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_hipchat_manage_configuration"
 
 
 - name: 'Manage hipchat plugin notifications'
@@ -200,8 +197,8 @@
   register: 'jenkins_change_plugin_hipchat_notifications'
   with_items: "{{ jenkins_plugin_hipchat_notifications }}"
   when:
-    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
+    - "'hipchat' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_hipchat_manage_configuration"
 
 
 - name: 'Manage docker plugin clouds'
@@ -223,13 +220,13 @@
   register: 'jenkins_change_plugin_docker_clouds'
   with_items: "{{ jenkins_plugin_docker_clouds }}"
   when:
-    - "{{ 'docker-plugin' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_docker_manage_configuration }}"
+    - "'docker-plugin' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_docker_manage_configuration"
 
 
 - name: 'Waiting jenkins restarted'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
-  when: "{{
+  when: "(
     jenkins_change_plugin_git.changed
       or jenkins_change_plugin_mailer.changed
       or jenkins_change_plugin_github_remove_servers.changed
@@ -241,4 +238,4 @@
       or jenkins_change_plugin_docker_clouds.changed
       or jenkins_change_plugin_hipchat.changed
       or jenkins_change_plugin_hipchat_notifications.changed
-  }}"
+  )"

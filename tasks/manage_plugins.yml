@@ -4,12 +4,12 @@
 
 - name: 'Manage plugins installation'
   include: "{{ role_path }}/tasks/manage_plugins_installation.yml"
-  when: "{{ jenkins_manage_plugin_install }}"
+  when: "jenkins_manage_plugin_install"
 
 
 - name: 'Manage plugins upgrade'
   include: "{{ role_path }}/tasks/manage_plugins_upgrade.yml"
-  when: "{{ jenkins_manage_plugin_upgrade }}"
+  when: "jenkins_manage_plugin_upgrade"
 
 
 - name: 'Enable plugins'
@@ -30,5 +30,5 @@
 - name: 'Restart Jenkins once all plugins enabled'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
   when:
-    - "{{ jenkins_tasks_enable_plugins is defined }}"
-    - "{{ jenkins_tasks_enable_plugins.changed }}"
+    - "jenkins_tasks_enable_plugins is defined"
+    - "jenkins_tasks_enable_plugins | changed"

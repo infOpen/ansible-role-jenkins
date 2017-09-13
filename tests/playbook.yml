@@ -28,7 +28,7 @@
       with_items:
         - 'curl'
         - 'openssh-client'
-      when: "{{ (ansible_os_family | lower) == 'debian' }}"
+      when: "(ansible_os_family | lower) == 'debian'"
 
 
 - hosts: 'all'

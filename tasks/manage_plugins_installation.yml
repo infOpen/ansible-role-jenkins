@@ -38,4 +38,4 @@
 
 - name: 'Restart Jenkins once all plugins installed'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
-  when: "{{ jenkins_tasks_install_plugins.changed }}"
+  when: "jenkins_tasks_install_plugins | changed"

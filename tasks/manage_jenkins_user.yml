@@ -18,8 +18,8 @@
       content: "{{ jenkins_deployment_user.ssh.public }}"
       mode: '0644'
   when:
-    - "{{ jenkins_deployment_user.ssh.private }}"
-    - "{{ jenkins_deployment_user.ssh.public }}"
+    - "jenkins_deployment_user.ssh.private"
+    - "jenkins_deployment_user.ssh.public"
 
 
 - name: 'Create SSH key for Jenkins user if not defined'

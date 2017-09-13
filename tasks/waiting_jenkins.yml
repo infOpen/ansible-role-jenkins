@@ -5,9 +5,8 @@
     url: "{{ jenkins_base_url }}/"
     status_code: '200,403'
   register: 'jenkins_check_available'
-  until: "{{
-    (jenkins_check_available.status == 200)
-    or (jenkins_check_available.status == 403) }}"
+  until: "(jenkins_check_available.status == 200)
+             or (jenkins_check_available.status == 403)"
   retries: "{{ jenkins_waiting_available_retries }}"
   delay: "{{ jenkins_waiting_available_delay }}"
   changed_when: False

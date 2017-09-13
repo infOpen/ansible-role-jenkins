@@ -34,4 +34,4 @@
 
 - name: 'Restart Jenkins once all plugins upgraded'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
-  when: "{{ jenkins_tasks_upgrade_plugins.changed }}"
+  when: "jenkins_tasks_upgrade_plugins | changed"
