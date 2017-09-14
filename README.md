@@ -1,6 +1,10 @@
 # jenkins
 
-[![Build Status](https://travis-ci.org/infOpen/ansible-role-jenkins.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-jenkins)
+[![Build Status](https://img.shields.io/travis/infOpen/ansible-role-jenkins/master.svg?label=travis_master)](https://travis-ci.org/infOpen/ansible-role-jenkins)
+[![Build Status](https://img.shields.io/travis/infOpen/ansible-role-jenkins/develop.svg?label=travis_develop)](https://travis-ci.org/infOpen/ansible-role-jenkins)
+[![Updates](https://pyup.io/repos/github/infOpen/ansible-role-jenkins/shield.svg)](https://pyup.io/repos/github/infOpen/ansible-role-jenkins/)
+[![Python 3](https://pyup.io/repos/github/infOpen/ansible-role-jenkins/python-3-shield.svg)](https://pyup.io/repos/github/infOpen/ansible-role-jenkins/)
+[![Ansible Role](https://img.shields.io/ansible/role/9333.svg)](https://galaxy.ansible.com/infOpen/jenkins/)
 
 Install and configure Jenkins and some plugins.
 
