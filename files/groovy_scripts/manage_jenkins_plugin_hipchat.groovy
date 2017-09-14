@@ -54,22 +54,22 @@ def Boolean manage_server(Descriptor desc, Map data) {
 
 
 /**
-    Manage hipchat token configuration
+    Manage hipchat card provider configuration
 
     @param Descriptor Hipchat plugin descriptor
     @param Map Needed configuration
     @return Boolean True if configuration change everything, else false
 */
-def Boolean manage_token(Descriptor desc, Map data) {
+def Boolean manage_card_provider(Descriptor desc, Map data) {
 
     try {
 
-        // Get current token
-        def String cur_token = desc.getToken()
+        // Get current card provider
+        def String cur_provider = desc.getCardProvider()
 
         // Change setting if different value
-        if (cur_token != data['token']) {
-            desc.setToken(data['token'])
+        if (cur_provider != data['card_provider']) {
+            desc.setToken(data['card_provider'])
             return true
         }
 
@@ -77,19 +77,52 @@ def Boolean manage_token(Descriptor desc, Map data) {
     }
     catch(Exception e) {
         throw new Exception(
-            'Manage hipchat token error, error message : ' + e.getMessage())
+            'Manage hipchat card provider error, error message : '
+            + e.getMessage()
+        )
     }
 }
 
 
 /**
-    Manage hipchat v2 enable configuration
+    Manage hipchat credential id configuration
 
     @param Descriptor Hipchat plugin descriptor
     @param Map Needed configuration
     @return Boolean True if configuration change everything, else false
 */
-def Boolean manage_v2_enable(Descriptor desc, Map data) {
+def Boolean manage_credential_id(Descriptor desc, Map data) {
+
+    try {
+
+        // Get current credential id
+        def String cur_credential = desc.getCredentialId()
+
+        // Change setting if different value
+        if (cur_credential != data['credential_id']) {
+            desc.setCredentialId(data['credential_id'])
+            return true
+        }
+
+        return false
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Manage hipchat credential ID error, error message : '
+            + e.getMessage()
+        )
+    }
+}
+
+
+/**
+    Manage hipchat v2 enabled configuration
+
+    @param Descriptor Hipchat plugin descriptor
+    @param Map Needed configuration
+    @return Boolean True if configuration change everything, else false
+*/
+def Boolean manage_v2_enabled(Descriptor desc, Map data) {
 
     try {
 
@@ -106,7 +139,7 @@ def Boolean manage_v2_enable(Descriptor desc, Map data) {
     }
     catch(Exception e) {
         throw new Exception(
-            'Manage hipchat v2 enable error, error message : '
+            'Manage hipchat v2 enabled error, error message : '
             + e.getMessage())
     }
 }
@@ -183,8 +216,10 @@ try {
     def Map data = parse_data(args[0])
 
     // Manage new configuration
-    has_changed.push(manage_token(desc, data))
-    has_changed.push(manage_v2_enable(desc, data))
+    has_changed.push(manage_server(desc, data))
+    has_changed.push(manage_card_provider(desc, data))
+    has_changed.push(manage_credential_id(desc, data))
+    has_changed.push(manage_v2_enabled(desc, data))
     has_changed.push(manage_room(desc, data))
     has_changed.push(manage_send_as(desc, data))
 

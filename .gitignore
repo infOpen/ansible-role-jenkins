@@ -3,6 +3,7 @@
 *.retry
 
 # Ignore swap files
+*.swo
 *.swp
 
 # Ignore roles dependencies used for vagrant tests
@@ -12,3 +13,11 @@ tests/roles
 *.pyc
 .cache
 
+# Molecule
+.molecule
+
+# Tox
+.tox
+
+# Log files
+*.log

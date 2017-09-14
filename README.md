@@ -11,14 +11,31 @@ in the metadata file.
 
 ## Testing
 
-This role has two test methods:
+This role use [Molecule](https://github.com/metacloud/molecule/) to run tests.
 
-- localy with Vagrant (need vagrant-triggers plugin installed):
-    vagrant up
+Locally, you can run tests on Docker (default driver) or Vagrant.
+Travis run tests using Docker driver only.
 
-- automaticaly by Travis
+Currently, tests are done on:
+- Ubuntu Xenial
+and use:
+- Ansible 2.0.x
+- Ansible 2.1.x
+- Ansible 2.2.x
 
-Vagrant should be used to check the role before push changes to Github.
+### Running tests
+
+#### Using Docker driver
+
+```
+$ tox
+```
+
+#### Using Vagrant driver
+
+```
+$ MOLECULE_DRIVER=vagrant tox
+```````
 
 ## Role Variables
 
@@ -63,7 +80,9 @@ Follow the possible variables with their default values
 
     # Java and jenkins arguments
     jenkins_etc_java_args:
+      - '-Dhudson.diyChunking=false'
       - '-Djava.awt.headless=true'
+      - -Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox; default-src 'none'; img-src 'self'; style-src 'self';\"
     jenkins_etc_args:
       - "--webroot=/var/cache/{{ jenkins_etc_name }}/war"
       - "--httpListenAddress={{ jenkins_etc_listen_address }}"
@@ -141,6 +160,11 @@ Follow the possible variables with their default values
     jenkins_authorization_strategy:
       class: 'GlobalMatrixAuthorizationStrategy'
 
+    # Jenkins crumb issuer, set to disable because not work with CLI
+    jenkins_crumb:
+      issuer: ''
+      exclude_client_ip: False
+
     # Jenkins location settings
     jenkins_location_administrator_email: 'root@localhost'
     jenkins_location_administrator_full_name: 'Jenkins administrator'
@@ -167,14 +191,15 @@ Follow the possible variables with their default values
 
     # Plugins: mailer
     jenkins_plugin_mailer_manage_configuration: True
-    jenkins_plugin_mailer_charset: 'UTF-8'
-    jenkins_plugin_mailer_default_suffix: ''
-    jenkins_plugin_mailer_reply_to: ''
-    jenkins_plugin_mailer_smtp_host: ''
-    jenkins_plugin_mailer_smtp_password: ''
-    jenkins_plugin_mailer_smtp_port: 25
-    jenkins_plugin_mailer_smtp_user: ''
-    jenkins_plugin_mailer_use_ssl: False
+    jenkins_plugin_mailer:
+      charset: 'UTF-8'
+      default_suffix: ''
+      reply_to: ''
+      smtp_host: ''
+      smtp_password: ''
+      smtp_port: 25
+      smtp_user: ''
+      use_ssl: False
 
     # Plugins: github
     jenkins_plugin_github_manage_configuration: True
@@ -194,17 +219,15 @@ Follow the possible variables with their default values
 
     # Plugins: gitlab
     jenkins_plugin_gitlab_manage_configuration: True
-    jenkins_plugin_gitlab_api_token: ''
-    jenkins_plugin_gitlab_host_url: ''
-    jenkins_plugin_gitlab_ignore_cert_error: False
+    jenkins_plugin_gitlab: []
 
     # Plugins: hipchat
     jenkins_plugin_hipchat_manage_configuration: True
-    jenkins_plugin_hipchat_server: 'api.hipchat.com'
-    jenkins_plugin_hipchat_token: ''
-    jenkins_plugin_hipchat_v2_enabled: False
-    jenkins_plugin_hipchat_room: 'Continuous Integration'
-    jenkins_plugin_hipchat_send_as: 'Jenkins'
+    jenkins_plugin_hipchat:
+      server: 'api.hipchat.com'
+      v2_enabled: True
+      room: 'Continuous Integration'
+      send_as: 'Jenkins'
     jenkins_plugin_hipchat_notifications: []
 
     # Plugins: docker
@@ -226,6 +249,14 @@ Follow the possible variables with their default values
       - 'python-httplib2'
 
 ## How configure ...
+
+### CSP
+
+Update "jenkins_etc_java_args" variable values, to set new CSP setting on this
+line:
+```
+-Dhudson.model.DirectoryBrowserSupport.CSP=
+```
 
 ### Application accounts
 
@@ -285,6 +316,13 @@ This is an example of YAML structure to create these credentials for Jenkins.
         text: 'loving_jenkins'
         description: 'Jenkins testing text credentials'
         state: 'present'
+      - credentials_type: 'gitlab_api_token'
+        credentials_domain: 'global'
+        scope: 'global'
+        id: 'simple-gitlab-api-token-credentials'
+        text: 'loving_jenkins'
+        description: 'Jenkins testing Gitlab API credentials'
+        state: 'present'
 
 You can remove all credentials linked to a domain. Just set the domain list to
 "jenkins_credentials_domains_to_empty".
@@ -339,6 +377,19 @@ You can manage Github plugin serveurs with this structure:
 You can remove all servers before plugin configuration. Just set True to
 "jenkins_plugins_github_remove_servers" variable.
 
+### Gitlab connections
+
+You can manage GitLab plugin connections with this structure:
+```
+jenkins_plugin_gitlab:
+  - name: 'foo'
+    api_token: 'gitlab-api'
+    host_url: 'http://localhost:443/gitlab'
+    ignore_cert_error: True
+    connection_timeout: 10
+    read_timeout: 10
+```
+
 ### Hipchat notifications
 
 You can manage Hipchat plugin notifications with this structure:
@@ -386,6 +437,7 @@ You can manage Docker plugin clouds with this structure:
               retry_wait_time: 0
             template_base:
               image: 'evarga/jenkins-slave'
+              network: ''
               docker_command: ''
               lxc_conf_string: ''
               hostname: ''
@@ -408,8 +460,8 @@ You can manage Docker plugin clouds with this structure:
 
 ## Dependencies
 
-- achaussier.openjdk-jre
-- achaussier.openjdk-jdk
+- infOpen.openjdk-jre
+- infOpen.openjdk-jdk
 
 ## Example Playbook
 

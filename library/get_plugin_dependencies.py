@@ -3,7 +3,7 @@
 
 from ansible.module_utils.basic import *  # NOQA
 import json
-from os.path import basename
+from os.path import basename, splitext
 
 
 def main():
@@ -36,17 +36,17 @@ def main():
         )
     )
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/get_plugin_dependencies.groovy" % (
+        module.params['groovy_scripts_path'])
 
     if module.params['use_ssh_key'] is False:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -noKeyAuth groovy %s %s" %
+            "java -jar %s -remoting -s '%s' -noKeyAuth groovy %s %s" %
             (module.params['cli_path'], module.params['url'],
              script, module.params['name']))
     else:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -i '%s' groovy %s %s" %
+            "java -jar %s -remoting -s '%s' -i '%s' groovy %s %s" %
             (module.params['cli_path'], module.params['url'],
              module.params['deployment_ssh_key'], script,
              module.params['name']))

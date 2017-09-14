@@ -14,9 +14,13 @@ def main():
                 type='str',
                 required=False,
                 default='api.hipchat.com'),
-            token=dict(
+            credential_id=dict(
                 type='str',
                 required=True),
+            card_provider=dict(
+                type='str',
+                required=False,
+                default='jenkins.plugins.hipchat.impl.DefaultCardProvider'),
             v2_enabled=dict(
                 type='bool',
                 required=False,
@@ -46,11 +50,11 @@ def main():
         )
     )
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/manage_jenkins_plugin_hipchat.groovy" % (
+        module.params['groovy_scripts_path'])
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+        "java -jar %s -remoting -s '%s' -i '%s' groovy %s '%s'" %
         (module.params['cli_path'], module.params['url'],
          module.params['deployment_ssh_key'], script,
          json.dumps(module.params)))
