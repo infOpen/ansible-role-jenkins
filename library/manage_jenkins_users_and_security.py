@@ -10,13 +10,17 @@ module_args = dict(
     user=dict(
         type='dict',
         required=True),
+    security_realm=dict(
+        type='dict',
+        required=False),
     crumb_issuer=dict(
         type='str',
         required=False,
         default=''),
-    security_realm=dict(
-        type='dict',
-        required=True),
+    crumb_exclude_client_ip=dict(
+        type='bool',
+        required=False,
+        default=False),
     authorization_strategy=dict(
         type='dict',
         required=True),
@@ -47,18 +51,18 @@ def main():
 
     module = AnsibleModule(module_args)
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/manage_jenkins_users_and_security.groovy" % (
+        module.params['groovy_scripts_path'])
 
     if (module.params['use_private_key']):
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+            "java -jar %s -remoting -s '%s' -i '%s' groovy %s '%s'" %
             (module.params['cli_path'], module.params['url'],
              module.params['deployment_ssh_key'], script,
              json.dumps(module.params)))
     else:
         rc, stdout, stderr = module.run_command(
-            "java -jar %s -s '%s' groovy %s '%s'" %
+            "java -jar %s -remoting -s '%s' -noKeyAuth groovy %s '%s'" %
             (module.params['cli_path'], module.params['url'], script,
              json.dumps(module.params)))
 

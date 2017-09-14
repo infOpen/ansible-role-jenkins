@@ -3,7 +3,7 @@
 import groovy.json.*
 import hudson.model.*
 import jenkins.model.*
-import jenkins.plugins.hipchat.model.Color
+import jenkins.plugins.hipchat.model.notifications.Notification.Color
 import jenkins.plugins.hipchat.model.NotificationConfig
 import jenkins.plugins.hipchat.model.NotificationType
 

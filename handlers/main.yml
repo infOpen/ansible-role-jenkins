@@ -1,17 +1,26 @@
 ---
 
 # Handlers file for jenkins
+#==============================================================================
 
-- name: 'Remove Jenkins 2 administrative password file'
+- name: 'HANDLER | Remove Jenkins 2 administrative password file'
   become: True
   file:
     dest: "{{ jenkins_default_adm_passd_file }}"
     state: 'absent'
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::config'
+    - 'role::jenkins::install'
 
 
-- name: 'Remove Jenkins 2 administrative password workaround'
+- name: 'HANDLER | Remove Jenkins 2 administrative password workaround'
   become: True
   lineinfile:
     dest: '/etc/init.d/jenkins'
     line: 'DAEMON_ARGS="$DAEMON_ARGS --env=jenkins.install.state=INITIAL_SETUP_COMPLETED"'
     state: 'absent'
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::config'
+    - 'role::jenkins::install'

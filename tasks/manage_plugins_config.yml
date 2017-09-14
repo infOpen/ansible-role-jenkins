@@ -15,22 +15,22 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_git'
   when:
-    - "{{ 'git' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_git_manage_configuration }}"
+    - "'git' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_git_manage_configuration"
 
 
 - name: 'Manage mailer plugin configuration with new settings'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_mailer:
-    charset: "{{ jenkins_plugin_mailer_charset }}"
-    default_suffix: "{{ jenkins_plugin_mailer_default_suffix }}"
-    reply_to: "{{ jenkins_plugin_mailer_reply_to }}"
-    smtp_host: "{{ jenkins_plugin_mailer_smtp_host }}"
-    smtp_password: "{{ jenkins_plugin_mailer_smtp_password }}"
-    smtp_port: "{{ jenkins_plugin_mailer_smtp_port }}"
-    smtp_user: "{{ jenkins_plugin_mailer_smtp_user }}"
-    use_ssl: "{{ jenkins_plugin_mailer_use_ssl }}"
+    charset: "{{ jenkins_plugin_mailer.charset }}"
+    default_suffix: "{{ jenkins_plugin_mailer.default_suffix }}"
+    reply_to: "{{ jenkins_plugin_mailer.reply_to }}"
+    smtp_host: "{{ jenkins_plugin_mailer.smtp_host }}"
+    smtp_password: "{{ jenkins_plugin_mailer.smtp_password }}"
+    smtp_port: "{{ jenkins_plugin_mailer.smtp_port }}"
+    smtp_user: "{{ jenkins_plugin_mailer.smtp_user }}"
+    use_ssl: "{{ jenkins_plugin_mailer.use_ssl }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
@@ -38,8 +38,8 @@
   no_log: True
   register: 'jenkins_change_plugin_mailer'
   when:
-    - "{{ 'mailer' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_mailer_manage_configuration }}"
+    - "'mailer' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_mailer_manage_configuration"
 
 
 - name: 'Remove github plugin servers configuration'
@@ -53,9 +53,9 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_github_remove_servers'
   when:
-    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_github_remove_servers }}"
-    - "{{ jenkins_plugin_github_manage_configuration }}"
+    - "'github' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_github_remove_servers"
+    - "jenkins_plugin_github_manage_configuration"
 
 
 - name: 'Manage github plugin configuration with new settings'
@@ -73,8 +73,8 @@
   register: 'jenkins_change_plugin_github'
   with_items: "{{ jenkins_plugin_github_servers }}"
   when:
-    - "{{ 'github' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_github_manage_configuration }}"
+    - "'github' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_github_manage_configuration"
 
 
 - name: 'Manage debian package builder plugin gpg configuration'
@@ -93,9 +93,8 @@
   no_log: True
   register: 'jenkins_change_plugin_debian_package_builder_gpg'
   when:
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Remove debian package builder plugin repositories configuration'
@@ -109,10 +108,9 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_plugin_debian_package_builder_remove_repo'
   when:
-    - "{{ jenkins_plugin_debian_package_builder_remove_repositories }}"
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "jenkins_plugin_debian_package_builder_remove_repositories"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Manage debian package builder plugin repositories configuration'
@@ -135,38 +133,42 @@
   register: 'jenkins_change_plugin_debian_package_builder_repo'
   with_items: "{{ jenkins_plugin_debian_package_builder_repo }}"
   when:
-    - "{{ 'debian-package-builder' in
-              (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_debian_package_builder_manage_configuration }}"
+    - "'debian-package-builder' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_debian_package_builder_manage_configuration"
 
 
 - name: 'Manage gitlab plugin configuration'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_gitlab:
-    api_token: "{{ jenkins_plugin_gitlab_api_token }}"
-    host_url: "{{ jenkins_plugin_gitlab_host_url }}"
-    ignore_cert_error: "{{ jenkins_plugin_gitlab_ignore_cert_error }}"
+    name: "{{ item.name }}"
+    api_token: "{{ item.api_token }}"
+    host_url: "{{ item.host_url }}"
+    ignore_cert_error: "{{ item.ignore_cert_error }}"
+    connection_timeout: "{{ item.connection_timeout }}"
+    read_timeout: "{{ item.read_timeout }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
     url: "{{ jenkins_base_url }}"
   no_log: True
   register: 'jenkins_change_plugin_gitlab'
+  with_items: "{{ jenkins_plugin_gitlab }}"
   when:
-    - "{{ 'gitlab-plugin' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_gitlab_manage_configuration }}"
+    - "'gitlab-plugin' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_gitlab_manage_configuration"
 
 
 - name: 'Manage hipchat plugin configuration'
   become: True
   become_user: "{{ jenkins_etc_user }}"
   manage_jenkins_plugin_hipchat:
-    server: "{{ jenkins_plugin_hipchat_server }}"
-    token: "{{ jenkins_plugin_hipchat_token }}"
-    v2_enabled: "{{ jenkins_plugin_hipchat_v2_enabled }}"
-    room: "{{ jenkins_plugin_hipchat_room }}"
-    send_as: "{{ jenkins_plugin_hipchat_send_as }}"
+    server: "{{ jenkins_plugin_hipchat.server | default(omit) }}"
+    card_provider: "{{ jenkins_plugin_hipchat.card_provider | default(omit) }}"
+    credential_id: "{{ jenkins_plugin_hipchat.credential_id }}"
+    v2_enabled: "{{ jenkins_plugin_hipchat.v2_enabled | default(omit) }}"
+    room: "{{ jenkins_plugin_hipchat.room }}"
+    send_as: "{{ jenkins_plugin_hipchat.send_as | default(omit) }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
@@ -174,8 +176,8 @@
   no_log: True
   register: 'jenkins_change_plugin_hipchat'
   when:
-    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
+    - "'hipchat' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_hipchat_manage_configuration"
 
 
 - name: 'Manage hipchat plugin notifications'
@@ -195,8 +197,8 @@
   register: 'jenkins_change_plugin_hipchat_notifications'
   with_items: "{{ jenkins_plugin_hipchat_notifications }}"
   when:
-    - "{{ 'hipchat' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_hipchat_manage_configuration }}"
+    - "'hipchat' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_hipchat_manage_configuration"
 
 
 - name: 'Manage docker plugin clouds'
@@ -218,19 +220,22 @@
   register: 'jenkins_change_plugin_docker_clouds'
   with_items: "{{ jenkins_plugin_docker_clouds }}"
   when:
-    - "{{ 'docker-plugin' in (jenkins_plugins | map(attribute='name')) }}"
-    - "{{ jenkins_plugin_docker_manage_configuration }}"
+    - "'docker-plugin' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_docker_manage_configuration"
 
 
 - name: 'Waiting jenkins restarted'
-  include: "{{ role_path }}/handlers/restart_and_waiting_jenkins.yml"
-  when: "{{
-            jenkins_change_plugin_git.changed
-              or jenkins_change_plugin_mailer
-              or jenkins_change_plugin_github_remove_servers
-              or jenkins_change_plugin_github
-              or jenkins_change_plugin_debian_package_builder_gpg
-              or jenkins_change_plugin_debian_package_builder_remove_repo
-              or jenkins_change_plugin_debian_package_builder_repo
-              or jenkins_change_plugin_gitlab
-        }}"
+  include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
+  when: "(
+    jenkins_change_plugin_git.changed
+      or jenkins_change_plugin_mailer.changed
+      or jenkins_change_plugin_github_remove_servers.changed
+      or jenkins_change_plugin_github.changed
+      or jenkins_change_plugin_debian_package_builder_gpg.changed
+      or jenkins_change_plugin_debian_package_builder_remove_repo.changed
+      or jenkins_change_plugin_debian_package_builder_repo.changed
+      or jenkins_change_plugin_gitlab.changed
+      or jenkins_change_plugin_docker_clouds.changed
+      or jenkins_change_plugin_hipchat.changed
+      or jenkins_change_plugin_hipchat_notifications.changed
+  )"

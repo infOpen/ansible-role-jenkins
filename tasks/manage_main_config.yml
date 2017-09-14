@@ -10,7 +10,8 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
-    crumb_issuer: "{{ jenkins_crumb_issuer }}"
+    crumb_issuer: "{{ jenkins_crumb.issuer }}"
+    crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"
     use_private_key: False
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
@@ -28,7 +29,7 @@
         - 'jenkins-administer'
       public_keys:
         - "{{ jenkins_user_ssh_public_key.stdout }}"
-  when: "{{ jenkins_manage_users_and_security }}"
+  when: "jenkins_manage_users_and_security"
 
 
 - name: 'Manage deployment user configuration using private key'
@@ -38,7 +39,8 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
-    crumb_issuer: "{{ jenkins_crumb_issuer }}"
+    crumb_issuer: "{{ jenkins_crumb.issuer }}"
+    crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
@@ -55,8 +57,8 @@
       public_keys:
         - "{{ jenkins_user_ssh_public_key.stdout }}"
   when:
-    - "{{ jenkins_manage_users_and_security }}"
-    - "{{ jenkins_change_deployment_user_without_ssh_key | failed }}"
+    - "jenkins_manage_users_and_security"
+    - "jenkins_change_deployment_user_without_ssh_key | failed"
 
 
 - name: 'Manage users and security'
@@ -66,7 +68,8 @@
     user: "{{ item }}"
     security_realm: "{{ jenkins_security_realm }}"
     authorization_strategy: "{{ jenkins_authorization_strategy }}"
-    crumb_issuer: "{{ jenkins_crumb_issuer }}"
+    crumb_issuer: "{{ jenkins_crumb.issuer }}"
+    crumb_exclude_client_ip: "{{ jenkins_crumb.exclude_client_ip }}"
     cli_path: "{{ jenkins_cli_path }}"
     deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
     groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
@@ -74,7 +77,7 @@
   no_log: True
   register: 'jenkins_change_users_or_security'
   with_items: "{{ jenkins_users }}"
-  when: "{{ jenkins_manage_users_and_security }}"
+  when: "jenkins_manage_users_and_security"
 
 
 - name: 'Manage main configuration with new settings'
@@ -112,6 +115,6 @@
     url: "{{ jenkins_base_url }}"
   register: 'jenkins_change_administrator_email_address'
   when:
-    - "{{ jenkins_location_administrator_email != '' }}"
-    - "{{ jenkins_location_administrator_full_name != '' }}"
-    - "{{ jenkins_location_url != '' }}"
+    - "jenkins_location_administrator_email != ''"
+    - "jenkins_location_administrator_full_name != ''"
+    - "jenkins_location_url != ''"

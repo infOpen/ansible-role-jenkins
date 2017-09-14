@@ -10,6 +10,9 @@ def main():
 
     module = AnsibleModule(
         argument_spec=dict(
+            name=dict(
+                type='str',
+                required=True),
             api_token=dict(
                 type='str',
                 required=True),
@@ -20,6 +23,14 @@ def main():
                 type='bool',
                 required=False,
                 default=False),
+            connection_timeout=dict(
+                type='int',
+                required=False,
+                default=10),
+            read_timeout=dict(
+                type='int',
+                required=False,
+                default=10),
             deployment_ssh_key=dict(
                 type='str',
                 required=False,
@@ -39,11 +50,11 @@ def main():
         )
     )
 
-    script = "%s/%s.groovy" % (module.params['groovy_scripts_path'],
-                               basename(__file__))
+    script = "%s/manage_jenkins_plugin_gitlab.groovy" % (
+        module.params['groovy_scripts_path'])
 
     rc, stdout, stderr = module.run_command(
-        "java -jar %s -s '%s' -i '%s' groovy %s '%s'" %
+        "java -jar %s -remoting -s '%s' -i '%s' groovy %s '%s'" %
         (module.params['cli_path'], module.params['url'],
          module.params['deployment_ssh_key'], script,
          json.dumps(module.params)))

@@ -2,105 +2,116 @@
 
 # Tasks file for jenkins
 
-- name: 'Load the OS specific varibles'
+- name: 'INIT | Load the OS specific varibles'
   include_vars: "{{ role_path }}/vars/{{ ansible_os_family }}.yml"
-
-
-- name: 'Include debian install tasks'
-  include: "{{ role_path }}/tasks/install_debian.yml"
   tags:
-    - 'install'
-    - 'jenkins'
-  when: "{{ ansible_os_family == 'Debian' }}"
+    - 'role::jenkins'
+    - 'role::jenkins::config'
+    - 'role::jenkins::init'
+    - 'role::jenkins::install'
 
 
-- name: 'Configure Jenkins user'
+- name: 'INSTALL | Include OS family install tasks'
+  include: "{{ role_path }}/tasks/install_{{ ansible_os_family | lower }}.yml"
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::install'
+
+
+- name: 'CONFIG | Configure Jenkins user'
   include: "{{ role_path }}/tasks/manage_jenkins_user.yml"
   tags:
-    - 'install'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::config'
+    - 'role::jenkins::install'
 
 
-- name: 'Ensure Jenkins is started'
+- name: 'INSTALL | Ensure Jenkins is started'
   become: True
   service:
     name: "{{ jenkins_service_name }}"
     state: 'started'
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Restart jenkins if new version installed'
-  include: "{{ role_path }}/handlers/restart_jenkins.yml"
-  when: "{{ jenkins_task_package_install.changed }}"
-
-
-- name: 'Waiting the application is available'
-  include: "{{ role_path }}/handlers/waiting_jenkins.yml"
-
-
-- name: 'Configure jenkins launching settings'
+- name: 'INSTALL | Configure jenkins launching settings'
   include: "{{ role_path }}/tasks/manage_startup.yml"
   tags:
-    - 'configure'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Install and configure Jenkins CLI'
+- name: 'INSTALL | Restart jenkins if new version installed or startup change'
+  include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
+  when: "( jenkins_task_package_install.changed
+             or jenkins_task_default_config.changed)"
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::install'
+
+
+- name: 'INSTALL | Install and configure Jenkins CLI'
   include: "{{ role_path }}/tasks/manage_cli.yml"
   tags:
-    - 'jenkins'
-    - 'install'
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Install groovy scripts'
+- name: 'INSTALL | Install groovy scripts'
   include: "{{ role_path }}/tasks/manage_groovy_scripts.yml"
   tags:
-    - 'jenkins'
-    - 'install'
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Check if Jenkins v2 default administrative password file exists'
+- name: 'INSTALL | Check if Jenkins v2 default administrative password file exists'
   become: True
   stat:
     path: "{{ jenkins_default_adm_passd_file }}"
   register: 'jenkins_administrative_password_file_test'
   changed_when: False
+  tags:
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Jenkins 2.0 default password protection workaround'
+- name: 'CONFIG | Jenkins 2.0 default password protection workaround'
   include: "{{ role_path }}/tasks/jenkins_2_workaround.yml"
   register: 'jenkins_authentication_disabled'
   when:
-    - "{{ jenkins_administrative_password_file_test.stat.exists is defined }}"
-    - "{{ jenkins_administrative_password_file_test.stat.exists }}"
+    - "jenkins_administrative_password_file_test.stat.exists is defined"
+    - "jenkins_administrative_password_file_test.stat.exists"
   tags:
-    - 'configure'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Manage plugins installations and upgrades'
+- name: 'INSTALL | Manage plugins installations and upgrades'
   include: "{{ role_path }}/tasks/manage_plugins.yml"
   tags:
-    - 'jenkins'
-    - 'install'
+    - 'role::jenkins'
+    - 'role::jenkins::install'
 
 
-- name: 'Include groovy main configuration'
+- name: 'CONFIG | Include groovy main configuration'
   include: "{{ role_path }}/tasks/manage_main_config.yml"
   tags:
-    - 'configure'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::config'
 
 
-- name: 'Manage jenkins credentials'
+- name: 'CONFIG | Manage jenkins credentials'
   include: "{{ role_path }}/tasks/manage_credentials.yml"
   tags:
-    - 'configure'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::config'
 
 
-- name: 'Include groovy plugins configuration'
+- name: 'CONFIG | Include groovy plugins configuration'
   include: "{{ role_path }}/tasks/manage_plugins_config.yml"
-  when: "{{ jenkins_plugins }}"
+  when: "(jenkins_plugins | length) > 1"
   tags:
-    - 'configure'
-    - 'jenkins'
+    - 'role::jenkins'
+    - 'role::jenkins::config'
