@@ -67,7 +67,7 @@
     path: "{{ item }}"
     owner: 'jenkins'
     group: 'jenkins'
-    mode: '0644'
+    mode: '0755'
     state: 'directory'
   with_items:
     - "{{ jenkins_etc_home_location }}/users"
