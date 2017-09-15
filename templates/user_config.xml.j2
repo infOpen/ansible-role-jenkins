@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<user>
+  <fullName>{{ jenkins_deployment_user.full_name }}</fullName>
+  <description></description>
+  <properties>
+    <org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
+      <authorizedKeys>{{ jenkins_user_ssh_public_key.stdout }}</authorizedKeys>
+    </org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
+  </properties>
+</user>
