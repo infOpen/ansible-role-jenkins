@@ -64,7 +64,7 @@
 - name: 'Check if deployment user config file exists'
   become: True
   stat:
-    dest: "{{ jenkins_etc_home_location }}/users/{{ jenkins_deployment_user.username }}/config.xml"
+    path: "{{ jenkins_etc_home_location }}/users/{{ jenkins_deployment_user.username }}/config.xml"
   register: 'check_jenkins_deployment_user_config_file'
 
 
