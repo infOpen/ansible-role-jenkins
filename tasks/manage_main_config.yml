@@ -61,6 +61,29 @@
     - "jenkins_change_deployment_user_without_ssh_key | failed"
 
 
+- name: 'Check if deployment user config file exists'
+  become: True
+  stat:
+    dest: "{{ jenkins_etc_home_location }}/users/{{ jenkins_deployment_user.username }}/config.xml"
+  register: 'check_jenkins_deployment_user_config_file'
+
+
+- name: 'Manage first deployment user configuration file'
+  become: True
+  template:
+    src: "{{ role_path }}/templates/user_config.xml.j2"
+    dest: "{{ jenkins_etc_home_location }}/users/{{ jenkins_deployment_user.username }}/config.xml"
+    owner: 'jenkins'
+    group: 'jenkins'
+    mode: '0644'
+  when: "not check_jenkins_deployment_user_config_file.stat.exists"
+
+
+- name: 'Restart jenkins if it is initial deployment'
+  include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
+  when: "not check_jenkins_deployment_user_config_file.stat.exists"
+
+
 - name: 'Manage users and security'
   become: True
   become_user: "{{ jenkins_etc_user }}"
