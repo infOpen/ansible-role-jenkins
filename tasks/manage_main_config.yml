@@ -61,6 +61,19 @@
     - "jenkins_change_deployment_user_without_ssh_key | failed"
 
 
+- name: 'Ensure Jenkins deployment user configuration folder exists'
+  become: True
+  file:
+    path: "{{ item }}"
+    owner: 'jenkins'
+    group: 'jenkins'
+    mode: '0644'
+    state: 'directory'
+  with_items:
+    - "{{ jenkins_etc_home_location }}/users"
+    - "{{ jenkins_etc_home_location }}/users/{{ jenkins_deployment_user.username }}"
+
+
 - name: 'Check if deployment user config file exists'
   become: True
   stat:
