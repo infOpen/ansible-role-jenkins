@@ -49,6 +49,7 @@ def DockerTemplateBase create_template_base(Map data) {
 
         template_base = new DockerTemplateBase(
                                 data['image'],
+                                data['pull_credentials_id'],
                                 data['dns_hosts'].join(' '),
                                 data['network'],
                                 data['docker_command'],
