@@ -158,6 +158,7 @@ ansible:
           connect_timeout: 10
           read_timeout: 10
           credentials_id: 'simple-jenkins-user'
+          docker_hostname: 'Foo'
           version: null
           state: 'present'
           templates:
@@ -170,7 +171,7 @@ ansible:
               num_executors: 1
               remove_volumes: False
               pull_strategy: 'PULL_LATEST'
-              launcher:
+              connector:
                 class: 'ssh'
                 credentials_id: 'simple-jenkins-user'
                 jvm_options: []

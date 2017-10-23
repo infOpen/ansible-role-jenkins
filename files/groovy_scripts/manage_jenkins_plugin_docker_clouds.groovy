@@ -4,8 +4,6 @@ import com.nirima.jenkins.plugins.docker.DockerCloud
 import com.nirima.jenkins.plugins.docker.DockerImagePullStrategy
 import com.nirima.jenkins.plugins.docker.DockerTemplate
 import com.nirima.jenkins.plugins.docker.DockerTemplateBase
-import com.nirima.jenkins.plugins.docker.launcher.DockerComputerLauncher
-import com.nirima.jenkins.plugins.docker.launcher.DockerComputerSSHLauncher
 import com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy
 import groovy.json.*
 import hudson.model.*
@@ -13,7 +11,10 @@ import hudson.plugins.sshslaves.SSHConnector
 import hudson.slaves.Cloud
 import hudson.slaves.CloudRetentionStrategy
 import hudson.slaves.RetentionStrategy
+import io.jenkins.docker.connector.DockerComputerConnector
+import io.jenkins.docker.connector.DockerComputerSSHConnector
 import jenkins.model.*
+import org.jenkinsci.plugins.docker.commons.credentials.DockerServerEndpoint
 
 
 /**
@@ -101,64 +102,61 @@ def DockerImagePullStrategy get_pull_strategy(String strategy_name) {
 
 
 /**
-    Create new SSH launcher
+    Create new SSH connector
 
     @param Map Needed configuration
-    @return DockerComputerSSHLauncher New docker SSH launcher
+    @return DockerComputerSSHConnector New docker SSH connector
 */
-def DockerComputerSSHLauncher create_ssh_launcher(Map data) {
+def DockerComputerSSHConnector create_ssh_connector(Map data) {
 
     try {
 
-        def SSHConnector ssh_connector = new SSHConnector (
-                                                data['port'],
-                                                data['credentials_id'],
-                                                data['jvm_options'].join(' '),
-                                                data['java_path'],
-                                                data['prefix_start_slave_cmd'],
-                                                data['suffix_start_slave_cmd'],
-                                                data['launch_timeout'],
-                                                data['max_num_retries'],
-                                                data['retry_wait_time'])
+        def DockerComputerSSHConnector ssh_connector
+        ssh_connector = new DockerComputerSSHConnector()
 
-        def DockerComputerSSHLauncher ssh_launcher
-        ssh_launcher = new DockerComputerSSHLauncher(ssh_connector)
-        return ssh_launcher
+        ssh_connector.setPort(data['port'])
+        ssh_connector.setJvmOptions(data['jvm_options'].join(' '))
+        ssh_connector.setJavaPath(data['java_path'])
+        ssh_connector.setPrefixStartSlaveCmd(data['prefix_start_slave_cmd'])
+        ssh_connector.setSuffixStartSlaveCmd(data['suffix_start_slave_cmd'])
+        ssh_connector.setLaunchTimeoutSeconds(data['launch_timeout'])
+
+        return ssh_connector
     }
     catch(Exception e) {
         throw new Exception(
-            'SSH docker launcher create error, error message : '
+            'SSH docker connector create error, error message : '
             + e.getMessage())
     }
 }
 
 
 /**
-    Create new Docker launcher
+    Create new Docker connector
 
     @param Map Needed configuration
-    @return DockerComputerSSHLauncher New docker SSH launcher
+    @return DockerComputerConnector New docker SSH launcher
 */
-def DockerComputerLauncher create_launcher(Map data) {
+def DockerComputerConnector create_connector(Map data) {
 
     try {
 
-        def DockerComputerLauncher launcher
+        def DockerComputerConnector connector
 
         switch (data['class']) {
 
             case 'ssh':
-                launcher = create_ssh_launcher(data)
+                connector = create_ssh_connector(data)
                 break
             default:
-                throw new Exception('Launcher type not managed')
+                throw new Exception('Connector type not managed')
         }
 
-        return launcher
+        return connector
     }
     catch(Exception e) {
         throw new Exception(
-            'Docker launcher create error, error message : ' + e.getMessage())
+            'Docker connector create error, error message : ' + e.getMessage())
     }
 }
 
@@ -210,7 +208,7 @@ def DockerTemplate create_template(Map data) {
         template_base = create_template_base(data['template_base'])
 
         // Create launcher
-        def DockerComputerLauncher launcher = create_launcher(data['launcher'])
+        def DockerComputerConnector connector = create_connector(data['connector'])
 
         // Create retention strategy
         def RetentionStrategy ret_strategy
@@ -227,12 +225,13 @@ def DockerTemplate create_template(Map data) {
                         data['label_string'],
                         data['remote_fs'],
                         data['remote_fs_mapping'],
-                        data['instance_cap'].toString())
+                        data['instance_cap'].toString(),
+                        [])
 
         // Additional settings
         tpl.setNumExecutors(data['num_executors'])
         tpl.setMode(Enum.valueOf(Node.Mode, data['mode']))
-        tpl.setLauncher(launcher)
+        tpl.setConnector(connector)
         tpl.setPullStrategy(pull_strategy)
         tpl.setRetentionStrategy(ret_strategy)
         tpl.setRemoveVolumes(data['remove_volumes'])
@@ -287,15 +286,19 @@ def DockerCloud create_cloud(Map data) {
         def List<? extends DockerTemplate> templates
         templates = create_templates(data['templates'])
 
+        def DockerServerEndpoint dockerHost = new DockerServerEndpoint(
+            data['server_url'],
+            data['credentials_id'],
+        )
         def DockerCloud cloud = new DockerCloud(
                                         data['name'],
                                         templates,
-                                        data['server_url'],
+                                        dockerHost,
                                         data['container_cap'],
                                         data['connect_timeout'],
                                         data['read_timeout'],
-                                        data['credentials_id'],
-                                        data['version'])
+                                        data['version'],
+                                        data['docker_hostname'])
 
         return cloud
     }
@@ -397,54 +400,42 @@ def Boolean are_same_retention_policies(CloudRetentionStrategy retention_a, Clou
 
 
 /**
-    Check if two docker cloud launchers have same properties
+    Check if two docker cloud connector have same properties
 
-    @param DockerComputerLauncher First launcher object
-    @param DockerComputerLauncher Second launcher object
+    @param DockerComputerConnector First connector object
+    @param DockerComputerConnector Second connector object
     @return Boolean True if configuration have same properties
 */
-def Boolean are_same_launchers(DockerComputerLauncher launcher_a,
-                               DockerComputerLauncher launcher_b) {
+def Boolean are_same_connectors(DockerComputerConnector connector_a,
+                                DockerComputerConnector connector_b) {
 
     try {
         def List<Boolean> has_changed = []
 
-        if (launcher_a.getClass().getName() != launcher_b.getClass().getName()) {
+        if (connector_a.getClass().getName() != connector_b.getClass().getName()) {
             return false
         }
 
-        def String launchers_class = launcher_a.getClass().getName()
-        if (launchers_class == 'com.nirima.jenkins.plugins.docker.launcher.DockerComputerSSHLauncher') {
-            def SSHConnector connector_a = launcher_a.getSshConnector()
-            def SSHConnector connector_b = launcher_b.getSshConnector()
-
-            has_changed.push(connector_a.port != connector_b.port)
-            has_changed.push(connector_a.getCredentialsId() != connector_b.getCredentialsId())
-            has_changed.push(connector_a.retryWaitTime != connector_b.retryWaitTime)
-            has_changed.push(connector_a.maxNumRetries != connector_b.maxNumRetries)
-            has_changed.push(connector_a.launchTimeoutSeconds != connector_b.launchTimeoutSeconds)
-            has_changed.push(connector_a.suffixStartSlaveCmd != connector_b.suffixStartSlaveCmd)
-            has_changed.push(connector_a.prefixStartSlaveCmd != connector_b.prefixStartSlaveCmd)
-            has_changed.push(connector_a.javaPath != connector_b.javaPath)
-            has_changed.push(connector_a.jvmOptions != connector_b.jvmOptions)
-
-            if ((connector_a.jdkInstaller != null) && (connector_b.jdkInstaller != null)) {
-                has_changed.push(connector_a.jdkInstaller.id != connector_b.jdkInstaller.id)
-            } else if ((connector_a.jdkInstaller != null) || (connector_b.jdkInstaller != null)) {
-                has_changed.push(true)
-            }
-        } else if (launchers_class == 'com.nirima.jenkins.plugins.docker.launcher.DockerComputerJNLPLauncher') {
-            has_changed.push(launcher_a.getJnlpLauncher().equals(launcher_b.getJnlpLauncher()))
-            has_changed.push(launcher_a.getUser() != launcher_b.getUser())
+        def String connectors_class = connector_a.getClass().getName()
+        if (connectors_class == 'io.jenkins.docker.connector.DockerComputerSSHConnector') {
+            has_changed.push(connector_a.getPort() != connector_b.getPort())
+            has_changed.push(connector_a.getJvmOptions() != connector_b.getJvmOptions())
+            has_changed.push(connector_a.getJavaPath() != connector_b.getJavaPath())
+            has_changed.push(connector_a.getPrefixStartSlaveCmd() != connector_b.getPrefixStartSlaveCmd())
+            has_changed.push(connector_a.getSuffixStartSlaveCmd() != connector_b.getSuffixStartSlaveCmd())
+            has_changed.push(connector_a.getLaunchTimeoutSeconds() != connector_b.getLaunchTimeoutSeconds())
+        } else if (connectors_class == 'io.jenkins.docker.connector.DockerComputerJNLPConnector') {
+            has_changed.push(connector_a.getJnlpLauncher().equals(connector_b.getJnlpLauncher()))
+            has_changed.push(connector_a.getUser() != connector_b.getUser())
         } else {
-            throw new Exception('Docker launcher class unmanaged')
+            throw new Exception('Docker connector class unmanaged')
         }
 
         return !has_changed.any()
     }
     catch(Exception e) {
         throw new Exception(
-            'Check if two Docker launchers have same content error, '
+            'Check if two Docker connectors have same content error, '
             + 'error message : ' + e.getMessage())
     }
 }
@@ -477,8 +468,8 @@ def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemp
             has_changed.push(!are_same_retention_policies(
                 template_a.getRetentionStrategy(),
                 templates_b[index].getRetentionStrategy()))
-            has_changed.push(!are_same_launchers(
-                template_a.getLauncher(), templates_b[index].getLauncher()))
+            has_changed.push(!are_same_connectors(
+                template_a.getConnector(), templates_b[index].getConnector()))
             has_changed.push(template_a.getRemoteFs() != templates_b[index].getRemoteFs())
             has_changed.push(template_a.getInstanceCap() != templates_b[index].getInstanceCap())
             has_changed.push(template_a.getRemoteFsMapping() != templates_b[index].getRemoteFsMapping())
@@ -509,6 +500,8 @@ def Boolean is_same_cloud(DockerCloud cloud_a, DockerCloud cloud_b) {
 
     try {
         def List<Boolean> has_changed = []
+        docker_host_a = cloud_a.getDockerHost()
+        docker_host_b = cloud_a.getDockerHost()
 
         has_changed.push(cloud_a.containerCap != cloud_b.containerCap)
         has_changed.push(cloud_a.connectTimeout != cloud_b.connectTimeout)
@@ -518,6 +511,8 @@ def Boolean is_same_cloud(DockerCloud cloud_a, DockerCloud cloud_b) {
         has_changed.push(cloud_a.version != null ? !cloud_a.version.equals(cloud_b.version) : cloud_b.version != null)
         has_changed.push(cloud_a.credentialsId != null ? !cloud_a.credentialsId.equals(cloud_b.credentialsId) : cloud_b.credentialsId != null)
         has_changed.push(cloud_a.connection != null ? !cloud_a.connection.equals(cloud_b.connection) : cloud_b.connection != null)
+        has_changed.push(docker_host_a.getCredentialsId() != docker_host_b.getCredentialsId())
+        has_changed.push(docker_host_a.getUri() != docker_host_b.getUri())
 
         return !has_changed.any()
     }

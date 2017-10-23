@@ -416,6 +416,7 @@ You can manage Docker plugin clouds with this structure:
         connect_timeout: 10
         read_timeout: 10
         credentials_id: 'simple-jenkins-user'
+        docker_hostname: 'Foo'
         version: null
         state: 'present'
         templates:
