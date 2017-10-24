@@ -416,6 +416,7 @@ You can manage Docker plugin clouds with this structure:
         connect_timeout: 10
         read_timeout: 10
         credentials_id: 'simple-jenkins-user'
+        docker_hostname: 'Foo'
         version: null
         state: 'present'
         templates:
@@ -441,6 +442,7 @@ You can manage Docker plugin clouds with this structure:
               retry_wait_time: 0
             template_base:
               image: 'evarga/jenkins-slave'
+              pull_credentials_id: ''
               network: ''
               docker_command: ''
               lxc_conf_string: ''
