@@ -429,9 +429,10 @@ You can manage Docker plugin clouds with this structure:
             num_executors: 1
             remove_volumes: False
             pull_strategy: 'PULL_LATEST'
-            launcher:
+            connector:
               class: 'ssh'
               credentials_id: 'simple-jenkins-user'
+              user: 'jenkins'
               jvm_options: []
               java_path: ''
               launch_timeout: 0

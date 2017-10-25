@@ -13,6 +13,7 @@ import hudson.slaves.CloudRetentionStrategy
 import hudson.slaves.RetentionStrategy
 import io.jenkins.docker.connector.DockerComputerConnector
 import io.jenkins.docker.connector.DockerComputerSSHConnector
+import io.jenkins.docker.connector.DockerComputerSSHConnector.InjectSSHKey
 import jenkins.model.*
 import org.jenkinsci.plugins.docker.commons.credentials.DockerServerEndpoint
 
@@ -112,7 +113,8 @@ def DockerComputerSSHConnector create_ssh_connector(Map data) {
     try {
 
         def DockerComputerSSHConnector ssh_connector
-        ssh_connector = new DockerComputerSSHConnector()
+        def InjectSSHKey ssh_key_strategy = new InjectSSHKey(data['user'])
+        ssh_connector = new DockerComputerSSHConnector(ssh_key_strategy)
 
         ssh_connector.setPort(data['port'])
         ssh_connector.setJvmOptions(data['jvm_options'].join(' '))
