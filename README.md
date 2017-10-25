@@ -431,8 +431,8 @@ You can manage Docker plugin clouds with this structure:
             pull_strategy: 'PULL_LATEST'
             connector:
               class: 'ssh'
-              credentials_id: 'simple-jenkins-user'
-              user: 'jenkins'
+              ssh_key_strategy_name: 'manually_configured_ssh_key'
+              ssh_key_strategy_value: 'simple-jenkins-user'
               jvm_options: []
               java_path: ''
               launch_timeout: 0

@@ -14,6 +14,8 @@ import hudson.slaves.RetentionStrategy
 import io.jenkins.docker.connector.DockerComputerConnector
 import io.jenkins.docker.connector.DockerComputerSSHConnector
 import io.jenkins.docker.connector.DockerComputerSSHConnector.InjectSSHKey
+import io.jenkins.docker.connector.DockerComputerSSHConnector.ManuallyConfiguredSSHKey
+import io.jenkins.docker.connector.DockerComputerSSHConnector.SSHKeyStrategy
 import jenkins.model.*
 import org.jenkinsci.plugins.docker.commons.credentials.DockerServerEndpoint
 
@@ -103,6 +105,35 @@ def DockerImagePullStrategy get_pull_strategy(String strategy_name) {
 
 
 /**
+    Create SSH strategy oject
+
+    @param Map Needed configuration
+    @return SSHKeyStrategy New docker SSH strategy
+*/
+def SSHKeyStrategy create_ssh_key_strategy(Map data) {
+
+    try {
+
+        if (data['ssh_key_strategy_name'] == 'inject_ssh_key') {
+            return new InjectSSHKey(data['ssh_key_strategy_value'])
+        }
+        else if (data['ssh_key_strategy_name'] == 'manually_configured_ssh_key') {
+            return new ManuallyConfiguredSSHKey(data['ssh_key_strategy_value'])
+        }
+        else {
+            throw new Exception('Docker SSH key strategy class unmanaged')
+        }
+
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Manage docker SSH key strategy create error, error message : '
+            + e.getMessage())
+    }
+}
+
+
+/**
     Create new SSH connector
 
     @param Map Needed configuration
@@ -112,8 +143,8 @@ def DockerComputerSSHConnector create_ssh_connector(Map data) {
 
     try {
 
+        def SSHKeyStrategy ssh_key_strategy = create_ssh_key_strategy(data)
         def DockerComputerSSHConnector ssh_connector
-        def InjectSSHKey ssh_key_strategy = new InjectSSHKey(data['user'])
         ssh_connector = new DockerComputerSSHConnector(ssh_key_strategy)
 
         ssh_connector.setPort(data['port'])
