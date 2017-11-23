@@ -203,3 +203,7 @@ jenkins_plugin_hipchat_notifications: []
 # Plugins: docker
 jenkins_plugin_docker_manage_configuration: True
 jenkins_plugin_docker_clouds: []
+
+# Plugins: workflow global libs
+jenkins_plugin_workflow_libs_manage_configuration: True
+jenkins_plugin_workflow_libs: []

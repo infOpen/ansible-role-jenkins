@@ -238,6 +238,10 @@ Follow the possible variables with their default values
     jenkins_plugin_docker_manage_configuration: True
     jenkins_plugin_docker_clouds: []
 
+    # Plugins: workflow global libs
+    jenkins_plugin_workflow_libs_manage_configuration: True
+    jenkins_plugin_workflow_libs: []
+
 ### Specific vars values for Debian family
 
     jenkins_repository_file_prefix: '/etc/apt/sources.list.d'

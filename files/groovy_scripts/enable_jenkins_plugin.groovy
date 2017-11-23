@@ -18,13 +18,13 @@ def check_args(plugin_name) {
 }
 
 // Enable plugin and its dependencies
-def enable_plugin(jenkins_pm, plugin) {
+def enable_plugin(jenkins_pm, plugin, plugin_name) {
 
     def plugins_enabled = []
 
     if (plugin == null) {
         throw new Exception(
-            "Plugin to enable cannot be null")
+            "Plugin to enable cannot be null - ${plugin_name}")
     }
 
     // Before enable durrent plugin, all dependencies should be enabled
@@ -35,7 +35,7 @@ def enable_plugin(jenkins_pm, plugin) {
 
             // Enable all required dependencies
             plugins_enabled.addAll(
-                enable_plugin(jenkins_pm, jenkins_pm.getPlugin(it.shortName)))
+                enable_plugin(jenkins_pm, jenkins_pm.getPlugin(it.shortName), it.shortName))
         }
     }
 
@@ -63,7 +63,8 @@ try {
 
     check_args(plugin_name)
     changes['enabled'] = enable_plugin(jenkins_pm,
-                                       jenkins_pm.getPlugin(plugin_name))
+                                       jenkins_pm.getPlugin(plugin_name),
+                                       plugin_name)
     jenkins_instance.save()
 }
 catch (e) {

@@ -224,6 +224,28 @@
     - "jenkins_plugin_docker_manage_configuration"
 
 
+- name: 'Manage workflow external libs'
+  become: True
+  become_user: "{{ jenkins_etc_user }}"
+  manage_jenkins_plugin_workflow_libs:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    scm: "{{ item.scm | default(omit) }}"
+    default_version: "{{ item.default_version | default(omit) }}"
+    implicit: "{{ item.implicit | default(omit) }}"
+    allow_version_override: "{{ item.allow_version_override | default(omit) }}"
+    include_in_changesets: "{{ item.include_in_changesets | default(omit) }}"
+    cli_path: "{{ jenkins_cli_path }}"
+    deployment_ssh_key: "{{ jenkins_deployment_ssh_key }}"
+    groovy_scripts_path: "{{ jenkins_groovy_scripts_path }}"
+    url: "{{ jenkins_base_url }}"
+  register: 'jenkins_change_plugin_workflow_libs'
+  with_items: "{{ jenkins_plugin_workflow_libs }}"
+  when:
+    - "'workflow-aggregator' in (jenkins_plugins | map(attribute='name'))"
+    - "jenkins_plugin_workflow_libs_manage_configuration"
+
+
 - name: 'Waiting jenkins restarted'
   include: "{{ role_path }}/tasks/restart_and_waiting_jenkins.yml"
   when: "(
@@ -238,4 +260,5 @@
       or jenkins_change_plugin_docker_clouds.changed
       or jenkins_change_plugin_hipchat.changed
       or jenkins_change_plugin_hipchat_notifications.changed
+      or jenkins_change_plugin_workflow_libs.changed
   )"
