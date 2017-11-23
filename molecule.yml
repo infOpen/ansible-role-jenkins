@@ -52,6 +52,7 @@ ansible:
         - name: 'mailer'
         - name: 'matrix-auth'
         - name: 'ssh'
+        - name: 'workflow-aggregator'
       jenkins_credentials:
         - credentials_type: 'ssh_with_passphrase'
           credentials_domain: 'global'
@@ -215,6 +216,17 @@ ansible:
         smtp_user: 'foo'
         smtp_port: 25
         use_ssl: False
+      jenkins_plugin_workflow_libs:
+        - name: 'foobar'
+          state: 'present'
+          scm:
+            type: 'git'
+            remote: 'https://github.com/infOpen/ansble-role-jenkins.git'
+            credentials_id: 'simple-jenkins-user'
+          default_version: 'foo'
+          implicit: True
+          allow_version_override: False
+          include_in_changesets: False
       jenkins_users:
         - username: 'read'
           full_name: 'Jenkins read only user'
@@ -263,8 +275,8 @@ vagrant:
     - name: 'virtualbox'
       type: 'virtualbox'
       options:
-        memory: 512
-        cpus: 1
+        memory: 4096
+        cpus: 4
   instances:
     - name: 'jenkins-vagrant'
       interfaces:
