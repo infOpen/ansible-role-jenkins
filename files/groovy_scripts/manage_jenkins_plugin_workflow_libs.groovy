@@ -39,18 +39,24 @@ def Object parse_data(String arg) {
 */
 def Boolean are_same_scm(SCMSource scm_a, SCMSource scm_b) {
 
-    def List<Boolean> checks = []
+    try {
+        def List<Boolean> checks = []
 
-    if (scm_a.getClass().getName() != scm_b.getClass().getName()) {
-        return false
+        if (scm_a.getClass().getName() != scm_b.getClass().getName()) {
+            return false
+        }
+
+        if (scm_a.getClass().getName() == 'jenkins.plugins.git.GitSCMSource') {
+            checks.add(scm_a.getCredentialsId() == scm_b.getCredentialsId())
+            checks.add(scm_a.getRemote() == scm_b.getRemote())
+        }
+
+        return checks.every()
     }
-
-    if (scm_a.getClass().getName() == 'jenkins.plugins.git.GitSCMSource') {
-        checks.add(scm_a.getCredentialsId() == scm_b.getCredentialsId())
-        checks.add(scm_a.getRemote() == scm_b.getRemote())
+    catch(e) {
+        throw new Exception(
+            "SCM compare error, error message : ${e.getMessage()}")
     }
-
-    return checks.every()
 }
 
 
@@ -75,7 +81,7 @@ def SCMSource manage_scm(Map data) {
     }
     catch(Exception e) {
         throw new Exception(
-            'SCM management error, error message : ' + e.getMessage())
+            "SCM management error, error message : ${e.getMessage()}")
     }
 }
 
@@ -89,17 +95,23 @@ def SCMSource manage_scm(Map data) {
 */
 def Boolean are_same_retrievers(LibraryRetriever retriever_a, LibraryRetriever retriever_b) {
 
-    def List<Boolean> checks = []
+    try {
+        def List<Boolean> checks = []
 
-    if (retriever_a.getClass().getName() != retriever_b.getClass().getName()) {
-        return false
+        if (retriever_a.getClass().getName() != retriever_b.getClass().getName()) {
+            return false
+        }
+
+        if (retriever_a.getClass().getName() == 'org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever') {
+            checks.add(are_same_scm(retriever_a.getScm(), retriever_b.getScm()))
+        }
+
+        return checks.every()
     }
-
-    if (retriever_a.getClass().getName() == 'org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever') {
-        checks.add(are_same_scm(retriever_a.getScm(), retriever_b.getScm()))
+    catch(e) {
+        throw new Exception(
+            "Retrievers compare error, error message : ${e.getMessage()}")
     }
-
-    return checks.every()
 }
 
 
@@ -123,7 +135,7 @@ def LibraryRetriever manage_retriever(Map data) {
     }
     catch(Exception e) {
         throw new Exception(
-            'Retriever management error, error message : ' + e.getMessage())
+            "Retriever management error, error message : ${e.getMessage()}")
     }
 }
 
@@ -137,15 +149,21 @@ def LibraryRetriever manage_retriever(Map data) {
 */
 def Boolean are_same_shared_libraries(LibraryConfiguration library_a, LibraryConfiguration library_b) {
 
-    def List<Boolean> checks = []
+    try {
+        def List<Boolean> checks = []
 
-    checks.add(library_a.getDefaultVersion() == library_b.getDefaultVersion())
-    checks.add(library_a.isImplicit() == library_b.isImplicit())
-    checks.add(library_a.isAllowVersionOverride() == library_b.isAllowVersionOverride())
-    checks.add(library_a.getIncludeInChangesets() == library_b.getIncludeInChangesets())
-    checks.add(are_same_retrievers(library_a.getRetriever(), library_b.getRetriever()))
+        checks.add(library_a.getDefaultVersion() == library_b.getDefaultVersion())
+        checks.add(library_a.isImplicit() == library_b.isImplicit())
+        checks.add(library_a.isAllowVersionOverride() == library_b.isAllowVersionOverride())
+        checks.add(library_a.getIncludeInChangesets() == library_b.getIncludeInChangesets())
+        checks.add(are_same_retrievers(library_a.getRetriever(), library_b.getRetriever()))
 
-    return checks.every()
+        return checks.every()
+    }
+    catch(e) {
+        throw new Exception(
+            "Libraries compare error, error message : ${e.getMessage()}")
+    }
 }
 
 
@@ -157,16 +175,22 @@ def Boolean are_same_shared_libraries(LibraryConfiguration library_a, LibraryCon
 */
 def LibraryConfiguration create_shared_library(Map data) {
 
-    def LibraryConfiguration library = null
-    def LibraryRetriever retriever = manage_retriever(data)
+    try {
+        def LibraryConfiguration library = null
+        def LibraryRetriever retriever = manage_retriever(data)
 
-    library = new LibraryConfiguration(data['name'], retriever)
-    library.setDefaultVersion(data.get('default_version', ''))
-    library.setImplicit(data.get('implicit', false))
-    library.setAllowVersionOverride(data.get('allow_version_override', true))
-    library.setIncludeInChangesets(data.get('include_in_changesets', true))
+        library = new LibraryConfiguration(data['name'], retriever)
+        library.setDefaultVersion(data.get('default_version', ''))
+        library.setImplicit(data.get('implicit', false))
+        library.setAllowVersionOverride(data.get('allow_version_override', true))
+        library.setIncludeInChangesets(data.get('include_in_changesets', true))
 
-    return library
+        return library
+    }
+    catch(e) {
+        throw new Exception(
+            "Library create error, error message : ${e.getMessage()}")
+    }
 }
 
 
@@ -180,12 +204,18 @@ def LibraryConfiguration create_shared_library(Map data) {
 */
 def Boolean add_shared_library(Descriptor desc, List<LibraryConfiguration> libraries, Map data) {
 
-    def LibraryConfiguration library = create_shared_library(data)
+    try {
+        def LibraryConfiguration library = create_shared_library(data)
 
-    libraries.add(library)
-    desc.setLibraries(libraries)
+        libraries.add(library)
+        desc.setLibraries(libraries)
 
-    return true
+        return true
+    }
+    catch(e) {
+        throw new Exception(
+            "Library add error, error message : ${e.getMessage()}")
+    }
 }
 
 
@@ -200,17 +230,23 @@ def Boolean add_shared_library(Descriptor desc, List<LibraryConfiguration> libra
 */
 def Boolean update_shared_library(Descriptor desc, List<LibraryConfiguration> libraries, Integer library_id, Map data) {
 
-    def LibraryConfiguration current_library = libraries[library_id]
-    def LibraryConfiguration new_library = create_shared_library(data)
+    try {
+        def LibraryConfiguration current_library = libraries[library_id]
+        def LibraryConfiguration new_library = create_shared_library(data)
 
-    if (are_same_shared_libraries(current_library, new_library)) {
-        return false
+        if (are_same_shared_libraries(current_library, new_library)) {
+            return false
+        }
+
+        libraries[library_id] = new_library
+        desc.setLibraries(libraries)
+
+        return true
     }
-
-    libraries[library_id] = new_library
-    desc.setLibraries(libraries)
-
-    return true
+    catch(e) {
+        throw new Exception(
+            "Library update error, error message : ${e.getMessage()}")
+    }
 }
 
 
@@ -223,15 +259,21 @@ def Boolean update_shared_library(Descriptor desc, List<LibraryConfiguration> li
 */
 def Integer get_library_id_by_name(List<LibraryConfiguration> libraries, name) {
 
-    def library_id = null
+    try {
+        def library_id = null
 
-    libraries.eachWithIndex{ library , index ->
-        if (library.getName() == name) {
-            library_id = index
+        libraries.eachWithIndex{ library , index ->
+            if (library.getName() == name) {
+                library_id = index
+            }
         }
-    }
 
-    return library_id
+        return library_id
+    }
+    catch(e) {
+        throw new Exception(
+            "Libraries get by name error, error message : ${e.getMessage()}")
+    }
 }
 
 
