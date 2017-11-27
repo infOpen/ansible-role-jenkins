@@ -217,16 +217,26 @@ ansible:
         smtp_port: 25
         use_ssl: False
       jenkins_plugin_workflow_libs:
+        - name: 'fake-library'
+          state: 'present'
+          scm:
+            type: 'git'
+            remote: 'https://fake.library.net'
+            credentials_id: 'simple-jenkins-user'
+          default_version: 'foo'
+          implicit: False
+          allow_version_override: False
+          include_in_changesets: False
         - name: 'foobar'
           state: 'present'
           scm:
             type: 'git'
-            remote: 'https://github.com/infOpen/ansble-role-jenkins.git'
+            remote: 'git+ssh://git@foo.bar/shared-libraries.git'
             credentials_id: 'simple-jenkins-user'
-          default_version: 'foo'
-          implicit: True
-          allow_version_override: False
-          include_in_changesets: False
+          default_version: 'master'
+          implicit: False
+          allow_version_override: True
+          include_in_changesets: True
       jenkins_users:
         - username: 'read'
           full_name: 'Jenkins read only user'

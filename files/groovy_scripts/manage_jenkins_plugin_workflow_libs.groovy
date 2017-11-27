@@ -198,15 +198,15 @@ def LibraryConfiguration create_shared_library(Map data) {
     Add shared library
 
     @param Descriptor Workflow libs plugin descriptor
-    @param List<LibraryConfiguration> libraries
     @param Map Library data
     @return Boolean True if configuration change everything, else false
 */
-def Boolean add_shared_library(Descriptor desc, List<LibraryConfiguration> libraries, Map data) {
+def Boolean add_shared_library(Descriptor desc, Map data) {
+
+        def LibraryConfiguration library = create_shared_library(data)
+        def List<LibraryConfiguration> libraries = desc.getLibraries()
 
     try {
-        def LibraryConfiguration library = create_shared_library(data)
-
         libraries.add(library)
         desc.setLibraries(libraries)
 
@@ -293,7 +293,7 @@ def Boolean manage_shared_library(Descriptor desc, Map data) {
 
         if (current_library_id == null) {
             if (data['state'] == 'present') {
-                return add_shared_library(desc, libraries, data)
+                return add_shared_library(desc, data)
             }
             return false
         }
