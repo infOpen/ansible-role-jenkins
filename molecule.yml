@@ -165,7 +165,6 @@ ansible:
           templates:
             - config_version: 2
               label_string: ''
-              remote_fs_mapping: '/tmp'
               remote_fs: '/home/jenkins'
               instance_cap: 20
               mode: 'NORMAL'
@@ -176,6 +175,7 @@ ansible:
                 class: 'ssh'
                 ssh_key_strategy_name: 'manually_configured_ssh_key'
                 ssh_key_strategy_value: 'ssh-jenkins-master-user'
+                ssh_verification_strategy: 'non_verifying'
                 jvm_options: []
                 java_path: ''
                 launch_timeout: 0
@@ -189,7 +189,6 @@ ansible:
                 pull_credentials_id: ''
                 network: ''
                 docker_command: ''
-                lxc_conf_string: ''
                 hostname: ''
                 dns_hosts: []
                 volumes: []
