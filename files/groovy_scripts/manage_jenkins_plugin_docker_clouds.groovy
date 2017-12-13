@@ -418,7 +418,6 @@ def Boolean are_same_template_bases(DockerTemplateBase base_a, DockerTemplateBas
         has_changed.push(base_a.getCpuShares() != base_b.getCpuShares())
         has_changed.push(base_a.getDockerCommandArray() != base_b.getDockerCommandArray())
         has_changed.push(base_a.getPortMappings() != base_b.getPortMappings())
-        has_changed.push(base_a.getLxcConf() != base_b.getLxcConf())
         has_changed.push(base_a.getEnvironmentsString() != base_b.getEnvironmentsString())
         has_changed.push(base_a.getExtraHostsString() != base_b.getExtraHostsString())
 
