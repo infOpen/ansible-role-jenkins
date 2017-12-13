@@ -8,6 +8,8 @@ import com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy
 import groovy.json.*
 import hudson.model.*
 import hudson.plugins.sshslaves.SSHConnector
+import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy;
+import hudson.plugins.sshslaves.verifiers.SshHostKeyVerificationStrategy;
 import hudson.slaves.Cloud
 import hudson.slaves.CloudRetentionStrategy
 import hudson.slaves.RetentionStrategy
@@ -60,7 +62,6 @@ def DockerTemplateBase create_template_base(Map data) {
                                 data['volumes'].join("\n"),
                                 data['volumes_from'].join("\n"),
                                 data['environments'].join("\n"),
-                                data['lxc_conf_string'],
                                 data['hostname'],
                                 data['memory_limit'],
                                 data['memory_swap'],
@@ -69,7 +70,8 @@ def DockerTemplateBase create_template_base(Map data) {
                                 data['bind_all_ports'],
                                 data['privileged'],
                                 data['tty'],
-                                data['mac_address'])
+                                data['mac_address'],
+                                data['extra_hosts'].join(' '))
 
         return template_base
     }
@@ -105,6 +107,32 @@ def DockerImagePullStrategy get_pull_strategy(String strategy_name) {
 
 
 /**
+    Create SSH verification strategy oject
+
+    @param Map Needed configuration
+    @return SshHostKeyVerificationStrategy New docker SSH verification strategy
+*/
+def SshHostKeyVerificationStrategy create_ssh_verification_strategy(Map data) {
+
+    try {
+
+        if (data['ssh_verification_strategy'] == 'non_verifying') {
+            return new NonVerifyingKeyVerificationStrategy()
+        }
+        else {
+            throw new Exception('Docker SSH verification strategy class unmanaged')
+        }
+
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Manage docker SSH verification strategy create error, error message : '
+            + e.getMessage())
+    }
+}
+
+
+/**
     Create SSH strategy oject
 
     @param Map Needed configuration
@@ -118,7 +146,8 @@ def SSHKeyStrategy create_ssh_key_strategy(Map data) {
             return new InjectSSHKey(data['ssh_key_strategy_value'])
         }
         else if (data['ssh_key_strategy_name'] == 'manually_configured_ssh_key') {
-            return new ManuallyConfiguredSSHKey(data['ssh_key_strategy_value'])
+            def SshHostKeyVerificationStrategy ssh_verification_strategy = create_ssh_verification_strategy(data)
+            return new ManuallyConfiguredSSHKey(data['ssh_key_strategy_value'], ssh_verification_strategy)
         }
         else {
             throw new Exception('Docker SSH key strategy class unmanaged')
@@ -255,16 +284,15 @@ def DockerTemplate create_template(Map data) {
         def DockerTemplate tpl
         tpl = new DockerTemplate(
                         template_base,
+                        connector,
                         data['label_string'],
                         data['remote_fs'],
-                        data['remote_fs_mapping'],
                         data['instance_cap'].toString(),
                         [])
 
         // Additional settings
         tpl.setNumExecutors(data['num_executors'])
         tpl.setMode(Enum.valueOf(Node.Mode, data['mode']))
-        tpl.setConnector(connector)
         tpl.setPullStrategy(pull_strategy)
         tpl.setRetentionStrategy(ret_strategy)
         tpl.setRemoveVolumes(data['remove_volumes'])
@@ -390,7 +418,6 @@ def Boolean are_same_template_bases(DockerTemplateBase base_a, DockerTemplateBas
         has_changed.push(base_a.getCpuShares() != base_b.getCpuShares())
         has_changed.push(base_a.getDockerCommandArray() != base_b.getDockerCommandArray())
         has_changed.push(base_a.getPortMappings() != base_b.getPortMappings())
-        has_changed.push(base_a.getLxcConf() != base_b.getLxcConf())
         has_changed.push(base_a.getEnvironmentsString() != base_b.getEnvironmentsString())
         has_changed.push(base_a.getExtraHostsString() != base_b.getExtraHostsString())
 
@@ -411,7 +438,7 @@ def Boolean are_same_template_bases(DockerTemplateBase base_a, DockerTemplateBas
     @param CloudRetentionStrategy Second cloud retention policy object
     @return Boolean True if configuration have same properties
 */
-def Boolean are_same_retention_policies(CloudRetentionStrategy retention_a, CloudRetentionStrategy retention_b) {
+def Boolean are_same_retention_policies(RetentionStrategy retention_a, RetentionStrategy retention_b) {
 
     try {
         if (retention_a.getClass() != retention_b.getClass()) {
@@ -505,7 +532,6 @@ def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemp
                 template_a.getConnector(), templates_b[index].getConnector()))
             has_changed.push(template_a.getRemoteFs() != templates_b[index].getRemoteFs())
             has_changed.push(template_a.getInstanceCap() != templates_b[index].getInstanceCap())
-            has_changed.push(template_a.getRemoteFsMapping() != templates_b[index].getRemoteFsMapping())
             has_changed.push(template_a.getLabelSet() != templates_b[index].getLabelSet())
             has_changed.push(template_a.getPullStrategy() != templates_b[index].getPullStrategy())
             has_changed.push(template_a.getShortDescription() != templates_b[index].getShortDescription())
@@ -532,22 +558,10 @@ def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemp
 def Boolean is_same_cloud(DockerCloud cloud_a, DockerCloud cloud_b) {
 
     try {
-        def List<Boolean> has_changed = []
         docker_host_a = cloud_a.getDockerHost()
         docker_host_b = cloud_a.getDockerHost()
 
-        has_changed.push(cloud_a.containerCap != cloud_b.containerCap)
-        has_changed.push(cloud_a.connectTimeout != cloud_b.connectTimeout)
-        has_changed.push(cloud_a.readTimeout != cloud_b.readTimeout)
-        has_changed.push(!are_same_templates(cloud_a.templates, cloud_b.templates))
-        has_changed.push(cloud_a.serverUrl != null ? !cloud_a.serverUrl.equals(cloud_b.serverUrl) : cloud_b.serverUrl != null)
-        has_changed.push(cloud_a.version != null ? !cloud_a.version.equals(cloud_b.version) : cloud_b.version != null)
-        has_changed.push(cloud_a.credentialsId != null ? !cloud_a.credentialsId.equals(cloud_b.credentialsId) : cloud_b.credentialsId != null)
-        has_changed.push(cloud_a.connection != null ? !cloud_a.connection.equals(cloud_b.connection) : cloud_b.connection != null)
-        has_changed.push(docker_host_a.getCredentialsId() != docker_host_b.getCredentialsId())
-        has_changed.push(docker_host_a.getUri() != docker_host_b.getUri())
-
-        return !has_changed.any()
+        return docker_host_a.equals(docker_host_b)
     }
     catch(Exception e) {
         throw new Exception(
