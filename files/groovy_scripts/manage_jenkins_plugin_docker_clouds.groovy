@@ -438,7 +438,7 @@ def Boolean are_same_template_bases(DockerTemplateBase base_a, DockerTemplateBas
     @param CloudRetentionStrategy Second cloud retention policy object
     @return Boolean True if configuration have same properties
 */
-def Boolean are_same_retention_policies(CloudRetentionStrategy retention_a, CloudRetentionStrategy retention_b) {
+def Boolean are_same_retention_policies(RetentionStrategy retention_a, RetentionStrategy retention_b) {
 
     try {
         if (retention_a.getClass() != retention_b.getClass()) {
@@ -532,7 +532,6 @@ def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemp
                 template_a.getConnector(), templates_b[index].getConnector()))
             has_changed.push(template_a.getRemoteFs() != templates_b[index].getRemoteFs())
             has_changed.push(template_a.getInstanceCap() != templates_b[index].getInstanceCap())
-            has_changed.push(template_a.getRemoteFsMapping() != templates_b[index].getRemoteFsMapping())
             has_changed.push(template_a.getLabelSet() != templates_b[index].getLabelSet())
             has_changed.push(template_a.getPullStrategy() != templates_b[index].getPullStrategy())
             has_changed.push(template_a.getShortDescription() != templates_b[index].getShortDescription())
