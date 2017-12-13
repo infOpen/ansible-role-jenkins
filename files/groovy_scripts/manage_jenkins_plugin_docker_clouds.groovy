@@ -8,6 +8,8 @@ import com.nirima.jenkins.plugins.docker.strategy.DockerOnceRetentionStrategy
 import groovy.json.*
 import hudson.model.*
 import hudson.plugins.sshslaves.SSHConnector
+import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy;
+import hudson.plugins.sshslaves.verifiers.SshHostKeyVerificationStrategy;
 import hudson.slaves.Cloud
 import hudson.slaves.CloudRetentionStrategy
 import hudson.slaves.RetentionStrategy
@@ -105,6 +107,32 @@ def DockerImagePullStrategy get_pull_strategy(String strategy_name) {
 
 
 /**
+    Create SSH verification strategy oject
+
+    @param Map Needed configuration
+    @return SshHostKeyVerificationStrategy New docker SSH verification strategy
+*/
+def SshHostKeyVerificationStrategy create_ssh_verification_strategy(Map data) {
+
+    try {
+
+        if (data['ssh_verification_strategy'] == 'non_verifying') {
+            return new NonVerifyingKeyVerificationStrategy()
+        }
+        else {
+            throw new Exception('Docker SSH verification strategy class unmanaged')
+        }
+
+    }
+    catch(Exception e) {
+        throw new Exception(
+            'Manage docker SSH verification strategy create error, error message : '
+            + e.getMessage())
+    }
+}
+
+
+/**
     Create SSH strategy oject
 
     @param Map Needed configuration
@@ -118,7 +146,8 @@ def SSHKeyStrategy create_ssh_key_strategy(Map data) {
             return new InjectSSHKey(data['ssh_key_strategy_value'])
         }
         else if (data['ssh_key_strategy_name'] == 'manually_configured_ssh_key') {
-            return new ManuallyConfiguredSSHKey(data['ssh_key_strategy_value'])
+            def SshHostKeyVerificationStrategy ssh_verification_strategy = create_ssh_verification_strategy(data)
+            return new ManuallyConfiguredSSHKey(data['ssh_key_strategy_value'], ssh_verification_strategy)
         }
         else {
             throw new Exception('Docker SSH key strategy class unmanaged')
