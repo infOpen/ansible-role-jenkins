@@ -189,7 +189,6 @@ ansible:
                 pull_credentials_id: ''
                 network: ''
                 docker_command: ''
-                lxc_conf_string: ''
                 hostname: ''
                 dns_hosts: []
                 volumes: []

@@ -60,7 +60,6 @@ def DockerTemplateBase create_template_base(Map data) {
                                 data['volumes'].join("\n"),
                                 data['volumes_from'].join("\n"),
                                 data['environments'].join("\n"),
-                                data['lxc_conf_string'],
                                 data['hostname'],
                                 data['memory_limit'],
                                 data['memory_swap'],
@@ -69,7 +68,8 @@ def DockerTemplateBase create_template_base(Map data) {
                                 data['bind_all_ports'],
                                 data['privileged'],
                                 data['tty'],
-                                data['mac_address'])
+                                data['mac_address'],
+                                data['extra_hosts'].join(' '))
 
         return template_base
     }
