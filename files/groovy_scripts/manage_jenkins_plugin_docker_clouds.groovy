@@ -284,16 +284,15 @@ def DockerTemplate create_template(Map data) {
         def DockerTemplate tpl
         tpl = new DockerTemplate(
                         template_base,
+                        connector,
                         data['label_string'],
                         data['remote_fs'],
-                        data['remote_fs_mapping'],
                         data['instance_cap'].toString(),
                         [])
 
         // Additional settings
         tpl.setNumExecutors(data['num_executors'])
         tpl.setMode(Enum.valueOf(Node.Mode, data['mode']))
-        tpl.setConnector(connector)
         tpl.setPullStrategy(pull_strategy)
         tpl.setRetentionStrategy(ret_strategy)
         tpl.setRemoveVolumes(data['remove_volumes'])

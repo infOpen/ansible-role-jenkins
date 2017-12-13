@@ -165,7 +165,6 @@ ansible:
           templates:
             - config_version: 2
               label_string: ''
-              remote_fs_mapping: '/tmp'
               remote_fs: '/home/jenkins'
               instance_cap: 20
               mode: 'NORMAL'
