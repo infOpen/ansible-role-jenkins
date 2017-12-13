@@ -558,22 +558,10 @@ def Boolean are_same_templates(List<DockerTemplate> templates_a, List<DockerTemp
 def Boolean is_same_cloud(DockerCloud cloud_a, DockerCloud cloud_b) {
 
     try {
-        def List<Boolean> has_changed = []
         docker_host_a = cloud_a.getDockerHost()
         docker_host_b = cloud_a.getDockerHost()
 
-        has_changed.push(cloud_a.containerCap != cloud_b.containerCap)
-        has_changed.push(cloud_a.connectTimeout != cloud_b.connectTimeout)
-        has_changed.push(cloud_a.readTimeout != cloud_b.readTimeout)
-        has_changed.push(!are_same_templates(cloud_a.templates, cloud_b.templates))
-        has_changed.push(cloud_a.serverUrl != null ? !cloud_a.serverUrl.equals(cloud_b.serverUrl) : cloud_b.serverUrl != null)
-        has_changed.push(cloud_a.version != null ? !cloud_a.version.equals(cloud_b.version) : cloud_b.version != null)
-        has_changed.push(cloud_a.credentialsId != null ? !cloud_a.credentialsId.equals(cloud_b.credentialsId) : cloud_b.credentialsId != null)
-        has_changed.push(cloud_a.connection != null ? !cloud_a.connection.equals(cloud_b.connection) : cloud_b.connection != null)
-        has_changed.push(docker_host_a.getCredentialsId() != docker_host_b.getCredentialsId())
-        has_changed.push(docker_host_a.getUri() != docker_host_b.getUri())
-
-        return !has_changed.any()
+        return docker_host_a.equals(docker_host_b)
     }
     catch(Exception e) {
         throw new Exception(
