@@ -287,8 +287,7 @@ def DockerTemplate create_template(Map data) {
                         connector,
                         data['label_string'],
                         data['remote_fs'],
-                        data['instance_cap'].toString(),
-                        [])
+                        data['instance_cap'].toString())
 
         // Additional settings
         tpl.setNumExecutors(data['num_executors'])
