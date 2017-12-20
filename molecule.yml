@@ -168,7 +168,6 @@ ansible:
               remote_fs: '/home/jenkins'
               instance_cap: 20
               mode: 'NORMAL'
-              num_executors: 1
               remove_volumes: False
               pull_strategy: 'PULL_LATEST'
               connector:
