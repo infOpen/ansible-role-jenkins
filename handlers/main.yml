@@ -1,7 +1,7 @@
 ---
 
 # Handlers file for jenkins
-#==============================================================================
+# =============================================================================
 
 - name: 'HANDLER | Remove Jenkins 2 administrative password file'
   become: True

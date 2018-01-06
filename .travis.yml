@@ -1,6 +1,6 @@
 ---
 
-# Travis file for Jenkins role
+# Travis configuration
 
 dist: 'trusty'
 sudo: 'required'
@@ -12,10 +12,9 @@ language: 'python'
 
 env:
   matrix:
-    - TOXENV='py27-ansible20'
-    - TOXENV='py27-ansible21'
     - TOXENV='py27-ansible22'
     - TOXENV='py27-ansible23'
+    - TOXENV='py27-ansible24'
 
 install:
   - 'pip install tox-travis'

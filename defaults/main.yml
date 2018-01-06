@@ -70,8 +70,9 @@ jenkins_main_cfg_clouds: []
 jenkins_manage_plugin_install: True
 jenkins_manage_plugin_upgrade: False
 
+
 # CONFIGURATION
-#--------------
+# =============================================================================
 jenkins_configuration_files_owner: "{{ jenkins_etc_user }}"
 jenkins_configuration_files_group: "{{ jenkins_etc_group }}"
 jenkins_configuration_files_mode: '0644'
@@ -140,12 +141,13 @@ jenkins_location_url: 'http://jenkins.foo.bar/'
 
 
 # Credentials configuration
-#==========================
+# =============================================================================
 jenkins_credentials_domains_to_empty: []
 jenkins_credentials: []
 
+
 # Plugins configuration
-#======================
+# =============================================================================
 
 # Plugins management
 jenkins_plugins:
