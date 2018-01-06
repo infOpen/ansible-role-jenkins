@@ -2,8 +2,8 @@
 
 # Role dependencies, used to run tests
 
-- src : 'infOpen.openjdk-jre'
+- src: 'infOpen.openjdk-jre'
   version: '0.2.0'
 
-- src : 'infOpen.openjdk-jdk'
+- src: 'infOpen.openjdk-jdk'
   version: '0.1.0'

@@ -2,8 +2,8 @@
 
 # Role tests
 
-- hosts: 'os_xenial:jenkins-vagrant-xenial64'
-  name: 'Install tests prerequisites - Python 2.7'
+- name: 'Converge | Prerequisites tasks'
+  hosts: 'jenkins-docker-xenial'
   gather_facts: False
   tasks:
     - name: 'PREREQUISITES | APT | Do an apt-get update'
@@ -17,7 +17,10 @@
 
 
 - hosts: 'all'
-  name: 'PREREQUISITES | SSH utils and curl'
+  name: 'PREREQUISITES | SSH utils, curl and java'
+  roles:
+    - role: 'infOpen.openjdk-jre'
+    - role: 'infOpen.openjdk-jdk'
   tasks:
     - name: 'PREREQUISITES | APT | Install SSH utils and curl'
       become: True
@@ -31,8 +34,7 @@
       when: "(ansible_os_family | lower) == 'debian'"
 
 
-- hosts: 'all'
+- name: 'Converge | Main tasks'
+  hosts: 'all'
   roles:
-    - role: "{{ role_name }}"
-  vars:
-    role_name: "{{ playbook_dir | basename }}"
+    - role: "ansible-role-jenkins"

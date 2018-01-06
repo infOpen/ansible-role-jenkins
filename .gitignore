@@ -1,23 +1,24 @@
-# Ignore vagrant data
-.vagrant
+# Ansible
 *.retry
+roles/
+tests/roles/
 
-# Ignore swap files
+# Swap files
 *.swo
 *.swp
 
-# Ignore roles dependencies used for vagrant tests
-tests/roles
-
-# python
+# Python bytecode
 *.pyc
-.cache
 
-# Molecule
-.molecule
+# Pytest
+.cache
 
 # Tox
 .tox
 
-# Log files
+# Vagrant
+.vagrant
 *.log
+
+# Molecule
+.molecule

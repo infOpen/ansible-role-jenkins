@@ -1,4 +1,6 @@
-# Filter plugins tests
+"""
+Fake test for plugins filters
+"""
 
 
 def test_fake():
